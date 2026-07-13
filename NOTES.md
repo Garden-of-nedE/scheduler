@@ -10,7 +10,10 @@
 *Note:* if `POSTGRES_PASSWORD` or `POSTGRES_DB` changed in compose file, must delete pre-exisiting volumes for fresh init.
     `docker compose down -v`
 
+Persistance test involved creating a table within a healthy container. Followed by stopping the volume, and restarting it. This test showcased that any data hosed in the volume will persist after disconnecting; and ensures that the volume is mounted properly.
+
 ## Docker Notes
 **Running** - Container's main process has started & not crashed
 
 **Healthy** - Application within container is actively passing user-defined functional test (healthcheck)
+
