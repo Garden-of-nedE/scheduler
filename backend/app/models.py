@@ -1,23 +1,26 @@
 import uuid
-from enum import Enum
+import enum
 
-from sqlalchemy import (Column, String, DateTime, ForeignKey, Enum, Time, Numeric, UniqueConstraint, func)
+from sqlalchemy import (Column, String, DateTime, ForeignKey, Enum, Time, Numeric, Boolean, UniqueConstraint, func)
 
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from app.database import Base
 
-class DayOfWeek(Enum):
-    monday = "Monday"
-    tuesday = "Tuesday"
-    wednesday = "Wednesday"
-    thursday = "Thursday"
-    friday = "Friday"
-    saturday = "Saturday"
-    sunday = "Sunday"
+def gen_uuid() -> str:
+    return str(uuid.uuid4())
 
-class ConnectionStatus(Enum):
+class DayOfWeek(str, enum.Enum):
+    monday = "monday"
+    tuesday = "tuesday"
+    wednesday = "wednesday"
+    thursday = "thursday"
+    friday = "friday"
+    saturday = "saturday"
+    sunday = "sunday"
+
+class ConnectionStatus(str, enum.Enum):
     pending = "pending"
     accepted = "accepted"
     rejected = "rejected"
@@ -34,8 +37,8 @@ class User(Base):
     timetable_entries = relationship("TimetableEntry", back_populates = "owner", cascade = "all, delete-orphan")
     assessments = relationship("Assessment", back_populates = "owner", cascade = "all, delete-orphan")
     events = relationship("Event", back_populates = "owner", cascade = "all, delete-orphan")
-    sent_requests = relationship("Connections", foreign_keys = "[Connections.requester_id]", back_populates = "request", cascade = "all, delete-orphan")
-    received_requests = relationship("Connections", foreign_keys = "[Connections.invitee_id]", back_populates = "invitee", cascade = "all, delete-orphan")
+    sent_requests = relationship("Connections", foreign_keys = "Connections.requester_id", back_populates = "request", cascade = "all, delete-orphan")
+    received_requests = relationship("Connections", foreign_keys = "Connections.invitee_id", back_populates = "invitee", cascade = "all, delete-orphan")
 
 class Course(Base):
     __tablename__ = "courses"
@@ -51,7 +54,7 @@ class TimetableEntry(Base):
 
     id = Column(UUID(as_uuid = False), primary_key = True, default = gen_uuid)
     user_id = Column(UUID(as_uuid = False), ForeignKey("users.id", ondelete = "CASCADE"), nullable = False, index = True)
-    course_code = Column(String, ForeignKey("courses.code"), nullable = False)
+    course_code = Column(String, ForeignKey("courses.code"), nullable = False, index = True)
     
     class_type = Column(String, nullable = True)
     day_of_week = Column(Enum(DayOfWeek), nullable = False)
@@ -75,6 +78,7 @@ class Assessment(Base):
     weighting = Column(Numeric(5, 2), nullable = False)
     total_marks = Column(Numeric(5, 2), nullable = False)
     mark_achieved = Column(Numeric(5, 2), nullable = True)
+    completed = Column(Boolean, nullable = True, default = False)
 
     owner = relationship("User", back_populates = "assessments")
     course = relationship("Course", back_populates = "assessments")
@@ -88,7 +92,7 @@ class Event(Base):
     title = Column(String, nullable = False)
     description = Column(String, nullable = True)
     start_time = Column(DateTime(timezone = True), nullable = False)
-    end_time = Column(DateTime(timezone = True), nullable = False)
+    end_time = Column(DateTime(timezone = True), nullable = True)
     location = Column(String, nullable = True)
 
     owner = relationship("User", back_populates = "events")
