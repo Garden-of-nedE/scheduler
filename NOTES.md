@@ -23,3 +23,8 @@ Persistance test involved creating a table within a healthy container. Followed 
 `get_db()` - generator uses the `yield` FastAPI dependency, that routes session connection and prevents open DB connections from leaking.
 
 `cascade = "all, delete-orphan"` - all data related to a deleted account will be removed.
+
+## models.py
+`Course` is a globale feature to allow for users to compare timetables.
+
+Need ot revise course deletion policy, duplicate-request handelling logic at a later stage.
