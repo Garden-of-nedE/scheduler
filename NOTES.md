@@ -1,30 +1,56 @@
 # Development Notes
 
-## Database
-`POSTGRES_USER` - Environment variable used to start a PostgreSQL database in Docker, defines the main administrator. This user will have full control over the database.
+## Design Choices
+### Docker
+A single docker container is utilised to compose the App and Postgres backend. Building using docker to ensure that project is functional across various operating systems (Windows & Mac), whilst ensuring that any dependencies for the project are self-contained. Minimise bloating local system memory with various libraries.
 
-`POSTGRES_PASSWORD` - Environment variable sets the administrators password for PostgreSQL. The authentification is set up *locally*, thus would only require password when connecting from a different host.
+### Flask Backend
+Project eventually will allow different computer systems (Windows & Mac) to communicate via the internet, utilising REST API. Framework only requires a single declaration for parameter types in standard Python via Pydantic library. Interactive API docs, via Swagger UI, allows for local testing to be conducted easily.  `OAuth2` built-in tool allows the frontend to authenticate with the backend, for security.
 
-`POSTGRESS_DB` - Optional environment variable used to define a different name for default database that is created. 
+## Build Stages
+1. Functional Postgres within Docker &rarr; Confirm that Docker networking works before moving forward.
+2. Database models &rarr; Define tables in SQLAlchemy before routing
+3. Full vertical slice for Authentication &rarr; Ensure Auth from end-to-end is established, heavily relied on for project
+4. Fully CRUD one table &rarr; Ensure that contents of ONE table is fully CRUD'd before moving on. Schema &rarr; router &rarr; test
+5. CRUD other tables
+6. Frontend set up &rarr; Final touches once API is established
+
+## Miscellaneous Notes
+### Database
+`POSTGRES_USER` &mdash; Environment variable used to start a PostgreSQL database in Docker, defines the main administrator. This user will have full control over the database.
+
+`POSTGRES_PASSWORD` &mdash; Environment variable sets the administrators password for PostgreSQL. The authentification is set up *locally*, thus would only require password when connecting from a different host.
+
+`POSTGRESS_DB` &mdash; Optional environment variable used to define a different name for default database that is created. 
 
 *Note:* if `POSTGRES_PASSWORD` or `POSTGRES_DB` changed in compose file, must delete pre-exisiting volumes for fresh init.
     `docker compose down -v`
 
 Persistance test involved creating a table within a healthy container. Followed by stopping the volume, and restarting it. This test showcased that any data hosed in the volume will persist after disconnecting; and ensures that the volume is mounted properly.
 
-## Docker Notes
-**Running** - Container's main process has started & not crashed
+### Docker
+**Running** &mdash; Container's main process has started & not crashed
 
-**Healthy** - Application within container is actively passing user-defined functional test (healthcheck)
+**Healthy** &mdash; Application within container is actively passing user-defined functional test (healthcheck)
 
-## Backend
-`pool_pre_ping = True` - pings the DB before resusing a pooled connection, provides clean reconnect if Postgres restarts or connection is stale.
+### Backend
+`pool_pre_ping = True` &mdash; pings the DB before resusing a pooled connection, provides clean reconnect if Postgres restarts or connection is stale.
 
-`get_db()` - generator uses the `yield` FastAPI dependency, that routes session connection and prevents open DB connections from leaking.
+`get_db()` &mdash; generator uses the `yield` FastAPI dependency, that routes session connection and prevents open DB connections from leaking.
 
-`cascade = "all, delete-orphan"` - all data related to a deleted account will be removed.
+`cascade = "all, delete-orphan"` &mdash; all data related to a deleted account will be removed.
 
-## models.py
-`Course` is a globale feature to allow for users to compare timetables.
+### models.py
+`Course` is a global feature to allow for users to compare timetables.
 
-Need ot revise course deletion policy, duplicate-request handelling logic at a later stage.
+Need to revise course deletion policy, duplicate-request handling logic at a later stage.
+
+### Swagger
+**Authorization Process**
+
+Snends request behind the scenes to `POST /api/auth/login` with provided form data. On success, Swagger automatically stores the returned `access_token` and attaches it as `Bearer` header to every subsequent requrest made from the UI. On failure, `401` occurs.
+
+Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is returned or a code `200 OK` is returned.
+
+### schemas.py
+`TimetableEntryUpdate` &rarr; deliberately makes every field optional for easier partial updates. Does not force the user to resend unchanged details. Inheriting from `TimetableEntryBase`, where fields are *required*, makes create validate strictly whilst updates are flexible.
