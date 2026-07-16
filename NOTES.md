@@ -68,3 +68,5 @@ Course creation &rarr; `course_name` is currently not a required field of `Timet
 A separate Course router will be created to list/create courses independently *before* submitting a timetable entry. \
 Current implementation: get or create pattern will first check for existing Course before creating it. \
 Attached limitation &rarr; theoretical race condition if two requests for same course code occurs, need to include a database level `ON CONFLICT DO NOTHING` constraint. 
+
+**FOCUS ON** `recurrence_group_id` needs to be visible to allow for group deletion during testing.

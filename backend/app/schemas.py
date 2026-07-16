@@ -62,7 +62,7 @@ class RecurrenceCreate(BaseModel):
     skip_dates: List[date] = []
 
 class AssessmentCreate(AssessmentBase):
-    pass
+    course_name: Optional[str] = None
 
 class AssessmentUpdate(BaseModel):
     course_code: Optional[str] = None
@@ -79,3 +79,4 @@ class AssessmentOut(AssessmentBase):
 
 class AssessmentRecurringCreate(AssessmentBase):
     recurrence: RecurrenceCreate
+    course_name: Optional[str] = None

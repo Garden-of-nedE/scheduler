@@ -73,10 +73,9 @@ def delete_task(
     db.commit()
 
 # ==== Recurrent Assessments ====
-
 @router.post("/recurring", response_model = list[schemas.AssessmentOut], status_code = status.HTTP_201_CREATED)
 def create_recurring_task(
-    task_in: schemas.AssessmentRecurrenceCreate,
+    task_in: schemas.AssessmentRecurringCreate,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
@@ -91,7 +90,7 @@ def create_recurring_task(
     current_date = task_in.recurrence.first_due_date
     generated_count = 0
 
-    while generated_count < task_in.recurrence.occurences:
+    while generated_count < task_in.recurrence.occurrences:
         if current_date.date() not in task_in.recurrence.skip_dates:
             task = models.Assessment(
                 course_code = task_in.course_code,
