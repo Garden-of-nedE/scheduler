@@ -2,7 +2,6 @@ import uuid
 import enum
 
 from sqlalchemy import (Column, String, DateTime, ForeignKey, Enum, Time, Numeric, Boolean, UniqueConstraint, func)
-
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -72,6 +71,7 @@ class Assessment(Base):
     id = Column(UUID(as_uuid = False), primary_key = True, default = gen_uuid)
     user_id = Column(UUID(as_uuid = False), ForeignKey("users.id", ondelete = "CASCADE"), nullable = False, index = True)
     course_code = Column(String, ForeignKey("courses.code"), nullable = False, index = True)
+    recurrence_group_id = Column(UUID(as_uuid = False), nullable = True, index = True)
 
     title = Column(String, nullable = False)
     due_date = Column(DateTime(timezone = True), nullable = False)

@@ -1,5 +1,5 @@
-from datetime import datetime, time
-from typing import Optional
+from datetime import datetime, time, date
+from typing import Optional, List
 from decimal import Decimal
 
 from pydantic import BaseModel, EmailStr, ConfigDict
@@ -55,6 +55,12 @@ class AssessmentBase(BaseModel):
     mark_achieved: Optional[Decimal] = None
     completed: bool = False
 
+class RecurrenceCreate(BaseModel):
+    frequency: str = "weekly"
+    occurrences: int
+    first_due_date: datetime
+    skip_dates: List[date] = []
+
 class AssessmentCreate(AssessmentBase):
     pass
 
@@ -70,3 +76,6 @@ class AssessmentUpdate(BaseModel):
 class AssessmentOut(AssessmentBase):
     model_config = ConfigDict(from_attributes = True)
     id: str
+
+class AssessmentRecurringCreate(AssessmentBase):
+    recurrence: RecurrenceCreate

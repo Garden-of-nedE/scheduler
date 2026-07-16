@@ -59,6 +59,8 @@ Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is r
 
 `Assessment.completed` defaults to `False` ensures that the frontend checkbox remains empty upon creation of the task. This status should only every be **updated**, rather than chosen on task creation.
 
+Recurring assessments: `skip_date` stretch the series of tasks across more calendar weeks, rather than reducing the total quiz count.
+
 ## Revisit Points
 Course deletion policy, duplicate-request handling logic at a later stage.
 
