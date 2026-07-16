@@ -57,6 +57,8 @@ Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is r
 
 `_get_entry_or_404` filters on **both** `id` & `user_id` to prevent one user from editing or deleteing the timetable of another.
 
+`Assessment.completed` defaults to `False` ensures that the frontend checkbox remains empty upon creation of the task. This status should only every be **updated**, rather than chosen on task creation.
+
 ## Revisit Points
 Course deletion policy, duplicate-request handling logic at a later stage.
 

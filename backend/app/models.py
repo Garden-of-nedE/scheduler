@@ -78,7 +78,7 @@ class Assessment(Base):
     weighting = Column(Numeric(5, 2), nullable = False)
     total_marks = Column(Numeric(5, 2), nullable = False)
     mark_achieved = Column(Numeric(5, 2), nullable = True)
-    completed = Column(Boolean, nullable = True, default = False)
+    completed = Column(Boolean, nullable = False, default = False)
 
     owner = relationship("User", back_populates = "assessments")
     course = relationship("Course", back_populates = "assessments")

@@ -1,5 +1,6 @@
 from datetime import datetime, time
 from typing import Optional
+from decimal import Decimal
 
 from pydantic import BaseModel, EmailStr, ConfigDict
 from app.models import DayOfWeek
@@ -44,3 +45,28 @@ class TimetableEntryUpdate(BaseModel):
 class TimetableEntryOut(TimetableEntryBase):
     model_config = ConfigDict(from_attribute = True)
     id: str 
+
+class AssessmentBase(BaseModel):
+    course_code: str
+    title: str
+    due_date: datetime
+    weighting: Decimal
+    total_marks: Decimal
+    mark_achieved: Optional[Decimal] = None
+    completed: bool = False
+
+class AssessmentCreate(AssessmentBase):
+    pass
+
+class AssessmentUpdate(BaseModel):
+    course_code: Optional[str] = None
+    title: Optional[str] = None
+    due_date: Optional[datetime] = None
+    weighting: Optional[Decimal] = None
+    total_marks: Optional[Decimal] = None
+    mark_achieved: Optional[Decimal] = None
+    completed: Optional[bool] = None
+
+class AssessmentOut(AssessmentBase):
+    model_config = ConfigDict(from_attributes = True)
+    id: str
