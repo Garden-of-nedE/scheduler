@@ -43,8 +43,6 @@ Persistance test involved creating a table within a healthy container. Followed 
 ### models.py
 `Course` is a global feature to allow for users to compare timetables.
 
-Need to revise course deletion policy, duplicate-request handling logic at a later stage.
-
 ### Swagger
 **Authorization Process**
 
@@ -54,3 +52,13 @@ Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is r
 
 ### schemas.py
 `TimetableEntryUpdate` &rarr; deliberately makes every field optional for easier partial updates. Does not force the user to resend unchanged details. Inheriting from `TimetableEntryBase`, where fields are *required*, makes create validate strictly whilst updates are flexible.
+
+`_get_entry_or_404` filters on **both** `id` & `user_id` to prevent one user from editing or deleteing the timetable of another.
+
+## Revisit Points
+Course deletion policy, duplicate-request handling logic at a later stage.
+
+Course creation &rarr; `course_name` is currently not a required field of `TimetableEntry`; made a pragmatic choise to add `course_name` to `TimetableEntryCreate` so that TimetableEntry CRUD can be completed. (16/07)\
+A separate Course router will be created to list/create courses independently *before* submitting a timetable entry. \
+Current implementation: get or create pattern will first check for existing Course before creating it. \
+Attached limitation &rarr; theoretical race condition if two requests for same course code occurs, need to include a database level `ON CONFLICT DO NOTHING` constraint. 
