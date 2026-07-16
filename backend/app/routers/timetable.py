@@ -6,7 +6,7 @@ from app import models, schemas
 from app.dependencys import get_current_user
 from app.crud import get_or_create_course
 
-router = APIRouter(prefix = "/api/timetable", tags = ["timetbale"])
+router = APIRouter(prefix = "/api/timetable", tags = ["timetable"])
 
 def _get_entry_or_404(db: Session, entry_id: str, user_id: str) -> models.TimetableEntry:
     entry = (
@@ -28,7 +28,7 @@ def list_entries(
 ):
     return (
         db.query(models.TimetableEntry)
-        ,filter(models.TimetableEntry.user_id == current_user.id)
+        .filter(models.TimetableEntry.user_id == current_user.id)
         .order_by(models.TimetableEntry.day_of_week, models.TimetableEntry.start_time)
         .all()
     )

@@ -46,9 +46,11 @@ Persistance test involved creating a table within a healthy container. Followed 
 ### Swagger
 **Authorization Process**
 
-Snends request behind the scenes to `POST /api/auth/login` with provided form data. On success, Swagger automatically stores the returned `access_token` and attaches it as `Bearer` header to every subsequent requrest made from the UI. On failure, `401` occurs.
+Sends request behind the scenes to `POST /api/auth/login` with provided form data. On success, Swagger automatically stores the returned `access_token` and attaches it as `Bearer` header to every subsequent requrest made from the UI. On failure, `401` occurs.
 
 Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is returned or a code `200 OK` is returned.
+
+`204 No Content` &rarr; expected return value on successful deletion of data entry.
 
 ### schemas.py
 `TimetableEntryUpdate` &rarr; deliberately makes every field optional for easier partial updates. Does not force the user to resend unchanged details. Inheriting from `TimetableEntryBase`, where fields are *required*, makes create validate strictly whilst updates are flexible.
