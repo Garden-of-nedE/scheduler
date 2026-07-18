@@ -72,6 +72,7 @@ def delete_task(
     db.delete(task)
     db.commit()
 
+NON_NULLABLE_FIELDS = {"course_code", "title", "due_date", "weighting", "total_marks", "completed"}
 @router.put("/{task_id}", response_model = schemas.AssessmentOut)
 def update_task(
     task_id: str,
@@ -81,10 +82,15 @@ def update_task(
 ):
     task = _get_task_or_404(db, task_id, current_user.id)
 
-    for field, value in task_in.model_dump(exclude_unset = True).items():
+    update_data = task_in.model_dump(exclude_unset = True)
+    for field in NON_NULLABLE_FIELDS:
+        if field in update_data and update_data[field] is None:
+            raise HTTPException(status_code = 400, detail = f"{field} cannot be set to null") 
+
+    for field, value in update_data.items():
         setattr(task, field, value)
 
-    if task.mark_achieved > task.total_marks:
+    if task.mark_achieved is not None and task.mark_achieved > task.total_marks:
         raise HTTPException(status_code = 400, detail = "mark_achieved must be smaller than total_marks")
     
     db.commit()

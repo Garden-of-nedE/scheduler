@@ -71,7 +71,7 @@ class AssessmentUpdate(BaseModel):
     weighting: Optional[Decimal] = None
     total_marks: Optional[Decimal] = None
     mark_achieved: Optional[Decimal] = None
-    completed: Optional[bool] = None
+    completed: Optional[bool] = False
 
 class AssessmentOut(AssessmentBase):
     model_config = ConfigDict(from_attributes = True)
