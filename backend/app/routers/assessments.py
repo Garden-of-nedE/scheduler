@@ -72,7 +72,7 @@ def delete_task(
     db.delete(task)
     db.commit()
 
-@router.put("/{task_id}", reponse_model = schemas.AssessmentOut)
+@router.put("/{task_id}", response_model = schemas.AssessmentOut)
 def update_task(
     task_id: str,
     task_in: schemas.AssessmentUpdate,
