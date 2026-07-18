@@ -81,3 +81,24 @@ class AssessmentOut(AssessmentBase):
 class AssessmentRecurringCreate(AssessmentBase):
     recurrence: RecurrenceCreate
     course_name: Optional[str] = None
+
+class EventBase(BaseModel):
+    title: str
+    description: Optional[str] = None
+    start_time: datetime
+    end_time: Optional[datetime] = None
+    location: Optional[str] = None
+
+class EventCreate(BaseModel):
+    pass
+
+class EventUpdate(EventBase):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    start_time: Optional[datetime] = None
+    end_time: Optional[datetime] = None
+    location: Optional[str] = None
+
+class EventOut(EventBase):
+    model_config = ConfigDict(from_attributes = True)
+    id: str
