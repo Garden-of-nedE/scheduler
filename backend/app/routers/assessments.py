@@ -86,6 +86,12 @@ def update_task(
     for field in NON_NULLABLE_FIELDS:
         if field in update_data and update_data[field] is None:
             raise HTTPException(status_code = 400, detail = f"{field} cannot be set to null") 
+        
+    if "course_code" in update_data:
+        try:
+            get_or_create_course(db, code = update_data["course_code"], name = update_data.get("course_name"))
+        except ValueError as e:
+            raise HTTPException(status_code = 400, detail = str(e))
 
     for field, value in update_data.items():
         setattr(task, field, value)

@@ -65,7 +65,6 @@ class AssessmentCreate(AssessmentBase):
     course_name: Optional[str] = None
 
 class AssessmentUpdate(BaseModel):
-    course_code: Optional[str] = None
     title: Optional[str] = None
     due_date: Optional[datetime] = None
     weighting: Optional[Decimal] = None
