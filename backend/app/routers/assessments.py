@@ -72,6 +72,26 @@ def delete_task(
     db.delete(task)
     db.commit()
 
+@router.put("/{task_id}", reponse_model = schemas.AssessmentOut)
+def update_task(
+    task_id: str,
+    task_in: schemas.AssessmentUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    task = _get_task_or_404(db, task_id, current_user.id)
+
+    for field, value in task_in.model_dump(exclude_unset = True).items():
+        setattr(task, field, value)
+
+    if task.mark_achieved > task.total_marks:
+        raise HTTPException(status_code = 400, detail = "mark_achieved must be smaller than total_marks")
+    
+    db.commit()
+    db.refresh(task)
+
+    return task
+
 # ==== Recurrent Assessments ====
 @router.post("/recurring", response_model = list[schemas.AssessmentOut], status_code = status.HTTP_201_CREATED)
 def create_recurring_task(
