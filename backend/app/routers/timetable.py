@@ -81,6 +81,7 @@ def get_entry(
 ):
     return _get_entry_or_404(db, entry_id, current_user.id)
 
+NON_NULLABLE_FIELDS = {"course_code", "day_of_week", "start_time", "end_time"}
 @router.put("/{entry_id}", response_model = schemas.TimetableEntryOut)
 def update_entry(
     entry_id: str,
@@ -90,7 +91,12 @@ def update_entry(
 ):
     entry = _get_entry_or_404(db, entry_id, current_user.id)
 
-    for field, value in entry_in.model_dump(exclude_unset = True).items():
+    update_data = entry_in.model_dump(exclude_unset = True)
+    for field in NON_NULLABLE_FIELDS:
+        if field in update_data and update_data[field] is None:
+            raise HTTPException(status_code = 400, detail = f"{field} cannot be set to null")
+
+    for field, value in update_data.items():
         setattr(entry, field, value)
 
     if entry.end_time <= entry.start_time:
