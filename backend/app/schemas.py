@@ -76,6 +76,7 @@ class AssessmentUpdate(BaseModel):
 class AssessmentOut(AssessmentBase):
     model_config = ConfigDict(from_attributes = True)
     id: str
+    recurrence_group_id: Optional[str] = None
 
 class AssessmentRecurringCreate(AssessmentBase):
     recurrence: RecurrenceCreate
