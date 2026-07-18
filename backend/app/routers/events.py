@@ -37,7 +37,7 @@ def create_event(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    if event_in.end_time <= event_in.start_time:
+    if event_in.end_time is not None and event_in.end_time <= event_in.start_time:
         raise HTTPException(status_code = 400, detail = "end_time must be after start_time")
     
     event = models.Event(**event_in.model_dump(), user_id = current_user.id)
@@ -76,7 +76,7 @@ def update_event(
     for field, value in update_data.items():
         setattr(event, field, value)
 
-    if event.end_time <= event.start_time:
+    if event.end_time is not None and event.end_time <= event.start_time:
         raise HTTPException(status_code = 400, detail = "end_time must be after start_time")
     
     db.commit()

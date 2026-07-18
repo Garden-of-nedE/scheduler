@@ -61,6 +61,9 @@ Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is r
 
 Recurring assessments: `skip_date` stretch the series of tasks across more calendar weeks, rather than reducing the total quiz count.
 
+### Noteable Error Log
+Encountered status code `500` when testing the Update functionality of the Assessment table. The `500` code indicated that it was a server side error, upon further investigation I found that it was due to inconsistencies located within my API schema logic. In which the `AssessmentUpdate` class would allow for non-nullable fields to be updated to `NULL` as a result of `Optional[X] = None`. To address this issue, a guard was added to the `PUT` router logic which would explicitly catches these occurrences before any updates are completed. Upon addressing this, I went back into the `Timetable` router and applied the same guard to the relevant fields.
+
 ## Revisit Points
 Course deletion policy, duplicate-request handling logic at a later stage.
 
@@ -68,5 +71,3 @@ Course creation &rarr; `course_name` is currently not a required field of `Timet
 A separate Course router will be created to list/create courses independently *before* submitting a timetable entry. \
 Current implementation: get or create pattern will first check for existing Course before creating it. \
 Attached limitation &rarr; theoretical race condition if two requests for same course code occurs, need to include a database level `ON CONFLICT DO NOTHING` constraint. 
-
-**FOCUS ON** `recurrence_group_id` needs to be visible to allow for group deletion during testing.

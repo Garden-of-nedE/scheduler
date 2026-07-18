@@ -65,6 +65,7 @@ class AssessmentCreate(AssessmentBase):
     course_name: Optional[str] = None
 
 class AssessmentUpdate(BaseModel):
+    course_code: Optional[str] = None
     title: Optional[str] = None
     due_date: Optional[datetime] = None
     weighting: Optional[Decimal] = None
@@ -88,7 +89,7 @@ class EventBase(BaseModel):
     end_time: Optional[datetime] = None
     location: Optional[str] = None
 
-class EventCreate(BaseModel):
+class EventCreate(EventBase):
     pass
 
 class EventUpdate(EventBase):
