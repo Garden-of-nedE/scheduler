@@ -58,6 +58,7 @@ def delete_event(
     db.delete(event)
     db.commit()
 
+NON_NULLABLE_FIELDS = {"title", "start_time"}
 @router.put("/{event_id}", response_model = schemas.EventOut)
 def update_event(
     event_id: str,
@@ -67,7 +68,12 @@ def update_event(
 ):
     event = _get_event_or_404(db, event_id, current_user.id)
 
-    for field, value in event_in.model_dump(exclude_unset = True).items():
+    update_data = event_in.model_dump(exclude_unset = True)
+    for field in NON_NULLABLE_FIELDS:
+        if field in update_data and update_data[field] is None:
+            raise HTTPException(status_code = 400, detail = f"{field} cannot be set to null")
+
+    for field, value in update_data.items():
         setattr(event, field, value)
 
     if event.end_time <= event.start_time:
