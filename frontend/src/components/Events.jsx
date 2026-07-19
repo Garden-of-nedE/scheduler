@@ -2,25 +2,27 @@ import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 
 function formatDate(isoString) {
-    return new Date(isoString).toLocaleDateString(undefined, {
+    return new Date(isoString).toLocaleString(undefined, {
         month: 'short',
         day: 'numeric',
         year: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
     })
 }
 
-export default function Assessments() {
-    const [tasks, setTasks] = useState([])
+export default function Events() {
+    const [events, setEvents] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
     useEffect(() => {
         async function load() {
             try {
-                const res = await client.get('/api/assessments')
-                setTasks(res.data)
+                const res = await client.get('/api/events')
+                setEvents(res.data)
             } catch (err) {
-                setError('Could not load your assessments')
+                setError('Could not load your events')
             } finally {
                 setLoading(false)
             }
@@ -28,19 +30,19 @@ export default function Assessments() {
         load()
     }, [])
 
-    if (loading) return <p>Loading assessments ...</p>
+    if (loading) return <p>Loading events ...</p>
     if (error) return <p style = {{ color: 'red' }}>{error}</p>
 
     return (
         <div>
-            <h2>Current Assessment List</h2>
-            {tasks.length === 0 ? (
-                <p>No assessments added.</p>
+            <h2>Current Events</h2>
+            {events.length === 0 ? (
+                <p>No events scheduled.</p>
             ) : (
                 <ul>
-                    {tasks.map((task) => (
-                        <li key = {task.id}>
-                            {formatDate(task.due_date)} | {task.course_code} | {task.title} | {task.weighting} | {task.completed ? '✓' : '○'}
+                    {events.map((event) => (
+                        <li key = {event.id}>
+                            {formatDate(event.start_time)} | {event.title} | {event.location}
                         </li>
                     ))}
                 </ul>
