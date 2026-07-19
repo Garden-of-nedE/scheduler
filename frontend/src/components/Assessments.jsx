@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
-
-function formatDate(isoString) {
-    return new Date(isoString).toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric',
-        year: '2-digit',
-    })
-}
+import { formatDate } from '../utils/formatters.js'
 
 export default function Assessments() {
     const [tasks, setTasks] = useState([])

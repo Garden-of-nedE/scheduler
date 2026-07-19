@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
-
-function formatDate(isoString) {
-    return new Date(isoString).toLocaleString(undefined, {
-        month: 'short',
-        day: 'numeric',
-        year: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-    })
-}
+import { formatDateTime } from '../utils/formatters.js'
 
 export default function Events() {
     const [events, setEvents] = useState([])
@@ -42,7 +33,7 @@ export default function Events() {
                 <ul>
                     {events.map((event) => (
                         <li key = {event.id}>
-                            {formatDate(event.start_time)} | {event.title} | {event.location}
+                            {formatDateTime(event.start_time)} | {event.title} | {event.location}
                         </li>
                     ))}
                 </ul>
