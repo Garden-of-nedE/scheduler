@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import Timetable from '../components/Timetable.jsx'
+import Assessments from '../components/Assessments.jsx'
 
 const TABS = [
     { key: 'timetable', label: 'Timetable'},
@@ -36,7 +37,7 @@ export default function Dashboard() {
 
             <main>
                 {tab === 'timetable' && <Timetable />}
-                {tab === 'assessments' && <div>Assessments view here</div>}
+                {tab === 'assessments' && <Assessments />}
                 {tab === 'events' && <div>Event view here</div>}
             </main>
         </div>

@@ -30,11 +30,12 @@ export default function Timetable() {
                 <p>No classes scheduled</p>
             ) : (
                 <ul>
-                    {entries.map((entry) => 
-                    <li key = {entry.id}>
-                        {entry.course_code} - {entry.day_of_week} {entry.start_time}-{entry.end_time}
-                        {entry.location && `@${entry.location}`}
-                    </li>)}
+                    {entries.map((entry) => (
+                        <li key = {entry.id}>
+                            {entry.course_code} - {entry.day_of_week} {entry.start_time}-{entry.end_time}
+                            {entry.location && `@${entry.location}`}
+                        </li>
+                    ))}
                 </ul>
             )}
         </div>
