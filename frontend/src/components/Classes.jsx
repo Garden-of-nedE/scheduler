@@ -15,6 +15,7 @@ export default function Classes() {
     const [error, setError] = useState('')
 
     const [modalOpen, setModalOpen] = useState(false)
+    const [editingId, setEditingId] = useState(null)
     const [form, setForm] = useState(emptyForm())
     const [formError, setFormError] = useState('')
 
@@ -39,11 +40,26 @@ export default function Classes() {
         setModalOpen(true)
     }
 
+    function openEdit(enrollment) {
+        setEditingId(enrollment.id)
+        setForm({
+            course_code: enrollment.course_code,
+            course_name: '',
+            color: enrollment.color || '#4F6D7A'
+        })
+        setFormError('')
+        setModalOpen(true)
+    }
+
     async function handleSubmit(e) {
         e.preventDefault()
         setFormError('')
         try {
-            await client.post('/api/enrollments', form)
+            if (editingId) {
+                await client.put(`/api/enrollments/${editingId}`, { color: form.color })
+            } else {
+                await client.post('/api/enrollments', form)
+            }
             setModalOpen(true)
             await load()
         } catch (err) {
@@ -65,48 +81,63 @@ export default function Classes() {
 
     return (
         <div>
-            <h2>Enrolled Classes</h2>
-            <button onClick = {openCreate}>+ Add class</button>
+        <h2>Enrolled Classes</h2>
+        <button onClick={openCreate}>+ Add class</button>
 
-            {classes.length === 0 ? (
-                <p>No enrolled classes</p>
-            ) : (
-                <ul>
-                    {classes.map((enrollment) => (
-                        <li key = {enrollment.course_code}>
-                            {enrollment.course_code} | {enrollment.course_name}{' '}
-                            <button onClick = {() => handleDelete(enrollment.id)}>Remove</button>
-                        </li>
-                    ))}
-                </ul>
-            )}
+        {classes.length === 0 ? (
+            <p>No enrolled classes</p>
+        ) : (
+            <ul>
+            {classes.map((enrollment) => (
+                <li key={enrollment.id} style={{ borderLeft: `4px solid ${enrollment.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
+                <button onClick={() => openEdit(enrollment)} style={{ all: 'unset', cursor: 'pointer' }}>
+                    {enrollment.course_code} — {enrollment.course.name}
+                </button>{' '}
+                <button onClick={() => handleDelete(enrollment.id)}>Remove</button>
+                </li>
+            ))}
+            </ul>
+        )}
 
-            {modalOpen &&(
-                <Modal title = "Add class" onClose = {() => setModalOpen(false)}>
-                    <form onSubmit ={handleSubmit}>
-                        {formError && <p style = {{ color: 'red' }}>{formError}</p>}
+        {modalOpen && (
+            <Modal title={editingId ? 'Edit class color' : 'Add class'} onClose={() => setModalOpen(false)}>
+            <form onSubmit={handleSubmit}>
+                {formError && <p style={{ color: 'red' }}>{formError}</p>}
 
-                        <div>
-                            <label>Course Code</label>
-                            <input
-                                required
-                                value = {form.course_code}
-                                onChange = {(e) => setForm({ ...form, course_code: e.target.value })}
-                            />
-                        </div>
+                {!editingId && (
+                <>
+                    <div>
+                    <label>Course code</label>
+                    <input
+                        required
+                        value={form.course_code}
+                        onChange={(e) => setForm({ ...form, course_code: e.target.value })}
+                    />
+                    </div>
 
-                        <div>
-                            <label>Course Name</label>
-                            <input
-                                value = {form.course_name}
-                                onChange = {(e) => setForm({ ...form, course_name: e.target.value })}
-                            />
-                        </div>
+                    <div>
+                    <label>Course name (only needed if this is a new course)</label>
+                    <input
+                        value={form.course_name}
+                        onChange={(e) => setForm({ ...form, course_name: e.target.value })}
+                    />
+                    </div>
+                </>
+                )}
 
-                        <button type = "submit">Add class</button>
-                    </form>
-                </Modal>
-            )}
+                <div>
+                <label>Color</label>
+                <input
+                    type="color"
+                    value={form.color}
+                    onChange={(e) => setForm({ ...form, color: e.target.value })}
+                />
+                </div>
+
+                <button type="submit">{editingId ? 'Save color' : 'Add class'}</button>
+            </form>
+            </Modal>
+        )}
         </div>
     )
 }
