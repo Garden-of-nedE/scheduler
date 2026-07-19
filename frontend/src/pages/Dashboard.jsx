@@ -14,6 +14,8 @@ export default function Dashboard() {
     const { user, logout } = useAuth()
     const [tab, setTab] = useState('timetable')
 
+    const [testModalOpen, setTestModalOpen] = useState(false)
+
     return (
         <div>
             <header>
