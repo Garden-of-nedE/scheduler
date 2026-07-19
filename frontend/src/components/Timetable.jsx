@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
-import { formatTime} from '../utils/formatters.js'
+import { formatTime } from '../utils/formatters.js'
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
@@ -24,7 +24,7 @@ export default function Timetable() {
     const [error, setError] = useState('')
     
     const [modalOpen, setModalOpen] = useState(false)
-    const [editingId, seteditingId] = useState(null)
+    const [editingId, setEditingId] = useState(null)
     const [form, setForm] = useState(emptyForm())
     const [formError, setFormError] = useState('') 
     
@@ -49,14 +49,14 @@ export default function Timetable() {
     }, [])
 
     function openCreate() {
-        seteditingId(null)
+        setEditingId(null)
         setForm(emptyForm())
         setFormError('')
         setModalOpen(true)
     }
 
     function openEdit(entry) {
-        seteditingId(entry.id)
+        setEditingId(entry.id)
         setForm({
             course_code: entry.course_code,
             class_type: entry.class_type || '',
@@ -110,14 +110,17 @@ export default function Timetable() {
                 <p>No classes scheduled</p>
             ) : (
                 <ul>
-                    {entries.map((entry) => (
-                        <li key = {entry.id}>
+                    {entries.map((entry) => {
+                        const enrollment = enrollments.find((e) => e.course_code === entry.course_code)
+                        return (
+                            <li key = {entry.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
                             <button onClick = {() => openEdit(entry)} style = {{ all: 'unset', cursor: 'pointer'}}>
-                                {entry.day_of_week} | {entry.course_code} | {entry.course_name} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)}
+                                {entry.day_of_week} | {entry.course_code} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)}
                                 | {entry.class_type} | {entry.location}
                             </button>
                         </li>
-                    ))}
+                        )
+                    })}
                 </ul>
             )}
 

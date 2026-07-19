@@ -1,25 +1,104 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
-import { formatDate } from '../utils/formatters.js'
+import Modal from './Modal.jsx'
+import { formatDateTime } from '../utils/formatters.js'
+
+function emptyForm() {
+    return {
+        course_code: '',
+        title: '',
+        due_date: '',
+        weighting: '',
+        total_marks: '',
+        mark_achieved: '',
+        completed: false
+    }
+}
 
 export default function Assessments() {
     const [tasks, setTasks] = useState([])
+    const [enrollments, setEnrollments] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
-    useEffect(() => {
-        async function load() {
-            try {
-                const res = await client.get('/api/assessments')
-                setTasks(res.data)
-            } catch (err) {
-                setError('Could not load your assessments')
-            } finally {
-                setLoading(false)
-            }
+    const [modalOpen, setModalOpen] = useState(false)
+    const [editingId, setEditingId] = useState(null)
+    const [form, setForm] = useState(emptyForm())
+    const [formError, setFormError] = useState('')
+
+    async function load() {
+        setLoading(true)
+        try{
+            const [tasksRes, enrollmentsRes] = await Promise.all([
+                client.get('/api/assessments'),
+                client.get('/api/enrollments')
+            ])
+            setTasks(tasksRes.data)
+            setEnrollments(enrollmentsRes.data)
+        } catch (err) {
+            setError('Could not load your assessments')
+        } finally {
+            setLoading(false)
         }
+    }
+
+    useEffect(() => {
         load()
     }, [])
+
+    function openCreate() {
+        setEditingId(null)
+        setForm(emptyForm())
+        setFormError('')
+        setModalOpen(true)
+    }
+
+    function openEdit(task) {
+        setEditingId(task.id)
+        setForm({
+            course_code: task.course_code,
+            title: task.title || '',
+            due_date: task.due_date.slice(0, 16),    // User formatDateTime here
+            weighting: task.weighting,
+            total_marks: task.total_marks,
+            mark_achieved: task.mark_achieved ?? '',
+            completed: task.completed || false
+        })
+        setFormError('')
+        setModalOpen(true)
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+        setFormError('')
+        const payload = {
+            ...form,
+            mark_achieved: form.mark_achieved === '' ? null : Number(form.mark_achieved),
+        }
+
+        try{
+            if (editingId) {
+                await client.put(`/api/assessments/${editingId}`, form)
+            } else {
+                await client.post('/api/assessments', payload)
+            }
+            setModalOpen(false)
+            await load()
+        } catch (err) {
+            setFormError(err.response?.data?.detail || 'Could not save task')
+        }
+    }
+
+    async function handleDelete(id) {
+        if (!editingId) return
+        try {
+            await client.delete(`/api/assessments/${id}`)
+            setModalOpen(false)
+            await load()
+        } catch (err) {
+            setFormError('Could not delete this task')
+        }
+    }
 
     if (loading) return <p>Loading assessments ...</p>
     if (error) return <p style = {{ color: 'red' }}>{error}</p>
@@ -27,16 +106,119 @@ export default function Assessments() {
     return (
         <div>
             <h2>Current Assessment List</h2>
+            <button onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add task</button>
+            {enrollments.length === 0 && <p>Add a class under "Classes" before adding an assessment.</p>}
+
             {tasks.length === 0 ? (
-                <p>No assessments added.</p>
+                <p>No assessments added</p>
             ) : (
                 <ul>
-                    {tasks.map((task) => (
-                        <li key = {task.id}>
-                            {formatDate(task.due_date)} | {task.course_code} | {task.title} | {task.weighting} | {task.completed ? '✓' : '○'}
+                    {tasks.map((task) => {
+                        const enrollment = enrollments.find((e) => e.course_code === task.course_code)
+                        return (
+                            <li key = {task.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
+                            <button onClick = {() => openEdit(task)} style = {{ all: 'unset', cursor: 'pointer'}}>
+                                {task.due_date} | {task.course_code} | {task.title} |{task.weighting} | {task.total_marks} | 
+                                {task.mark_achieved}
+                            </button>{' '}
+                            <button onClick = {() => handleDelete(task.id)}>Remove</button>
                         </li>
-                    ))}
+                        )
+                    })}
                 </ul>
+            )}
+
+            {modalOpen && (
+                <Modal title = {editingId ? 'Edit task' : 'Add tasks'} onClose = {() => setModalOpen(false)}>
+                    <form onSubmit = {handleSubmit}>
+                        {formError && <p style = {{ color: 'red' }}>{formError}</p>}
+
+                        <div>
+                            <label>Course Code</label>
+                            <select
+                                required
+                                value = {form.course_code}
+                                onChange = {(e) => setForm({ ...form, course_code: e.target.value})}
+                            >
+                                <option values = "" disabled>Select a class ..</option>
+                                {enrollments.map((enr) => (
+                                    <option key = {enr.id} value = {enr.course_code}>
+                                        {enr.course_code}  {enr.course.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Task</label>
+                            <input 
+                                required
+                                value = {form.title}
+                                onChange = {(e) => setForm({ ...form, title: e.target.value })}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Due Date</label>
+                            <input
+                                type = "datetime-local"
+                                required
+                                value = {form.due_date}
+                                onChange = {(e) => setForm({ ...form, due_date: e.target.value })}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Weighting (%)</label>
+                            <input 
+                                type = "number"
+                                step = "0.01"
+                                required
+                                value = {form.weighting}
+                                onChange = {(e) => setForm({ ...form, weighting: e.target.value})}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Total Marks</label>
+                            <input
+                                type = "number"
+                                step = "0.01"
+                                required
+                                value = {form.total_marks}
+                                onChange = {(e) => setForm({ ...form, total_marks: e.target.value })}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Mark Achieved</label>
+                            <input
+                                type = "number"
+                                step = "0.01"
+                                value = {form.mark_achieved}
+                                onChange = {(e) => setForm({ ...form, mark_achieved: e.target.value })}
+                            />
+                        </div>
+
+                        <div>
+                            <label>
+                                <input
+                                    type = "checkbox"
+                                    checked = {form.completed}
+                                    onChange = {(e) => setForm({ ...form, completed: e.target.value })}
+                                />
+                                Completed
+                            </label>
+                        </div>
+
+                        <button type = "submit">{editingId? 'Save changes' : 'Add task'}</button>
+                        {editingId && (
+                            <button type = "button" onClick = {() => handleDelete(editingId)}>
+                                Delete
+                            </button>
+                        )}
+                    </form>
+                </Modal>
             )}
         </div>
     )
