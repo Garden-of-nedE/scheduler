@@ -8,7 +8,6 @@ const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'
 function emptyForm() {
     return {
         course_code: '',
-        course_name: '',
         class_type: '',
         day_of_week: 'monday',
         start_time: '08:00',
@@ -20,6 +19,7 @@ function emptyForm() {
 
 export default function Timetable() {
     const [entries, setEntries] = useState([])
+    const [enrollments, setEnrollments] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     
@@ -29,9 +29,14 @@ export default function Timetable() {
     const [formError, setFormError] = useState('') 
     
     async function load() {
+        setLoading(true)
         try {
-            const res = await client.get('/api/timetable')
-            setEntries(res.data)
+            const [entriesRes, enrollmentsRes] = await Promise.all([
+                client.get('/api/timetable'),
+                client.get('/api/enrollments')
+            ])
+            setEntries(entriesRes.data)
+            setEnrollments(enrollmentsRes.data)
         } catch (err) {
             setError('Could not load your timetable')
         } finally {
@@ -54,7 +59,6 @@ export default function Timetable() {
         seteditingId(entry.id)
         setForm({
             course_code: entry.course_code,
-            course_name: entry.course_name || '',
             class_type: entry.class_type || '',
             day_of_week: entry.day_of_week,
             start_time: entry.start_time.slice(0, 5),
@@ -78,7 +82,7 @@ export default function Timetable() {
             setModalOpen(true)
             await load()
         } catch (err) {
-            setFormError(err.response?.data?.detail || 'Could not save this class.')
+            setFormError(err.response?.data?.detail || 'Could not save this class')
         }
     }
 
@@ -89,7 +93,7 @@ export default function Timetable() {
             setModalOpen(false)
             await load()
         } catch (err) {
-            setFormError('Could not delete this class.')
+            setFormError('Could not delete this class')
         }
     }
 
@@ -99,7 +103,8 @@ export default function Timetable() {
     return (
         <div>
             <h2>Weekly timetable</h2>
-            <button onClick = {openCreate}>+ Add class</button>
+            <button onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add class</button>
+                            {enrollments.length ===  0 && <p>Asdd a class under "Classes" before scheduling</p>}
 
             {entries.length === 0 ? (
                 <p>No classes scheduled</p>
@@ -127,14 +132,6 @@ export default function Timetable() {
                                 required
                                 value = {form.course_code}
                                 onChange = {(e) => setForm({ ...form, course_code: e.target.value })}
-                            />
-                        </div>
-
-                        <div>
-                            <label>Course name</label>
-                            <input
-                                value = {form.course_name}
-                                onChange = {(e) => setForm({ ...form, course_name: e.target.value })}
                             />
                         </div>
 

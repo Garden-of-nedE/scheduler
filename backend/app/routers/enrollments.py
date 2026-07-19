@@ -6,7 +6,7 @@ from app import models, schemas
 from app.dependencys import get_current_user
 from app.crud import get_or_create_course
 
-router = APIRouter(prefix = '/api/enrollment', tags = ["enrollment"])
+router = APIRouter(prefix = '/api/enrollments', tags = ["enrollments"])
 
 @router.get("", response_model = list[schemas.EnrollmentOut])
 def list_enrollments(
@@ -22,6 +22,11 @@ def create_enrollment(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ): 
+    try:
+        get_or_create_course(db, code = enrol_in.course_code, name = enrol_in.course_name)
+    except ValueError as e:
+        raise HTTPException(status_code = 400, detail = str(e))
+
     existing = (
         db.query(models.Enrollment)
         .filter(

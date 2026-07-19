@@ -54,7 +54,7 @@ class TimetableEntryBase(BaseModel):
     color: Optional[str] = "#6B95A7"
 
 class TimetableEntryCreate(TimetableEntryBase):
-    course_name: Optional[str] = None
+    pass
 
 class TimetableEntryUpdate(BaseModel):
     course_code: Optional[str] = None

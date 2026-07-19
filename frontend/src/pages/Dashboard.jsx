@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import Timetable from '../components/Timetable.jsx'
+import Classes from '../components/Classes.jsx'
 import Assessments from '../components/Assessments.jsx'
 import Events from '../components/Events.jsx'
 
 const TABS = [
     { key: 'timetable', label: 'Timetable'},
+    { key: 'classes', label: 'Classes'},
     { key: 'assessments', label: 'Assessments'},
     { key: 'events', label: 'Events'},
 ]
@@ -38,6 +40,7 @@ export default function Dashboard() {
 
             <main>
                 {tab === 'timetable' && <Timetable />}
+                {tab === 'classes' && <Classes />}
                 {tab === 'assessments' && <Assessments />}
                 {tab === 'events' && <Events />}
             </main>

@@ -38,10 +38,7 @@ def create_entry(
     entry_in: schemas.TimetableEntryCreate,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
-):
-    if entry_in.end_time <= entry_in.start_time:
-        raise HTTPException(status_code = 400, detail = "end_time must be after start_time")
-    
+):  
     enrolled = (
         db.query(models.Enrollment)
         .filter(
@@ -54,6 +51,9 @@ def create_entry(
     if not enrolled:
         raise HTTPException(status_code = 400, detail = f"Not enrolled in {entry_in.course_code}")
 
+    if entry_in.end_time <= entry_in.start_time:
+        raise HTTPException(status_code = 400, detail = "end_time must be after start_time")
+    
     entry = models.TimetableEntry(
         course_code = entry_in.course_code,
         class_type = entry_in.class_type,
@@ -97,6 +97,19 @@ def update_entry(
     current_user: models.User = Depends(get_current_user),
 ):
     entry = _get_entry_or_404(db, entry_id, current_user.id)
+
+    if entry_in.course_code is not None:
+        enrolled = (
+            db.query(models.Enrollment)
+            .filter(
+                models.Enrollment.user_id == current_user.id,
+                models.Enrollment.course_code == entry_in.course_code,
+            )
+            .first()
+        )
+
+        if not enrolled:
+            raise HTTPException(status_code = 400, detail = f"Not enrolled in {entry_in.course_code}")
 
     update_data = entry_in.model_dump(exclude_unset = True)
     for field in NON_NULLABLE_FIELDS:
