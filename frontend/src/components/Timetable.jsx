@@ -131,11 +131,18 @@ export default function Timetable() {
                         
                         <div>
                             <label>Course code</label>
-                            <input
+                            <select
                                 required
                                 value = {form.course_code}
                                 onChange = {(e) => setForm({ ...form, course_code: e.target.value })}
-                            />
+                            >
+                                <option value = "" disabled>Select a class ...</option>
+                                {enrollments.map((enr) => (
+                                    <option key = {enr.id} vlaue = {enr.course_code}>
+                                        {enr.course_code}   {enr.course.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div>

@@ -120,8 +120,7 @@ export default function Assessments() {
                             <button onClick = {() => openEdit(task)} style = {{ all: 'unset', cursor: 'pointer'}}>
                                 {task.due_date} | {task.course_code} | {task.title} |{task.weighting} | {task.total_marks} | 
                                 {task.mark_achieved}
-                            </button>{' '}
-                            <button onClick = {() => handleDelete(task.id)}>Remove</button>
+                            </button>
                         </li>
                         )
                     })}
@@ -140,7 +139,7 @@ export default function Assessments() {
                                 value = {form.course_code}
                                 onChange = {(e) => setForm({ ...form, course_code: e.target.value})}
                             >
-                                <option values = "" disabled>Select a class ..</option>
+                                <option values = "" disabled>Select a class ...</option>
                                 {enrollments.map((enr) => (
                                     <option key = {enr.id} value = {enr.course_code}>
                                         {enr.course_code}  {enr.course.name}
@@ -207,7 +206,7 @@ export default function Assessments() {
                                     checked = {form.completed}
                                     onChange = {(e) => setForm({ ...form, completed: e.target.value })}
                                 />
-                                Completed
+                                {' '}Completed
                             </label>
                         </div>
 
