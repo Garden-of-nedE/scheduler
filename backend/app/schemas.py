@@ -34,6 +34,16 @@ class CourseUpdate(BaseModel):
 class CourseOut(CourseBase):
     model_config = ConfigDict(from_attribute = True)
 
+class EnrollmentCreate(BaseModel):
+    course_code: str
+    course_name: Optional[str] = None   # Only required if course is brand new
+
+class EnrollmentOut(BaseModel):
+    model_config = ConfigDict(from_attributes = True)
+    id: str
+    course_code: str
+    course: CourseOut
+
 class TimetableEntryBase(BaseModel):
     course_code: str
     class_type: Optional[str] = None

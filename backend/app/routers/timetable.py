@@ -42,10 +42,17 @@ def create_entry(
     if entry_in.end_time <= entry_in.start_time:
         raise HTTPException(status_code = 400, detail = "end_time must be after start_time")
     
-    try:
-        get_or_create_course(db, code = entry_in.course_code, name = entry_in.course_name)
-    except ValueError as e:
-        raise HTTPException(status_code = 400, detail = str(e))
+    enrolled = (
+        db.query(models.Enrollment)
+        .filter(
+            models.Enrollment.user_id == current_user.id,
+            models.Enrollment.course_code == entry_in.course_code,
+        )
+        .first()
+    )
+
+    if not enrolled:
+        raise HTTPException(status_code = 400, detail = f"Not enrolled in {entry_in.course_code}")
 
     entry = models.TimetableEntry(
         course_code = entry_in.course_code,

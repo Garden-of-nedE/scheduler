@@ -24,6 +24,10 @@ class ConnectionStatus(str, enum.Enum):
     accepted = "accepted"
     rejected = "rejected"
 
+class UserRole(str, enum.Enum):
+    student = "student"
+    admin = "admin"
+
 class User(Base):
     __tablename__ = "users"
 
@@ -31,6 +35,7 @@ class User(Base):
     email = Column(String, unique = True, index = True, nullable = False)
     hashed_password = Column(String, nullable = False)
     full_name = Column(String, nullable = True)
+    role = Column(Enum(UserRole), nullable = False, default = UserRole.student)
     created_at = Column(DateTime(timezone = True), server_default = func.now())
 
     timetable_entries = relationship("TimetableEntry", back_populates = "owner", cascade = "all, delete-orphan")
@@ -38,6 +43,7 @@ class User(Base):
     events = relationship("Event", back_populates = "owner", cascade = "all, delete-orphan")
     sent_requests = relationship("Connections", foreign_keys = "Connections.requester_id", back_populates = "request", cascade = "all, delete-orphan")
     received_requests = relationship("Connections", foreign_keys = "Connections.invitee_id", back_populates = "invitee", cascade = "all, delete-orphan")
+    enrollments = relationship("Enrollment", back_populates = "owner", cascade = "all, delete-orphan")
 
 class Course(Base):
     __tablename__ = "courses"
@@ -47,6 +53,21 @@ class Course(Base):
     
     timetable_entries = relationship("TimetableEntry", back_populates = "course")
     assessments = relationship("Assessment", back_populates = "course")
+    enrollments = relationship("Enrollment", back_populates = "course")
+
+class Enrollment(Base):
+    __tablename__ = "enrollments"
+
+    id = Column(UUID(as_uuid = False), primary_key = True, default = gen_uuid)
+    user_id = Column(UUID(as_uuid = False), ForeignKey("users.id", ondelete = "CASCADE"))
+    course_code = Column(String, ForeignKey("courses.code"), nullable = False, index = True)
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "course_code", name = "uq_user_enrollment"),
+    )
+
+    owner = relationship("User", back_populates = "enrollments")
+    course = relationship("Course", back_populates = "enrollments")
 
 class TimetableEntry(Base):
     __tablename__ = "timetable_entries"

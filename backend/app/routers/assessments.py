@@ -40,10 +40,17 @@ def create_task(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    try:
-        get_or_create_course(db, code = task_in.course_code, name = task_in.course_name)
-    except ValueError as e:
-        raise HTTPException(status_code = 400, detail = str(e))
+    enrolled = (
+        db.query(models.Enrollment)
+        .filter(
+            models.Enrollment.user_id == current_user.id,
+            models.Enrollment.course_code == task_in.course_code,
+        )
+        .first()
+    )
+
+    if not enrolled:
+        raise HTTPException(status_code = 400, detail = f"Not enrolled in {task_in.course_code}")
     
     task = models.Assessment(
         course_code = task_in.course_code,
