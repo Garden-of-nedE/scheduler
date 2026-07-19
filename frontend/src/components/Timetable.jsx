@@ -108,7 +108,7 @@ export default function Timetable() {
                     {entries.map((entry) => (
                         <li key = {entry.id}>
                             <button onClick = {() => openEdit(entry)} style = {{ all: 'unset', cursor: 'pointer'}}>
-                                {entry.day_of_week} | {entry.course_code} {entry.course_name} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)}
+                                {entry.day_of_week} | {entry.course_code} | {entry.course_name} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)}
                                 | {entry.class_type} | {entry.location}
                             </button>
                         </li>

@@ -5,7 +5,7 @@ from app.database import get_db
 from app import models, schemas
 from app.dependencys import get_current_user
 
-router = APIRouter(prefix = '/api/courses', tages = ["courses"])
+router = APIRouter(prefix = '/api/courses', tags = ["courses"])
 
 @router.get("", response_model = list[schemas.CourseOut])
 def list_courses(
