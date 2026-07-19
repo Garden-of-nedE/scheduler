@@ -24,6 +24,7 @@ export default function Timetable() {
     const [error, setError] = useState('')
     
     const [modalOpen, setModalOpen] = useState(false)
+    const [editingId, seteditingId] = useState(null)
     const [form, setForm] = useState(emptyForm())
     const [formError, setFormError] = useState('') 
     
@@ -43,7 +44,24 @@ export default function Timetable() {
     }, [])
 
     function openCreate() {
+        seteditingId(null)
         setForm(emptyForm())
+        setFormError('')
+        setModalOpen(true)
+    }
+
+    function openEdit(entry) {
+        seteditingId(entry.id)
+        setForm({
+            course_code: entry.course_code,
+            course_name: entry.course_name || '',
+            class_type: entry.class_type || '',
+            day_of_week: entry.day_of_week,
+            start_time: entry.start_time.slice(0, 5),
+            end_time: entry.end_time.slice(0, 5),
+            location: entry.location || '',
+            color: entry.color || '#4F6D7A'
+        })
         setFormError('')
         setModalOpen(true)
     }
@@ -52,11 +70,26 @@ export default function Timetable() {
         e.preventDefault()
         setFormError('')
         try {
-            await client.post('/api/timetable', form)
+            if (editingId) {
+                await client.put(`/api/timetable/${editingId}`, form)
+            } else {
+                await client.post('/api/timetable', form)
+            }
             setModalOpen(true)
             await load()
         } catch (err) {
             setFormError(err.response?.data?.detail || 'Could not save this class.')
+        }
+    }
+
+    async function handleDelete() {
+        if (!editingId) return
+        try {
+            await client.delete(`/api/timetable/${editingId}`)
+            setModalOpen(false)
+            await load()
+        } catch (err) {
+            setFormError('Could not delete this class.')
         }
     }
 
@@ -74,15 +107,17 @@ export default function Timetable() {
                 <ul>
                     {entries.map((entry) => (
                         <li key = {entry.id}>
-                            {entry.day_of_week} | {entry.course_code} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)}
-                            | {entry.class_type} | {entry.location && `@${entry.location}`}
+                            <button onClick = {() => openEdit(entry)} style = {{ all: 'unset', cursor: 'pointer'}}>
+                                {entry.day_of_week} | {entry.course_code} {entry.course_name} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)}
+                                | {entry.class_type} | {entry.location}
+                            </button>
                         </li>
                     ))}
                 </ul>
             )}
 
             {modalOpen && (
-                <Modal title = "Add class" onClose ={() => setModalOpen(false)}>
+                <Modal title = {editingId ? 'Edit class' : 'Add class'} onClose ={() => setModalOpen(false)}>
                     <form onSubmit = {handleSubmit}>
                         {formError && <p style = {{ color: 'red'}}>{formError}</p>}
                         
@@ -96,7 +131,7 @@ export default function Timetable() {
                         </div>
 
                         <div>
-                            <label>Course name (only needed if a new course)</label>
+                            <label>Course name</label>
                             <input
                                 value = {form.course_name}
                                 onChange = {(e) => setForm({ ...form, course_name: e.target.value })}
@@ -143,7 +178,21 @@ export default function Timetable() {
                             />
                         </div>
 
-                        <button type = "submit">Add class</button>
+                        <div>
+                            <label>Location</label>
+                            <input 
+                                type = "text"
+                                value = {form.location}
+                                onChange = {(e) => setForm({ ...form, location: e.target.value })}
+                            />
+                        </div>
+
+                        <button type = "submit">{editingId ? 'Save changes' : 'Add class'}</button>
+                        {editingId && (
+                            <button type = "button" onClick = {handleDelete}>
+                                Delete
+                            </button>
+                        )}
                     </form>
                 </Modal>
             )}

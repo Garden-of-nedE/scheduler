@@ -21,6 +21,19 @@ class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
+class CourseBase(BaseModel):
+    code: str
+    name: str
+
+class CourseCreate(CourseBase):
+    pass
+
+class CourseUpdate(BaseModel):
+    name: str
+
+class CourseOut(CourseBase):
+    model_config = ConfigDict(from_attribute = True)
+
 class TimetableEntryBase(BaseModel):
     course_code: str
     class_type: Optional[str] = None
