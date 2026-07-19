@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
+import Timetable from '../components/Timetable.jsx'
 
 const TABS = [
     { key: 'timetable', label: 'Timetable'},
@@ -34,7 +35,7 @@ export default function Dashboard() {
             </nav>
 
             <main>
-                {tab === 'timetable' && <div>Timetable view here</div>}
+                {tab === 'timetable' && <Timetable />}
                 {tab === 'assessments' && <div>Assessments view here</div>}
                 {tab === 'events' && <div>Event view here</div>}
             </main>

@@ -61,8 +61,19 @@ Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is r
 
 Recurring assessments: `skip_date` stretch the series of tasks across more calendar weeks, rather than reducing the total quiz count.
 
+### Frontend
+Vite is used for the frontend, ESLint which catches issues such as unused variables, undefined referecences and typos.
+
 ### Noteable Error Log
+**Backend**
+
 Encountered status code `500` when testing the Update functionality of the Assessment table. The `500` code indicated that it was a server side error, upon further investigation I found that it was due to inconsistencies located within my API schema logic. In which the `AssessmentUpdate` class would allow for non-nullable fields to be updated to `NULL` as a result of `Optional[X] = None`. To address this issue, a guard was added to the `PUT` router logic which would explicitly catches these occurrences before any updates are completed. Upon addressing this, I went back into the `Timetable` router and applied the same guard to the relevant fields.
+
+**Frontend**
+
+Ran into an issue in which the landing page did not redirect as expected, when tested. This was due to typos in the `client.js` file, rather than the Vite versioning that I initially thought it was. The specific error message [`Cannot read properties of undefined (reading 'VITE_API_URL')`] persists across multiple different fixed. I did not proper interpret the traceback point, which provided the exact location of the error.
+
+CORS error showed a 200 status in the Network tab but still blocked the browser from reading the response. The request succeeded server-side, however the browser did not transer the data to JS. The issue was located in the `main.py` which was missing a CORSMIddleware block, with its inclusion the page functioned as expected.
 
 ## Revisit Points
 Course deletion policy, duplicate-request handling logic at a later stage.
