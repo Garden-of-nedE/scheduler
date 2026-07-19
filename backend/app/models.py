@@ -61,6 +61,7 @@ class Enrollment(Base):
     id = Column(UUID(as_uuid = False), primary_key = True, default = gen_uuid)
     user_id = Column(UUID(as_uuid = False), ForeignKey("users.id", ondelete = "CASCADE"))
     course_code = Column(String, ForeignKey("courses.code"), nullable = False, index = True)
+    color = Column(String, nullable = True, default = "#6B95A7")
 
     __table_args__ = (
         UniqueConstraint("user_id", "course_code", name = "uq_user_enrollment"),
@@ -81,7 +82,6 @@ class TimetableEntry(Base):
     start_time = Column(Time, nullable = False)
     end_time = Column(Time, nullable = False)
     location = Column(String, nullable = True)
-    color = Column(String, nullable = True, default = "#6B95A7")
     
     owner = relationship("User", back_populates = "timetable_entries")
     course = relationship("Course", back_populates = "timetable_entries")

@@ -37,11 +37,16 @@ class CourseOut(CourseBase):
 class EnrollmentCreate(BaseModel):
     course_code: str
     course_name: Optional[str] = None   # Only required if course is brand new
+    color: Optional[str] = "#4F6D7A"
+
+class EnrollmentUpdate(BaseModel):
+    color: str
 
 class EnrollmentOut(BaseModel):
     model_config = ConfigDict(from_attributes = True)
     id: str
     course_code: str
+    color: Optional[str] = None
     course: CourseOut
 
 class TimetableEntryBase(BaseModel):
@@ -51,7 +56,6 @@ class TimetableEntryBase(BaseModel):
     start_time: time
     end_time: time
     location: Optional[str] = None
-    color: Optional[str] = "#6B95A7"
 
 class TimetableEntryCreate(TimetableEntryBase):
     pass
@@ -63,7 +67,6 @@ class TimetableEntryUpdate(BaseModel):
     start_time: Optional[time] = None
     end_time: Optional[time] = None
     location: Optional[str] = None
-    color: Optional[str] = None
 
 class TimetableEntryOut(TimetableEntryBase):
     model_config = ConfigDict(from_attribute = True)

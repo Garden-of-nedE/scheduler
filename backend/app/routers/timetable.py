@@ -61,7 +61,6 @@ def create_entry(
         start_time = entry_in.start_time,
         end_time = entry_in.end_time,
         location = entry_in.location,
-        color = entry_in.color,
         user_id = current_user.id,
     )
     db.add(entry)

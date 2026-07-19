@@ -66,3 +66,28 @@ def delete_enrollment(
     
     db.delete(enrollment)
     db.commit()
+
+@router.put("/{enrollment_id}", response_model = schemas.EnrollmentOut)
+def update_enrollment(
+    enrollment_id: str,
+    enrol_in: schemas.EnrollmentUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    enrollment = (
+        db.query(models.Enrollment)
+        .filter(
+            models.Enrollment.id == enrollment_id,
+            models.Enrollment.user_id == current_user.id,
+        )
+        .first()
+    )
+
+    if not enrollment:
+        raise HTTPException(status_code = 404, detail = "Enrollment not found")
+    
+    enrollment.color = enrol_in.color
+    db.commit()
+    db.refresh(enrollment)
+
+    return enrollment
