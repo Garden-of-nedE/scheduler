@@ -81,7 +81,7 @@ export default function Assessments() {
 
         try{
             if (editingId) {
-                await client.put(`/api/assessments/${editingId}`, form)
+                await client.put(`/api/assessments/${editingId}`, payload)
             } else {
                 await client.post('/api/assessments', payload)
             }
@@ -103,6 +103,15 @@ export default function Assessments() {
         }
     }
 
+    async function toggleCompleted(task) {
+        try {
+            await client.put(`/api/assessments/${task.id}`, { completed: !task.completed })
+            await load()
+        } catch (err) {
+            setError('Could not update this task')
+        }
+    }
+
     if (loading) return <p>Loading assessments ...</p>
     if (error) return <p style = {{ color: 'red' }}>{error}</p>
 
@@ -121,9 +130,12 @@ export default function Assessments() {
                         return (
                             <li key = {task.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
                             <button onClick = {() => openEdit(task)} style = {{ all: 'unset', cursor: 'pointer'}}>
-                                {formatDate(task.due_date)} | {task.course_code} | {task.title} |{task.weighting} | {task.total_marks} | 
+                                {formatDate(task.due_date)} | {task.course_code} | {task.title} |{task.weighting}% | {task.total_marks} | 
                                 {task.mark_achieved}
-                            </button>
+                            </button> {' '}
+                            <button onClick = {() => toggleCompleted(task)}>
+                                {task.completed ? '✓' : '○'}
+                            </button> {' '}
                         </li>
                         )
                     })}
@@ -216,7 +228,7 @@ export default function Assessments() {
                                 <input
                                     type = "checkbox"
                                     checked = {form.completed}
-                                    onChange = {(e) => setForm({ ...form, completed: e.target.value })}
+                                    onChange = {(e) => setForm({ ...form, completed: e.target.checked })}
                                 />
                                 {' '}Completed
                             </label>
