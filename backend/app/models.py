@@ -113,8 +113,9 @@ class Event(Base):
 
     title = Column(String, nullable = False)
     description = Column(String, nullable = True)
-    start_time = Column(DateTime(timezone = True), nullable = False)
-    end_time = Column(DateTime(timezone = True), nullable = True)
+    date = Column(Date, nullable = False)
+    start_time = Column(Time, nullable = False)
+    end_time = Column(Time, nullable = True)
     location = Column(String, nullable = True)
 
     owner = relationship("User", back_populates = "events")

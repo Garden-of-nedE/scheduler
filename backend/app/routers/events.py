@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from datetime import datetime, date as date_type, time as time_type
 
 from app.database import get_db
 from app import models, schemas
@@ -37,6 +38,11 @@ def create_event(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    event_datetime = datetime.combine(event_in.date, event_in.start_time)
+
+    if event_datetime < datetime.now():
+        raise HTTPException(status_code = 400, details = "Event date cannot be in the past")
+    
     if event_in.end_time is not None and event_in.end_time <= event_in.start_time:
         raise HTTPException(status_code = 400, detail = "end_time must be after start_time")
     

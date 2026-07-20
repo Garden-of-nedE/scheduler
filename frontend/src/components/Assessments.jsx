@@ -130,8 +130,7 @@ export default function Assessments() {
                         return (
                             <li key = {task.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
                             <button onClick = {() => openEdit(task)} style = {{ all: 'unset', cursor: 'pointer'}}>
-                                {formatDate(task.due_date)} | {task.course_code} | {task.title} |{task.weighting}% | {task.total_marks} | 
-                                {task.mark_achieved}
+                                {formatDate(task.due_date)} | {task.course_code} | {task.title} | {task.weighting}% | {task.total_marks} | {task.mark_achieved}
                             </button> {' '}
                             <button onClick = {() => toggleCompleted(task)}>
                                 {task.completed ? '✓' : '○'}
@@ -143,7 +142,7 @@ export default function Assessments() {
             )}
 
             {modalOpen && (
-                <Modal title = {editingId ? 'Edit task' : 'Add tasks'} onClose = {() => setModalOpen(false)}>
+                <Modal title = {editingId ? 'Edit task' : 'Add task'} onClose = {() => setModalOpen(false)}>
                     <form onSubmit = {handleSubmit}>
                         {formError && <p style = {{ color: 'red' }}>{formError}</p>}
 
@@ -221,17 +220,6 @@ export default function Assessments() {
                                 value = {form.mark_achieved}
                                 onChange = {(e) => setForm({ ...form, mark_achieved: e.target.value })}
                             />
-                        </div>
-
-                        <div>
-                            <label>
-                                <input
-                                    type = "checkbox"
-                                    checked = {form.completed}
-                                    onChange = {(e) => setForm({ ...form, completed: e.target.checked })}
-                                />
-                                {' '}Completed
-                            </label>
                         </div>
 
                         <button type = "submit">{editingId? 'Save changes' : 'Add task'}</button>

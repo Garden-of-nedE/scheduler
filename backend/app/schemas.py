@@ -113,18 +113,20 @@ class AssessmentRecurringCreate(AssessmentBase):
 class EventBase(BaseModel):
     title: str
     description: Optional[str] = None
-    start_time: datetime
-    end_time: Optional[datetime] = None
+    date: date
+    start_time: time
+    end_time: Optional[time] = None
     location: Optional[str] = None
 
 class EventCreate(EventBase):
     pass
 
-class EventUpdate(EventBase):
+class EventUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
+    date: Optional[date] = None
+    start_time: Optional[time] = None
+    end_time: Optional[time] = None
     location: Optional[str] = None
 
 class EventOut(EventBase):
