@@ -138,7 +138,7 @@ export default function Timetable() {
                             >
                                 <option value = "" disabled>Select a class ...</option>
                                 {enrollments.map((enr) => (
-                                    <option key = {enr.id} vlaue = {enr.course_code}>
+                                    <option key = {enr.id} value = {enr.course_code}>
                                         {enr.course_code}   {enr.course.name}
                                     </option>
                                 ))}

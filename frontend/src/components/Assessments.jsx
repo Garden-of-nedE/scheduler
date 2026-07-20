@@ -139,7 +139,7 @@ export default function Assessments() {
                                 value = {form.course_code}
                                 onChange = {(e) => setForm({ ...form, course_code: e.target.value})}
                             >
-                                <option values = "" disabled>Select a class ...</option>
+                                <option value = "" disabled>Select a class ...</option>
                                 {enrollments.map((enr) => (
                                     <option key = {enr.id} value = {enr.course_code}>
                                         {enr.course_code}  {enr.course.name}

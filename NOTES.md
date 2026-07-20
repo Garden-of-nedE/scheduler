@@ -75,6 +75,8 @@ Ran into an issue in which the landing page did not redirect as expected, when t
 
 CORS error showed a 200 status in the Network tab but still blocked the browser from reading the response. The request succeeded server-side, however the browser did not transer the data to JS. The issue was located in the `main.py` which was missing a CORSMIddleware block, with its inclusion the page functioned as expected.
 
+Ran it unexpected error, where once a student logs out of their session they are no longer able to add classes to their timetable or assessments. Thought this was due to a token issue with JWT. After verifying that it wwas not a backend issue, further checks through `Inspect Elements` of the front end showed that there were typos in the respective code bases. 
+
 ## Revisit Points
 Course deletion policy, duplicate-request handling logic at a later stage.
 
@@ -82,5 +84,3 @@ Course creation &rarr; `course_name` is currently not a required field of `Timet
 A separate Course router will be created to list/create courses independently *before* submitting a timetable entry. \
 Current implementation: get or create pattern will first check for existing Course before creating it. \
 Attached limitation &rarr; theoretical race condition if two requests for same course code occurs, need to include a database level `ON CONFLICT DO NOTHING` constraint. 
-
-Signing out &rarr; student becomes unenrolled in class
