@@ -39,7 +39,11 @@ def create_enrollment(
     if existing:
         raise HTTPException(status_code = 400, detail = "Already enrolled in this Unit")
     
-    enrollment = models.Enrollment(user_id = current_user.id, course_code = enrol_in.course_code)
+    enrollment = models.Enrollment(
+        user_id = current_user.id, 
+        course_code = enrol_in.course_code,
+        color = enrol_in.color,
+    )
     db.add(enrollment)
     db.commit()
     db.refresh(enrollment)

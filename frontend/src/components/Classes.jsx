@@ -35,6 +35,7 @@ export default function Classes() {
     }, [])
 
     function openCreate() {
+        setEditingId(null)
         setForm(emptyForm())
         setFormError('')
         setModalOpen(true)
