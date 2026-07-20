@@ -75,7 +75,8 @@ class TimetableEntryOut(TimetableEntryBase):
 class AssessmentBase(BaseModel):
     course_code: str
     title: str
-    due_date: datetime
+    due_date: date
+    deadline: Optional[time] = None
     weighting: Decimal
     total_marks: Decimal
     mark_achieved: Optional[Decimal] = None
@@ -93,7 +94,8 @@ class AssessmentCreate(AssessmentBase):
 class AssessmentUpdate(BaseModel):
     course_code: Optional[str] = None
     title: Optional[str] = None
-    due_date: Optional[datetime] = None
+    due_date: Optional[date] = None
+    deadline: Optional[time] = None
     weighting: Optional[Decimal] = None
     total_marks: Optional[Decimal] = None
     mark_achieved: Optional[Decimal] = None

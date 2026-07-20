@@ -1,7 +1,7 @@
 import uuid
 import enum
 
-from sqlalchemy import (Column, String, DateTime, ForeignKey, Enum, Time, Numeric, Boolean, UniqueConstraint, func)
+from sqlalchemy import (Column, String, DateTime, Date, Time, ForeignKey, Enum, Time, Numeric, Boolean, UniqueConstraint, func)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -95,7 +95,8 @@ class Assessment(Base):
     recurrence_group_id = Column(UUID(as_uuid = False), nullable = True, index = True)
 
     title = Column(String, nullable = False)
-    due_date = Column(DateTime(timezone = True), nullable = False)
+    due_date = Column(Date, nullable = False)
+    deadline = Column(Time, nullable = True)
     weighting = Column(Numeric(5, 2), nullable = False)
     total_marks = Column(Numeric(5, 2), nullable = False)
     mark_achieved = Column(Numeric(5, 2), nullable = True)

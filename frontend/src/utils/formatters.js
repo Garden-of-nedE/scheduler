@@ -10,7 +10,7 @@ export function formatDateTime(isoString) {
 
 export function formatDate(isoString) {
     return new Date(isoString).toLocaleDateString(undefined, {
-        month: 'short',
+        month: 'numeric',
         day: 'numeric',
         year: '2-digit',
     })

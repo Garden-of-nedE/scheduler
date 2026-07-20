@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
-import { formatDateTime } from '../utils/formatters.js'
+import { formatDate, formatTime } from '../utils/formatters.js'
 
 function emptyForm() {
     return {
         course_code: '',
         title: '',
         due_date: '',
+        deadline: '23:59',
         weighting: '',
         total_marks: '',
         mark_achieved: '',
@@ -58,7 +59,8 @@ export default function Assessments() {
         setForm({
             course_code: task.course_code,
             title: task.title || '',
-            due_date: task.due_date.slice(0, 16),    // User formatDateTime here
+            due_date: task.due_date,
+            deadline: task.deadline ? task.deadline.slice(0, 5) : '',
             weighting: task.weighting,
             total_marks: task.total_marks,
             mark_achieved: task.mark_achieved ?? '',
@@ -73,6 +75,7 @@ export default function Assessments() {
         setFormError('')
         const payload = {
             ...form,
+            deadline: form.deadline === '' ? null : form.deadline,
             mark_achieved: form.mark_achieved === '' ? null : Number(form.mark_achieved),
         }
 
@@ -118,7 +121,7 @@ export default function Assessments() {
                         return (
                             <li key = {task.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
                             <button onClick = {() => openEdit(task)} style = {{ all: 'unset', cursor: 'pointer'}}>
-                                {task.due_date} | {task.course_code} | {task.title} |{task.weighting} | {task.total_marks} | 
+                                {formatDate(task.due_date)} | {task.course_code} | {task.title} |{task.weighting} | {task.total_marks} | 
                                 {task.mark_achieved}
                             </button>
                         </li>
@@ -160,10 +163,19 @@ export default function Assessments() {
                         <div>
                             <label>Due Date</label>
                             <input
-                                type = "datetime-local"
+                                type = "date"
                                 required
                                 value = {form.due_date}
                                 onChange = {(e) => setForm({ ...form, due_date: e.target.value })}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Deadline (optional)</label>
+                            <input
+                                type = "time"
+                                value = {form.deadline}
+                                onChange = {(e) => setForm({ ...form, deadline: e.target.value })}
                             />
                         </div>
 
