@@ -120,10 +120,17 @@ def create_recurring_task(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    try:
-        get_or_create_course(db, code = task_in.course_code, name = task_in.course_name)
-    except ValueError as e:
-        raise HTTPException(status_code = 400, detail = str(e))
+    enrolled = (
+        db.query(models.Enrollment)
+        .filter(
+            models.Enrollment.user_id == current_user.id,
+            models.Enrollment.course_code == task_in.course_code,
+        )
+        .first()
+    )
+
+    if not enrolled:
+        raise HTTPException(status_code = 400, detail = f"Not enrolled in {task_in.course_code}")
     
     group_id = str(uuid.uuid4())
     created = []
@@ -132,11 +139,11 @@ def create_recurring_task(
     generated_count = 0
 
     while generated_count < task_in.recurrence.occurrences:
-        if current_date.date() not in task_in.recurrence.skip_dates:
+        if current_date not in task_in.recurrence.skip_dates:
             task = models.Assessment(
                 course_code = task_in.course_code,
                 task_name = task_in.task_name,
-                due_date = task_in.due_date,
+                due_date = current_date,
                 description = task_in.description,
                 deadline = task_in.deadline,
                 weighting = task_in.weighting,
@@ -144,7 +151,7 @@ def create_recurring_task(
                 mark_achieved = None,
                 completed = False,
                 user_id = current_user.id,
-                recurrence_group_id = group_id
+                recurrence_group_id = group_id,
             )
             db.add(task)
             created.append(task)

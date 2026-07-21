@@ -86,7 +86,7 @@ class AssessmentBase(BaseModel):
 class RecurrenceCreate(BaseModel):
     frequency: str = "weekly"
     occurrences: int
-    first_due_date: datetime
+    first_due_date: date
     skip_dates: List[date] = []
 
 class AssessmentCreate(AssessmentBase):
@@ -108,7 +108,13 @@ class AssessmentOut(AssessmentBase):
     id: str
     recurrence_group_id: Optional[str] = None
 
-class AssessmentRecurringCreate(AssessmentBase):
+class AssessmentRecurringCreate(BaseModel):
+    course_code: str
+    task_name: str
+    description: Optional[str] = None
+    deadline: Optional[time] = None
+    weighting: Decimal
+    total_marks: Decimal
     recurrence: RecurrenceCreate
 
 class EventBase(BaseModel):
