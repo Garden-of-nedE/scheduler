@@ -76,7 +76,7 @@ export default function Assessments() {
         setEditingId(null)
         setForm(emptyForm())
         setIsRecurring(false)
-        setRecurrence({ occurrences: '', first_due_date: '', skip_date: [] })
+        setRecurrence({ occurrences: '', first_due_date: '', skip_dates: [] })
         setSkipDateInput('')
         setFormError('')
         setModalOpen(true)
@@ -108,7 +108,23 @@ export default function Assessments() {
         }
 
         try{
-            if (editingId) {
+            if (isRecurring) {
+                const recurringPayload = {
+                    course_code: form.course_code,
+                    task_name: form.task_name,
+                    description: form.description,
+                    deadline: form.deadline === '' ? null : form.deadline,
+                    weighting: form.weighting,
+                    total_marks: form.total_marks,
+                    recurrence: {
+                        frequency: 'weekly',
+                        occurrences: Number(recurrence.occurrences),
+                        first_due_date: recurrence.first_due_date,
+                        skip_dates: recurrence.skip_dates,
+                    },
+                }
+                await client.post('/api/assessments/recurring', recurringPayload)
+            } else if (editingId) {
                 await client.put(`/api/assessments/${editingId}`, payload)
             } else {
                 await client.post('/api/assessments', payload)
@@ -228,19 +244,6 @@ export default function Assessments() {
                     <form onSubmit = {handleSubmit}>
                         {formError && <p style = {{ color: 'red' }}>{formError}</p>}
 
-                        {!editingId && (
-                            <div>
-                                <label>
-                                    <input
-                                        type = "checkbox"
-                                        checked = {isRecurring}
-                                        onChange = {(e) => setIsRecurring(e.target.checked)}
-                                    />
-                                    {' '}Repeat weekly
-                                </label>
-                            </div>
-                        )}
-
                         <div>
                             <label>Course Code</label>
                             <select
@@ -266,6 +269,19 @@ export default function Assessments() {
                             />
                         </div>
 
+                        {!editingId && (
+                            <div>
+                                <label>
+                                    <input
+                                        type = "checkbox"
+                                        checked = {isRecurring}
+                                        onChange = {(e) => setIsRecurring(e.target.checked)}
+                                    />
+                                    {' '}Repeat weekly
+                                </label>
+                            </div>
+                        )}
+
                         {isRecurring ? (
                             <>
                                 <div>
@@ -275,7 +291,7 @@ export default function Assessments() {
                                         min = "1"
                                         required
                                         value = {recurrence.occurrences}
-                                        onChange = {(e) = setRecurrence({ ...recurrence, occurrences: e.target.value })}
+                                        onChange = {(e) => setRecurrence({ ...recurrence, occurrences: e.target.value })}
                                     />
                                 </div>
 
@@ -299,8 +315,8 @@ export default function Assessments() {
                                     <button
                                         type = "button"
                                         onClick = {() => {
-                                            if (skipDateInput && !recurrence.skip_dates.at.include(skipDateInput)) {
-                                                setRecurrence({ ...recurrence, skip_date: [...recurrence.skip_dates, skipDateInput] })
+                                            if (skipDateInput && !recurrence.skip_dates.includes(skipDateInput)) {
+                                                setRecurrence({ ...recurrence, skip_dates: [...recurrence.skip_dates, skipDateInput] })
                                                 setSkipDateInput('')
                                             }
                                         }}
@@ -389,7 +405,7 @@ export default function Assessments() {
                             />
                         </div>
 
-                        <button type = "submit">{editingId? 'Save changes' : 'Add task'}</button>
+                        <button type = "submit">{editingId ? 'Save changes' : 'Add task'}</button>
                         {editingId && (
                             <button type = "button" onClick = {() => handleDelete(editingId)}>
                                 Delete
