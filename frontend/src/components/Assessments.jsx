@@ -94,6 +94,7 @@ export default function Assessments() {
             mark_achieved: task.mark_achieved ?? '',
             completed: task.completed || false
         })
+        setIsRecurring(false)
         setFormError('')
         setModalOpen(true)
     }
