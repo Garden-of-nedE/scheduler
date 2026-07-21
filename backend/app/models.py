@@ -94,8 +94,9 @@ class Assessment(Base):
     course_code = Column(String, ForeignKey("courses.code"), nullable = False, index = True)
     recurrence_group_id = Column(UUID(as_uuid = False), nullable = True, index = True)
 
-    title = Column(String, nullable = False)
+    task_name = Column(String, nullable = False)
     due_date = Column(Date, nullable = False)
+    description = Column(String, nullable = True)
     deadline = Column(Time, nullable = True)
     weighting = Column(Numeric(5, 2), nullable = False)
     total_marks = Column(Numeric(5, 2), nullable = False)

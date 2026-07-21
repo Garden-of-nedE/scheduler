@@ -6,7 +6,7 @@ import { formatDate, formatTime } from '../utils/formatters.js'
 function emptyForm() {
     return {
         course_code: '',
-        title: '',
+        task_name: '',
         due_date: '',
         deadline: '23:59',
         weighting: '',
@@ -26,6 +26,23 @@ export default function Assessments() {
     const [editingId, setEditingId] = useState(null)
     const [form, setForm] = useState(emptyForm())
     const [formError, setFormError] = useState('')
+
+    const [sortOrder, setSortOrder] = useState('asc')
+    const [filters, setFilters] = useState({
+        course_code: '',
+        status: 'all',
+    })
+
+    const filteredTasks = tasks.filter((task) => {
+        if (filters.course_code && task.course_code !== filters.course_code) return false
+        if (filters.status === 'completed' && !task.completed) return false
+        if (filters.status === 'incompleted' && task.completed) return false
+        return true
+    })
+    .sort((a, b) => {
+        const comparison = a.due_date.localeCompare(b.due_date)
+        return sortOrder === 'asc' ? comparison : -comparison
+    })
 
     async function load() {
         setLoading(true)
@@ -58,7 +75,7 @@ export default function Assessments() {
         setEditingId(task.id)
         setForm({
             course_code: task.course_code,
-            title: task.title || '',
+            task_name: task.task_name || '',
             due_date: task.due_date,
             deadline: task.deadline ? task.deadline.slice(0, 5) : '',
             weighting: task.weighting,
@@ -112,37 +129,91 @@ export default function Assessments() {
         }
     }
 
+    function weightedMark(task) {
+        if (task.mark_achieved == null) return null
+        return ((task.mark_achieved/task.total_marks) * task_weighting).toFixed(2)
+    }
+
     if (loading) return <p>Loading assessments ...</p>
     if (error) return <p style = {{ color: 'red' }}>{error}</p>
 
     return (
         <div>
             <h2>Current Assessment List</h2>
-            <button onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add task</button>
+            <button onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add task</button>            
             {enrollments.length === 0 && <p>Add a class under "Classes" before adding an assessment.</p>}
 
-            {tasks.length === 0 ? (
+            <div style = {{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+                <select 
+                    value = {filters.course_code}
+                    onChange = {(e) => setFilters({ ...filters, course_code: e.target.value })}
+                >
+                    <option value = "">All courses</option>
+                    {enrollments.map((enr) => (
+                        <option key = {enr.id} value = {enr.course_code}>{enr.course_code}</option>
+                    ))}
+                </select>
+
+                <select 
+                    value = {filters.status}
+                    onChange = {(e) => setFilters({ ...filters, status: e.target.value })}
+                >
+                    <option value = "all">All</option>
+                    <option value = "completed">Completed</option>
+                    <option value = "incompleted">Incompleted</option>
+                </select>
+                <button onClick = {() => setFilters({ course_code: '', status: 'all' })}>
+                    Clear filters
+                </button>
+            </div>
+
+            {filteredTasks.length === 0 ? (
                 <p>No assessments added</p>
             ) : (
-                <ul>
-                    {tasks.map((task) => {
-                        const enrollment = enrollments.find((e) => e.course_code === task.course_code)
-                        return (
-                            <li key = {task.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
-                            <button onClick = {() => openEdit(task)} style = {{ all: 'unset', cursor: 'pointer'}}>
-                                {formatDate(task.due_date)} | {task.course_code} | {task.title} | {task.weighting}% | {task.total_marks} | {task.mark_achieved}
-                            </button> {' '}
-                            <button onClick = {() => toggleCompleted(task)}>
-                                {task.completed ? '✓' : '○'}
-                            </button> {' '}
-                        </li>
-                        )
-                    })}
-                </ul>
+                <table style = {{ borderCollapse: 'collapse', width: '100%'}}>
+                    <thead>
+                        <tr>
+                            <th onClick = {() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')} style = {{ cursor: 'pointer' }}>
+                                Due Date {sortOrder === 'asc' ? '↑' : '↓'}
+                            </th>
+                            <th>Course</th>
+                            <th>Task Name</th>
+                            <th>Weighting</th>
+                            <th>Description</th>
+                            <th>Mark</th>
+                            <th>Weighted Mark</th>
+                            <th>Completed</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredTasks.map((task) => {
+                            const enrollment = enrollments.find((e) => e.course_code === task.course_code)
+                            return (
+                                <tr key = {task.id} style = {{ borderLeft: `4px solid ${enrollment?.color || '#4F6D7A'}`}}>
+                                    <td>{formatDate(task.due_date)}</td>
+                                    <td>{task.course_code}</td>
+                                    <td>
+                                        <button onClick = {() => openEdit(task)} style = {{ all: 'unset', cursor: 'pointer' }}>
+                                            {task.task_name}
+                                        </button>
+                                    </td>
+                                    <td>{task.weighting}%</td>
+                                    <td>{task.description}</td>
+                                    <td>{task.mark_achieved != null ? `${task.mark_achieved}/${task.total_marks}` : `—/${task.total_marks}`}</td>
+                                    <td>{weightedMark(task) != null ? `${weightedMark(task)}%` : '—'}</td>
+                                    <td>
+                                        <button onClick = {() => toggleCompleted(task)}>{task.completed ? '✓' : '□'}</button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
             )}
 
             {modalOpen && (
-                <Modal title = {editingId ? 'Edit task' : 'Add task'} onClose = {() => setModalOpen(false)}>
+                <Modal task_name = {editingId ? 'Edit task' : 'Add task'} onClose = {() => setModalOpen(false)}>
                     <form onSubmit = {handleSubmit}>
                         {formError && <p style = {{ color: 'red' }}>{formError}</p>}
 
@@ -166,8 +237,8 @@ export default function Assessments() {
                             <label>Task</label>
                             <input 
                                 required
-                                value = {form.title}
-                                onChange = {(e) => setForm({ ...form, title: e.target.value })}
+                                value = {form.task_name}
+                                onChange = {(e) => setForm({ ...form, task_name: e.target.value })}
                             />
                         </div>
 
@@ -182,11 +253,10 @@ export default function Assessments() {
                         </div>
 
                         <div>
-                            <label>Deadline (optional)</label>
+                            <label>Description</label>
                             <input
-                                type = "time"
-                                value = {form.deadline}
-                                onChange = {(e) => setForm({ ...form, deadline: e.target.value })}
+                                value = {form.description}
+                                onChange = {(e) => setForm({ ...form, description: e.target.value })}
                             />
                         </div>
 
@@ -219,6 +289,15 @@ export default function Assessments() {
                                 step = "0.01"
                                 value = {form.mark_achieved}
                                 onChange = {(e) => setForm({ ...form, mark_achieved: e.target.value })}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Deadline (optional)</label>
+                            <input
+                                type = "time"
+                                value = {form.deadline}
+                                onChange = {(e) => setForm({ ...form, deadline: e.target.value })}
                             />
                         </div>
 

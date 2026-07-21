@@ -54,8 +54,9 @@ def create_task(
     
     task = models.Assessment(
         course_code = task_in.course_code,
-        title = task_in.title,
+        task_name = task_in.task_name,
         due_date = task_in.due_date,
+        description = task_in.description,
         deadline = task_in.deadline,
         weighting = task_in.weighting,
         total_marks = task_in.total_marks,
@@ -80,7 +81,7 @@ def delete_task(
     db.delete(task)
     db.commit()
 
-NON_NULLABLE_FIELDS = {"course_code", "title", "due_date", "weighting", "total_marks", "completed"}
+NON_NULLABLE_FIELDS = {"course_code", "task_name", "due_date", "weighting", "total_marks", "completed"}
 @router.put("/{task_id}", response_model = schemas.AssessmentOut)
 def update_task(
     task_id: str,
@@ -134,8 +135,9 @@ def create_recurring_task(
         if current_date.date() not in task_in.recurrence.skip_dates:
             task = models.Assessment(
                 course_code = task_in.course_code,
-                title = task_in.title,
+                task_name = task_in.task_name,
                 due_date = task_in.due_date,
+                description = task_in.description,
                 deadline = task_in.deadline,
                 weighting = task_in.weighting,
                 total_marks = task_in.total_marks,

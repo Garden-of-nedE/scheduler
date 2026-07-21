@@ -74,8 +74,9 @@ class TimetableEntryOut(TimetableEntryBase):
 
 class AssessmentBase(BaseModel):
     course_code: str
-    title: str
+    task_name: str
     due_date: date
+    description: Optional[str] = None
     deadline: Optional[time] = None
     weighting: Decimal
     total_marks: Decimal
@@ -89,12 +90,13 @@ class RecurrenceCreate(BaseModel):
     skip_dates: List[date] = []
 
 class AssessmentCreate(AssessmentBase):
-    course_name: Optional[str] = None
+    pass
 
 class AssessmentUpdate(BaseModel):
     course_code: Optional[str] = None
-    title: Optional[str] = None
+    task_name: Optional[str] = None
     due_date: Optional[date] = None
+    description: Optional[str] = None
     deadline: Optional[time] = None
     weighting: Optional[Decimal] = None
     total_marks: Optional[Decimal] = None
@@ -108,7 +110,6 @@ class AssessmentOut(AssessmentBase):
 
 class AssessmentRecurringCreate(AssessmentBase):
     recurrence: RecurrenceCreate
-    course_name: Optional[str] = None
 
 class EventBase(BaseModel):
     title: str
