@@ -27,6 +27,14 @@ export default function Assessments() {
     const [form, setForm] = useState(emptyForm())
     const [formError, setFormError] = useState('')
 
+    const [isRecurring, setIsRecurring] = useState(false)
+    const [recurrence, setRecurrence] = useState({
+        occurrences: '',
+        first_due_date: '',
+        skip_dates: [],
+    })
+    const [skipDateInput, setSkipDateInput] = useState('')
+
     const [sortOrder, setSortOrder] = useState('asc')
     const [filters, setFilters] = useState({
         course_code: '',
@@ -67,6 +75,9 @@ export default function Assessments() {
     function openCreate() {
         setEditingId(null)
         setForm(emptyForm())
+        setIsRecurring(false)
+        setRecurrence({ occurrences: '', first_due_date: '', skip_date: [] })
+        setSkipDateInput('')
         setFormError('')
         setModalOpen(true)
     }
@@ -217,6 +228,19 @@ export default function Assessments() {
                     <form onSubmit = {handleSubmit}>
                         {formError && <p style = {{ color: 'red' }}>{formError}</p>}
 
+                        {!editingId && (
+                            <div>
+                                <label>
+                                    <input
+                                        type = "checkbox"
+                                        checked = {isRecurring}
+                                        onChange = {(e) => setIsRecurring(e.target.checked)}
+                                    />
+                                    {' '}Repeat weekly
+                                </label>
+                            </div>
+                        )}
+
                         <div>
                             <label>Course Code</label>
                             <select
@@ -242,15 +266,79 @@ export default function Assessments() {
                             />
                         </div>
 
-                        <div>
-                            <label>Due Date</label>
-                            <input
-                                type = "date"
-                                required
-                                value = {form.due_date}
-                                onChange = {(e) => setForm({ ...form, due_date: e.target.value })}
-                            />
-                        </div>
+                        {isRecurring ? (
+                            <>
+                                <div>
+                                    <label>Number of occurrences</label>
+                                    <input
+                                        type = "number"
+                                        min = "1"
+                                        required
+                                        value = {recurrence.occurrences}
+                                        onChange = {(e) = setRecurrence({ ...recurrence, occurrences: e.target.value })}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label>First due date</label>
+                                    <input
+                                        type = "date"
+                                        required
+                                        value = {recurrence.first_due_date}
+                                        onChange = {(e) => setRecurrence({ ...recurrence, first_due_date: e.target.value })}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label>Skip a date</label>
+                                    <input
+                                        type = "date"
+                                        value = {skipDateInput}
+                                        onChange = {(e) => setSkipDateInput(e.target.value)}
+                                    />
+                                    <button
+                                        type = "button"
+                                        onClick = {() => {
+                                            if (skipDateInput && !recurrence.skip_dates.at.include(skipDateInput)) {
+                                                setRecurrence({ ...recurrence, skip_date: [...recurrence.skip_dates, skipDateInput] })
+                                                setSkipDateInput('')
+                                            }
+                                        }}
+                                    >
+                                        + Add skip date
+                                    </button>
+
+                                    {recurrence.skip_dates.length > 0 && (
+                                        <ul>
+                                            {recurrence.skip_dates.map((d) => (
+                                                <li key = {d}>
+                                                    {d}{' '}
+                                                    <button
+                                                        type = "button"
+                                                        onClick = {() => setRecurrence({
+                                                            ...recurrence,
+                                                            skip_dates: recurrence.skip_dates.filter((sd) => sd !== d)
+                                                        })}
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <div>
+                                <label>Due date</label>
+                                <input
+                                    type = "date"
+                                    required
+                                    value = {form.due_date}
+                                    onChange = {(e) => setForm({ ...form, due_date: e.target.value })}
+                                />
+                            </div>
+                        )}
 
                         <div>
                             <label>Description</label>
