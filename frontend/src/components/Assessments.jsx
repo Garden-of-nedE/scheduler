@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
-import { formatDate, formatTime } from '../utils/formatters.js'
+import { formatDate, withOpacity } from '../utils/formatters.js'
 
 function emptyForm() {
     return {
@@ -44,7 +44,7 @@ export default function Assessments() {
     const filteredTasks = tasks.filter((task) => {
         if (filters.course_code && task.course_code !== filters.course_code) return false
         if (filters.status === 'completed' && !task.completed) return false
-        if (filters.status === 'incompleted' && task.completed) return false
+        if (filters.status === 'incomplete' && task.completed) return false
         return true
     })
     .sort((a, b) => {
@@ -159,7 +159,7 @@ export default function Assessments() {
 
     function weightedMark(task) {
         if (task.mark_achieved == null) return null
-        return ((task.mark_achieved/task.total_marks) * task_weighting).toFixed(2)
+        return ((task.mark_achieved/task.total_marks) * task.weighting).toFixed(2)
     }
 
     if (loading) return <p>Loading assessments ...</p>
@@ -171,7 +171,7 @@ export default function Assessments() {
             <button onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add task</button>            
             {enrollments.length === 0 && <p>Add a class under "Classes" before adding an assessment.</p>}
 
-            <div style = {{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+            <div className = "filter-bar">
                 <select 
                     value = {filters.course_code}
                     onChange = {(e) => setFilters({ ...filters, course_code: e.target.value })}
@@ -188,9 +188,9 @@ export default function Assessments() {
                 >
                     <option value = "all">All</option>
                     <option value = "completed">Completed</option>
-                    <option value = "incompleted">Incompleted</option>
+                    <option value = "incomplete">Incomplete</option>
                 </select>
-                <button onClick = {() => setFilters({ course_code: '', status: 'all' })}>
+                <button className = "btn btn-secondary" onClick = {() => setFilters({ course_code: '', status: 'all' })}>
                     Clear filters
                 </button>
             </div>
@@ -198,10 +198,10 @@ export default function Assessments() {
             {filteredTasks.length === 0 ? (
                 <p>No assessments added</p>
             ) : (
-                <table style = {{ borderCollapse: 'collapse', width: '100%'}}>
+                <table className = "assessment-table">
                     <thead>
                         <tr>
-                            <th onClick = {() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')} style = {{ cursor: 'pointer' }}>
+                            <th className = "sortable" onClick = {() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
                                 Due Date {sortOrder === 'asc' ? '↑' : '↓'}
                             </th>
                             <th>Course</th>
@@ -217,12 +217,13 @@ export default function Assessments() {
                     <tbody>
                         {filteredTasks.map((task) => {
                             const enrollment = enrollments.find((e) => e.course_code === task.course_code)
+                            console.log(enrollment?.color, withOpacity(enrollment?.color || '#4F6D7A', 0.25))
                             return (
-                                <tr key = {task.id} style = {{ borderLeft: `4px solid ${enrollment?.color || '#4F6D7A'}`}}>
+                                <tr key = {task.id} style = {{ '--row-color': withOpacity(enrollment?.color || '#4F6D7A', 0.25)}}>
                                     <td>{formatDate(task.due_date)}</td>
                                     <td>{task.course_code}</td>
                                     <td>
-                                        <button onClick = {() => openEdit(task)} style = {{ all: 'unset', cursor: 'pointer' }}>
+                                        <button onClick = {() => openEdit(task)} className = "link-button">
                                             {task.task_name}
                                         </button>
                                     </td>

@@ -143,3 +143,47 @@ body {
   all: unset;
   cursor: pointer;
 }
+
+.assessment-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: var(--spacing-md);
+}
+
+.assessment-table th {
+  text-align: left;
+  padding: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.assessment-table th.sortable {
+  cursor: pointer;
+}
+
+.assessment-table td {
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.assessment-table tr {
+  background-color: var(--row-color, transparent);
+}
+
+.filter-bar {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.filter-bar select,
+.filter-bar input {
+  padding: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
