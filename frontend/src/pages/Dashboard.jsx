@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
+import { useTheme } from '../context/ThemeContext.jsx'
 import Timetable from '../components/Timetable.jsx'
 import Classes from '../components/Classes.jsx'
 import Assessments from '../components/Assessments.jsx'
@@ -15,14 +16,15 @@ const TABS = [
 export default function Dashboard() {
     const { user, logout } = useAuth()
     const [tab, setTab] = useState('timetable')
+    const { theme, toggleTheme } = useTheme()
 
     return (
         <div>
             <header>
                 <div>
-                    <p>Semester</p>
                     <h1>{user?.full_name ? `${user.full_name}'s Timetable` : 'Your Timetable'}</h1>
                 </div>
+                <button onClick={toggleTheme}>{theme === 'light' ? '🌙 Dark' : '☀️ Light'}</button>
                 <button onClick = {logout}>Sign out</button>
             </header>
 

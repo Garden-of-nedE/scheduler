@@ -83,3 +83,5 @@ Course deletion policy, duplicate-request handling logic at a later stage.
 A separate Course router will be created to list/create courses independently *before* submitting a timetable entry. \
 Current implementation: get or create pattern will first check for existing Course before creating it. \
 Attached limitation &rarr; theoretical race condition if two requests for same course code occurs, need to include a database level `ON CONFLICT DO NOTHING` constraint. 
+
+Planned: calendar view for Events (grid layout, month/week navigation, positioning same-day events). Will reuse global CSS variable system (`--color-`, `--radius`, `--spacing-`) for visual consistency with rest of app; likely gets its own CSS file once calendar-specific rules grown large enought to warrant splitting. It will start out in the shared stylesheet like everything else.
