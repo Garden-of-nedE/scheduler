@@ -2,34 +2,13 @@ import React from 'react'
 
 export default function Modal({ title, onClose, children }) {
     return (
-        <div
-            style = {{
-                position: 'fixed',
-                inset: 0,
-                background: 'rgba(0, 0, 0, 0.5)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
-            onClick = {onClose}
-        >
-            <div
-                style = {{
-                    background: 'white',
-                    borderRadius: '8px',
-                    padding: '24px',
-                    minWidth: '320px',
-                    maxWidth: '90vw',
-                    maxHeight: '90vh',
-                    overflowY: 'auto',
-                }}
-                onClick = {(e) => e.stopPropagation()}
-            >
-                <div style = {{display: 'flex', justifyContent: 'space-between', marginBottom: '16px'}}>
+        <div className = "modal-overlay" onClick = {onClose}>
+            <div className = "modal-box" onClick = {(e) => e.stopPropagation()}>
+                <div className = "modal-header">
                     <h2>{title}</h2>
-                    <button onClick = {onClose} aria-label = "Close">x</button>
+                    <button className = "modal-close" onClick = {onClose} aria-label = "Close">x</button>
                 </div>
-                {children}
+                <div className = "modal-body">{children}</div>
             </div>
         </div>
     )
