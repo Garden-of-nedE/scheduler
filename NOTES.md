@@ -62,7 +62,7 @@ Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is r
 Recurring assessments: `skip_date` stretch the series of tasks across more calendar weeks, rather than reducing the total quiz count.
 
 ### Frontend
-Vite is used for the frontend, ESLint which catches issues such as unused variables, undefined referecences and typos.
+Vite is used for the frontend, ESLint which catches issues such as unused variables, undefined references and typos.
 
 ### Noteable Error Log
 **Backend**
