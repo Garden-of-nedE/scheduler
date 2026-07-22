@@ -75,3 +75,71 @@ body {
 .modal-close:hover {
   color: var(--color-text);
 }
+
+.btn {
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.btn:disabled {
+  background-color: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-text)l;
+  border: 1px solid var(--color-border);
+}
+
+.form-field {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-field label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.form-field input:not([type = 'color']),
+.form-field select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.form-field input[tyuupe='color'] {
+  width: 48px;
+  height: 32px;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  cursor: pointer;
+}
+
+.link-button {
+  all: unset;
+  cursor: pointer;
+}

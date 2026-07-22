@@ -107,7 +107,7 @@ export default function Classes() {
 
                     {!editingId && (
                     <>
-                        <div>
+                        <div className = "form-field">
                         <label>Course code</label>
                         <input
                             required
@@ -116,7 +116,7 @@ export default function Classes() {
                         />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                         <label>Course name</label>
                         <input
                             value = {form.course_name}
@@ -126,7 +126,7 @@ export default function Classes() {
                     </>
                     )}
 
-                    <div>
+                    <div className = "form-field">
                     <label>Color</label>
                     <input
                         type = "color"
@@ -135,7 +135,7 @@ export default function Classes() {
                     />
                     </div>
 
-                    <button type = "submit">{editingId ? 'Save color' : 'Add class'}</button>
+                    <button type = "submit" className = "btn">{editingId ? 'Save color' : 'Add class'}</button>
                 </form>
             </Modal>
         )}

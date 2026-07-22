@@ -245,7 +245,7 @@ export default function Assessments() {
                     <form onSubmit = {handleSubmit}>
                         {formError && <p style = {{ color: 'red' }}>{formError}</p>}
 
-                        <div>
+                        <div className = "form-field">
                             <label>Course Code</label>
                             <select
                                 required
@@ -261,7 +261,7 @@ export default function Assessments() {
                             </select>
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Task</label>
                             <input 
                                 required
@@ -285,7 +285,7 @@ export default function Assessments() {
 
                         {isRecurring ? (
                             <>
-                                <div>
+                                <div className = "form-field">
                                     <label>Number of occurrences</label>
                                     <input
                                         type = "number"
@@ -296,7 +296,7 @@ export default function Assessments() {
                                     />
                                 </div>
 
-                                <div>
+                                <div className = "form-field">
                                     <label>First due date</label>
                                     <input
                                         type = "date"
@@ -306,7 +306,7 @@ export default function Assessments() {
                                     />
                                 </div>
 
-                                <div>
+                                <div className = "form-field">
                                     <label>Skip a date</label>
                                     <input
                                         type = "date"
@@ -346,7 +346,7 @@ export default function Assessments() {
                                 </div>
                             </>
                         ) : (
-                            <div>
+                            <div className = "form-field">
                                 <label>Due date</label>
                                 <input
                                     type = "date"
@@ -357,7 +357,7 @@ export default function Assessments() {
                             </div>
                         )}
 
-                        <div>
+                        <div className = "form-field">
                             <label>Description</label>
                             <input
                                 value = {form.description}
@@ -365,7 +365,7 @@ export default function Assessments() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Weighting (%)</label>
                             <input 
                                 type = "number"
@@ -376,7 +376,7 @@ export default function Assessments() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Total Marks</label>
                             <input
                                 type = "number"
@@ -387,7 +387,7 @@ export default function Assessments() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Mark Achieved</label>
                             <input
                                 type = "number"
@@ -397,7 +397,7 @@ export default function Assessments() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Deadline (optional)</label>
                             <input
                                 type = "time"

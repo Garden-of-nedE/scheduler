@@ -121,7 +121,7 @@ export default function Events() {
                     <form onSubmit = {handleSubmit}>
                         {formError && <p style = {{ color: 'red' }}>{formError}</p>}
 
-                        <div>
+                        <div className = "form-field">
                             <label>Title</label>
                             <input
                                 required
@@ -130,7 +130,7 @@ export default function Events() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Description</label>
                             <input
                                 value = {form.description}
@@ -138,7 +138,7 @@ export default function Events() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Date</label>
                             <input
                                 type = "date"
@@ -148,7 +148,7 @@ export default function Events() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Start Time</label>
                             <input
                                 type = "time"
@@ -158,7 +158,7 @@ export default function Events() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>End Time (Optional)</label>
                             <input
                                 type = "time"
@@ -167,7 +167,7 @@ export default function Events() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Location</label>
                             <input
                                 value = {form.location}

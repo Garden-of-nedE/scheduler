@@ -115,8 +115,7 @@ export default function Timetable() {
                         return (
                             <li key = {entry.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
                             <button onClick = {() => openEdit(entry)} style = {{ all: 'unset', cursor: 'pointer'}}>
-                                {entry.day_of_week} | {entry.course_code} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)}
-                                | {entry.class_type} | {entry.location}
+                                {entry.day_of_week} | {entry.course_code} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)} | {entry.class_type} | {entry.location}
                             </button>
                         </li>
                         )
@@ -129,7 +128,7 @@ export default function Timetable() {
                     <form onSubmit = {handleSubmit}>
                         {formError && <p style = {{ color: 'red'}}>{formError}</p>}
                         
-                        <div>
+                        <div className = "form-field">
                             <label>Course code</label>
                             <select
                                 required
@@ -145,7 +144,7 @@ export default function Timetable() {
                             </select>
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Class type</label>
                             <input
                                 value = {form.class_type}
@@ -153,7 +152,7 @@ export default function Timetable() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Day</label>
                             <select
                                 value = {form.day_of_week}
@@ -165,7 +164,7 @@ export default function Timetable() {
                             </select>
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Start time</label>
                             <input
                                 type = "time"
@@ -175,7 +174,7 @@ export default function Timetable() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>End time</label>
                             <input
                                 type = "time"
@@ -185,7 +184,7 @@ export default function Timetable() {
                             />
                         </div>
 
-                        <div>
+                        <div className = "form-field">
                             <label>Location</label>
                             <input 
                                 type = "text"
