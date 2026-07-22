@@ -38,7 +38,7 @@ def create_event(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    event_datetime = datetime.combine(event_in.date, event_in.start_time)
+    event_datetime = datetime.combine(event_in.event_date, event_in.start_time)
 
     if event_datetime < datetime.now():
         raise HTTPException(status_code = 400, details = "Event date cannot be in the past")

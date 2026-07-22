@@ -7,7 +7,7 @@ function emptyForm() {
     return {
         title: '',
         description: '',
-        date: '',
+        event_date: '',
         start_time: '',
         end_time: '',
         location: '',
@@ -52,9 +52,9 @@ export default function Events() {
         setForm({
             title: event.title,
             description: event.description || '',
-            date: event.date,
-            start_time: event.start_time.slice(0, 16),
-            end_time: event.end_time ? event.end_time.slice(0, 16) : '',
+            event_date: event.event_date,
+            start_time: event.start_time.slice(0, 5),
+            end_time: event.end_time ? event.end_time.slice(0, 5) : '',
             location: event.location || '',
         })
         setFormError('')
@@ -108,7 +108,7 @@ export default function Events() {
                         return (
                             <li key = {event.id}>
                             <button onClick = {() => openEdit(event)} style = {{ all: 'unset', cursor: 'pointer'}}>
-                                {formatDate(event.date)} {formatTime(event.start_time)} | {event.title} | {event.location}
+                                {formatDate(event.event_date)} {formatTime(event.start_time)} | {event.title} | {event.location}
                             </button>{' '}
                         </li>
                         )
@@ -119,7 +119,7 @@ export default function Events() {
             {modalOpen && (
                 <Modal title = {editingId ? 'Edit event' : 'Add event'} onClose = {() => setModalOpen(false)}>
                     <form onSubmit = {handleSubmit}>
-                        {formError && <p style = {{ color: 'red'}}>{formError}</p>}
+                        {formError && <p style = {{ color: 'red' }}>{formError}</p>}
 
                         <div>
                             <label>Title</label>
@@ -143,8 +143,8 @@ export default function Events() {
                             <input
                                 type = "date"
                                 required
-                                value = {form.date}
-                                onChange = {(e) => setForm({ ...form, date: e.target.value })}
+                                value = {form.event_date}
+                                onChange = {(e) => setForm({ ...form, event_date: e.target.value })}
                             />
                         </div>
 

@@ -114,7 +114,7 @@ class Event(Base):
 
     title = Column(String, nullable = False)
     description = Column(String, nullable = True)
-    date = Column(Date, nullable = False)
+    event_date = Column(Date, nullable = False)
     start_time = Column(Time, nullable = False)
     end_time = Column(Time, nullable = True)
     location = Column(String, nullable = True)

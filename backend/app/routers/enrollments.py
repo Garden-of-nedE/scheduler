@@ -67,6 +67,18 @@ def delete_enrollment(
 
     if not enrollment:
         raise HTTPException(status_code = 404, detail = "Enrollment not found")
+
+    course_code = enrollment.course_code
+
+    db.query(models.TimetableEntry).filter(
+        models.TimetableEntry.user_id == current_user.id,
+        models.TimetableEntry.course_code == course_code,
+    ).delete()
+
+    db.query(models.Assessment).filter(
+        models.Assessment.user_id == current_user.id,
+        models.Assessment.course_code == course_code,
+    ).delete()
     
     db.delete(enrollment)
     db.commit()
