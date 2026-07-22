@@ -4,7 +4,7 @@
 ### Docker
 A single docker container is utilised to compose the App and Postgres backend. Building using docker to ensure that project is functional across various operating systems (Windows & Mac), whilst ensuring that any dependencies for the project are self-contained. Minimise bloating local system memory with various libraries.
 
-### Flask Backend
+### Backend
 Project eventually will allow different computer systems (Windows & Mac) to communicate via the internet, utilising REST API. Framework only requires a single declaration for parameter types in standard Python via Pydantic library. Interactive API docs, via Swagger UI, allows for local testing to be conducted easily.  `OAuth2` built-in tool allows the frontend to authenticate with the backend, for security.
 
 ## Build Stages
