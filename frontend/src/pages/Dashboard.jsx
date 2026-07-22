@@ -19,7 +19,7 @@ export default function Dashboard() {
     const { theme, toggleTheme } = useTheme()
 
     return (
-        <div>
+        <div className = 'page-container'>
             <header>
                 <div>
                     <h1>{user?.full_name ? `${user.full_name}'s Timetable` : 'Your Timetable'}</h1>

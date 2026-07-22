@@ -168,7 +168,7 @@ export default function Assessments() {
     return (
         <div>
             <h2>Current Assessment List</h2>
-            <button onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add task</button>            
+            <button type = "button" className = "btn" onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add task</button>            
             {enrollments.length === 0 && <p>Add a class under "Classes" before adding an assessment.</p>}
 
             <div className = "filter-bar">
@@ -217,7 +217,6 @@ export default function Assessments() {
                     <tbody>
                         {filteredTasks.map((task) => {
                             const enrollment = enrollments.find((e) => e.course_code === task.course_code)
-                            console.log(enrollment?.color, withOpacity(enrollment?.color || '#4F6D7A', 0.25))
                             return (
                                 <tr key = {task.id} style = {{ '--row-color': withOpacity(enrollment?.color || '#4F6D7A', 0.25)}}>
                                     <td>{formatDate(task.due_date)}</td>
@@ -407,12 +406,14 @@ export default function Assessments() {
                             />
                         </div>
 
-                        <button type = "submit">{editingId ? 'Save changes' : 'Add task'}</button>
-                        {editingId && (
-                            <button type = "button" onClick = {() => handleDelete(editingId)}>
-                                Delete
-                            </button>
-                        )}
+                        <div className = "button-group">
+                            <button type = "submit" className = "btn">{editingId ? 'Save changes' : 'Add class'}</button>
+                            {editingId && (
+                                <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
+                                    Delete
+                                </button>
+                            )}
+                        </div>
                     </form>
                 </Modal>
             )}

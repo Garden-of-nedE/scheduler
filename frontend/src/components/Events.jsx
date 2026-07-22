@@ -98,7 +98,7 @@ export default function Events() {
     return (
         <div>
             <h2>Current Events</h2>
-            <button onClick = {openCreate}>+ Add Event</button>
+            <button type = "button" className = "btn" onClick = {openCreate}>+ Add Event</button>
 
             {events.length === 0 ? (
                 <p>No events scheduled.</p>
@@ -107,9 +107,9 @@ export default function Events() {
                     {events.map((event) => {
                         return (
                             <li key = {event.id}>
-                            <button onClick = {() => openEdit(event)} style = {{ all: 'unset', cursor: 'pointer'}}>
+                            <button onClick = {() => openEdit(event)} className = "link-button">
                                 {formatDate(event.event_date)} {formatTime(event.start_time)} | {event.title} | {event.location}
-                            </button>{' '}
+                            </button>
                         </li>
                         )
                     })}
@@ -175,12 +175,14 @@ export default function Events() {
                             />
                         </div>
 
-                        <button type = "submit">{editingId? 'Save changes' : 'Add event'}</button>
-                        {editingId && (
-                            <button type = "button" onClick = {() => handleDelete(editingId)}>
-                                Delete
-                            </button>
-                        )}
+                        <div className = "button-group">
+                            <button type = "submit" className = "btn">{editingId ? 'Save changes' : 'Add class'}</button>
+                            {editingId && (
+                                <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
+                                    Delete
+                                </button>
+                            )}
+                        </div>
                     </form>
                 </Modal>
             )}

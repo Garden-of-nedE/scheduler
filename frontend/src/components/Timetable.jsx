@@ -103,8 +103,8 @@ export default function Timetable() {
     return (
         <div>
             <h2>Weekly timetable</h2>
-            <button onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add class</button>
-                            {enrollments.length ===  0 && <p>Asdd a class under "Classes" before scheduling</p>}
+            <button type = "button" className = "btn" onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add class</button>
+            {enrollments.length ===  0 && <p>Asdd a class under "Classes" before scheduling</p>}
 
             {entries.length === 0 ? (
                 <p>No classes scheduled</p>
@@ -114,7 +114,7 @@ export default function Timetable() {
                         const enrollment = enrollments.find((e) => e.course_code === entry.course_code)
                         return (
                             <li key = {entry.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
-                            <button onClick = {() => openEdit(entry)} style = {{ all: 'unset', cursor: 'pointer'}}>
+                            <button onClick = {() => openEdit(entry)} className = "link-button">
                                 {entry.day_of_week} | {entry.course_code} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)} | {entry.class_type} | {entry.location}
                             </button>
                         </li>
@@ -193,12 +193,14 @@ export default function Timetable() {
                             />
                         </div>
 
-                        <button type = "submit">{editingId ? 'Save changes' : 'Add class'}</button>
-                        {editingId && (
-                            <button type = "button" onClick = {handleDelete}>
-                                Delete
-                            </button>
-                        )}
+                        <div className = "button-group">
+                            <button type = "submit" className = "btn">{editingId ? 'Save changes' : 'Add class'}</button>
+                            {editingId && (
+                                <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
+                                    Delete
+                                </button>
+                            )}
+                        </div>
                     </form>
                 </Modal>
             )}

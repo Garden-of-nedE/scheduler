@@ -187,3 +187,16 @@ body {
   background-color: var(--color-surface);
   color: var(--color-text);
 }
+
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.button-group {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
