@@ -5,6 +5,7 @@ import Timetable from '../components/Timetable.jsx'
 import Classes from '../components/Classes.jsx'
 import Assessments from '../components/Assessments.jsx'
 import Events from '../components/Events.jsx'
+import { SunIcon, MoonIcon, LogoutIcon } from '../components/icons/Icons.jsx'
 
 const TABS = [
     { key: 'timetable', label: 'Timetable'},
@@ -19,33 +20,43 @@ export default function Dashboard() {
     const { theme, toggleTheme } = useTheme()
 
     return (
-        <div className = 'page-container'>
+        <div className = "page-container">
             <header>
-                <div>
-                    <h1>{user?.full_name ? `${user.full_name}'s Timetable` : 'Your Timetable'}</h1>
+                <h1>{user?.full_name ? `${user.full_name}'s Timetable` : 'Your Timetable'}</h1>
+                <div className = "button-group">
+                    <button className = "btn-icons" onClick={toggleTheme}>
+                        {theme === 'light' ? <MoonIcon size = {18} />: <SunIcon size = {18} />}
+                    </button>
+                    <button className = "btn btn-secondary" onClick = {logout}>
+                        <LogoutIcon size = {16} />
+                        Sign out
+                    </button>
                 </div>
-                <button onClick={toggleTheme}>{theme === 'light' ? '🌙 Dark' : '☀️ Light'}</button>
-                <button onClick = {logout}>Sign out</button>
             </header>
 
-            <nav>
-                {TABS.map((t) => (
-                    <button
-                        key = {t.key}
-                        onClick = {() => setTab(t.key)}
-                        disabled = {tab === t.key}
-                    >
-                        {t.label}
-                    </button>
-                ))}
-            </nav>
+            <div className = "dashboard-layout">
+                <nav className = "sidebar-nav">
+                    {TABS.map((t) => (
+                        <button
+                            key = {t.key}
+                            className = "btn"
+                            onClick = {() => setTab(t.key)}
+                            disabled = {tab === t.key}
+                        >
+                            {t.label}
+                        </button>
+                    ))}
+                </nav>
 
-            <main>
-                {tab === 'timetable' && <Timetable />}
-                {tab === 'classes' && <Classes />}
-                {tab === 'assessments' && <Assessments />}
-                {tab === 'events' && <Events />}
-            </main>
+                <div className = "dashboard-content">
+                    <main>
+                        {tab === 'timetable' && <Timetable />}
+                        {tab === 'classes' && <Classes />}
+                        {tab === 'assessments' && <Assessments />}
+                        {tab === 'events' && <Events />}
+                    </main>
+                </div>
+            </div>
         </div>
     )
 }

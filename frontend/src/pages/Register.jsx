@@ -26,49 +26,51 @@ export default function Register() {
     }
 
     return (
-        <div>
-            <h1>Register</h1>
+        <div className = "auth-page">
+            <div className = "auth-card">
+                <h1>Register</h1>
 
-            {error && <p style = {{ color: 'red' }}>{error}</p>}
+                {error && <p className = "form-error">{error}</p>}
 
-            <form onSubmit = {handleSubmit}>
-                <div>
-                    <label>Full Name</label>
-                    <input
-                        type = "text"
-                        value = {fullName}
-                        onChange = {(e) => setFullName(e.target.value)}
-                    />
-                </div>
+                <form onSubmit = {handleSubmit}>
+                    <div className = "form-field">
+                        <label>Full Name</label>
+                        <input
+                            type = "text"
+                            value = {fullName}
+                            onChange = {(e) => setFullName(e.target.value)}
+                        />
+                    </div>
 
-                <div>
-                    <label>Email</label>
-                    <input
-                        type = "email"
-                        required
-                        value = {email}
-                        onChange = {(e) => setEmail(e.target.value)}
-                    />
-                </div>
+                    <div className = "form-field">
+                        <label>Email</label>
+                        <input
+                            type = "email"
+                            required
+                            value = {email}
+                            onChange = {(e) => setEmail(e.target.value)}
+                        />
+                    </div>
 
-                <div>
-                    <label>Password</label>
-                    <input
-                        type = "password"
-                        required
-                        value = {password}
-                        onChange = {(e) => setPassword(e.target.value)}
-                    />
-                </div>
+                    <div className = "form-field">
+                        <label>Password</label>
+                        <input
+                            type = "password"
+                            required
+                            value = {password}
+                            onChange = {(e) => setPassword(e.target.value)}
+                        />
+                    </div>
 
-                <button type = "submit" disabled = {submitting}>
-                    {submitting ? 'Signing up ...' : 'Sign in'}
-                </button>
-            </form>
+                    <button type = "submit" className = "btn" style = {{ alignSelf: 'center', display: 'block', margin: '0 auto' }} disabled = {submitting}>
+                        {submitting ? 'Signing up ...' : 'Sign in'}
+                    </button>
+                </form>
 
-            <p>
-                Exisiting user? <Link to = "/login"> Login here</Link>
-            </p>
+                <p>
+                    Exisiting user? <Link to = "/login"> Login here</Link>
+                </p>
+            </div>
         </div>
     )
 }

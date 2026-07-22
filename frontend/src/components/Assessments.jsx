@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
 import { formatDate, withOpacity } from '../utils/formatters.js'
+import { AddIcon, BoxIcon, CheckedIcon, DownIcon, TrashIcon, UpIcon } from '../components/icons/Icons.jsx'
 
 function emptyForm() {
     return {
@@ -168,7 +169,10 @@ export default function Assessments() {
     return (
         <div>
             <h2>Current Assessment List</h2>
-            <button type = "button" className = "btn" onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add task</button>            
+            <button type = "button" className = "btn" onClick = {openCreate} disabled = {enrollments.length === 0}>
+                <AddIcon size = {16} />
+                Add task
+            </button>            
             {enrollments.length === 0 && <p>Add a class under "Classes" before adding an assessment.</p>}
 
             <div className = "filter-bar">
@@ -202,7 +206,7 @@ export default function Assessments() {
                     <thead>
                         <tr>
                             <th className = "sortable" onClick = {() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
-                                Due Date {sortOrder === 'asc' ? '↑' : '↓'}
+                                Due Date {sortOrder === 'asc' ? <UpIcon size = {16} /> : <DownIcon size = {16} />}
                             </th>
                             <th>Course</th>
                             <th>Task Name</th>
@@ -210,7 +214,7 @@ export default function Assessments() {
                             <th>Description</th>
                             <th>Mark</th>
                             <th>Weighted Mark</th>
-                            <th>Completed</th>
+                            <th className = "col-completed">Completed</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -230,8 +234,8 @@ export default function Assessments() {
                                     <td>{task.description}</td>
                                     <td>{task.mark_achieved != null ? `${task.mark_achieved}/${task.total_marks}` : `—/${task.total_marks}`}</td>
                                     <td>{weightedMark(task) != null ? `${weightedMark(task)}%` : '—'}</td>
-                                    <td>
-                                        <button onClick = {() => toggleCompleted(task)}>{task.completed ? '✓' : '□'}</button>
+                                    <td className = "col-completed">
+                                        <button className = "btn-icons" onClick = {() => toggleCompleted(task)}>{task.completed ? <CheckedIcon size = {24} /> : <BoxIcon size = {24}/>}</button>
                                     </td>
                                 </tr>
                             )
@@ -410,6 +414,7 @@ export default function Assessments() {
                             <button type = "submit" className = "btn">{editingId ? 'Save changes' : 'Add class'}</button>
                             {editingId && (
                                 <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
+                                    <TrashIcon size = {16} />
                                     Delete
                                 </button>
                             )}

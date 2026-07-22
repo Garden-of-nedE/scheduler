@@ -25,40 +25,43 @@ export default function Login() {
     }
 
     return (
-        <div>
-            <h1>Sign In</h1>
+        <div className = "auth-page">
+            <div className = "auth-card">
+                <h1>Sign In</h1>
 
-            {error && <p style = {{ color: 'red' }}>{error}</p>}
+                {error && <p className = "form-error">{error}</p>}
 
-            <form onSubmit = {handleSubmit}>
-                <div>
-                    <label>Email</label>
-                    <input
-                        type = "email"
-                        required
-                        value = {email}
-                        onChange = {(e) => setEmail(e.target.value)}
-                    />
-                </div>
+                <form onSubmit = {handleSubmit}>
+                    <div className = "form-field"> 
+                        <label>Email</label>
+                        <input
+                            type = "email"
+                            required
+                            value = {email}
+                            onChange = {(e) => setEmail(e.target.value)}
+                        />
+                    </div>
 
-                <div>
-                    <label>Password</label>
-                    <input
-                        type = "password"
-                        required
-                        value = {password}
-                        onChange = {(e) => setPassword(e.target.value)}
-                    />
-                </div>
+                    <div className = "form-field">
+                        <label>Password</label>
+                        <input
+                            type = "password"
+                            required
+                            value = {password}
+                            onChange = {(e) => setPassword(e.target.value)}
+                        />
+                    </div>
 
-                <button type = "submit" disabled = {submitting}>
-                    {submitting ? 'Signing in ...' : 'Sign in'}
-                </button>
-            </form>
+                    <button type = "submit" className = "btn" style = {{ alignSelf: 'center', display: 'block', margin: '0 auto' }} disabled = {submitting}>
+                        {submitting ? 'Signing in ...' : 'Sign in'}
+                    </button>
+                </form>
 
-            <p>
-                New here? <Link to = "/register">Create an account</Link>
-            </p>
+                <p>
+                    New here? <Link to = "/register">Create an account</Link>
+                </p>
+
+            </div>
         </div>
     )
 }
