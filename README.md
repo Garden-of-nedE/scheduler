@@ -1,18 +1,85 @@
 # Student Scheduler
 
-This web app was developed as a means to migrate away from Google Sheets as my main scheduling resource.
+An organisation tool for students providing a weekly timetable, assessment tracker, and events calendar.
+This includes course enrollment, recurring assessments, and student-to-student timetable comparisons.
 
-It allows for students to personalise their own timetable, from their list of enrolled classes. As well as keep track of assessment deadlines and other events, via a notification system.
+**Backend:** FastAPI (Python), JWT auth, SQLAlchemy
 
-To be implemented:
-- Notificaiton system
-- Admin tools (editing and removing courses)
-- Frontend CSS
-- Logo/branding
-- Input guards/checks [new course creation]
+**Database:** PostgreSQL
 
-Current list:
- - Timetable weekly/daily toggle — still outstanding from a while back, if you still want it
- - Full clean-rebuild sanity check — confirming the whole project runs correctly from a cold docker compose build --no-cache && docker compose up, and that your data survives a normal restart
- - README update — reflecting the actual current data model (Course, Enrollment, UserRole, the date/deadline splits, recurring assessments) rather than the original version from early in the project
- - The deferred CSS/styling pass — logged as a scoped task, not blocking functionality
+**Frontend:** React (Vite)
+
+**Infra:** Docker Compose (db + backend + frontend)
+
+## Project Structure
+Backend code lives in `backend/app` (FastAPI routers, models, schemas). Frontend code lives in `frontend/src` (React pages and components). See `NOTES.md` for design decisions.
+
+## Running it
+1. Make sure Docker and Docker Compose, Node.js 20+ are installed locally. Node.js used for frontend dependency management; the app itself runs in Docker.
+2. Copy environment file template adn fill in real values:
+```bash
+    cp backend/.env.example backend/.env
+    cp frontend/.env.example frontend/.env
+``` 
+At minimum, replace `SECRET_KEY` in `backend.env` with a real random string:
+```bash
+    python3 -c "import secrets; print(secrets.token_hex(32))"
+```
+
+3. From project root:
+```bash
+    docker compose up --build
+```
+4. Open:
+    - Frontend: http://localhost:5173
+    - Backend API docs (Swagger): http://localhost:8000/docs
+    - Postgres: localhost:5432 (user/password/db: `scheduler`)
+
+5. Register an account, add a class under **Classes**, then schedule timetable entries and assessments against it.
+
+Both backend and frontend run with hot-reload, and source folders are mounted as volumes. Code changes on your machine show up immediately without rebuilding the image.
+
+## Data Model
+| Entity | Fields | Notes |
+|---|---|---|
+| **User** | email, hashed_password, full_name, role | `role` is `student` or `admin` |
+| **Course** | code (PK), name | Global catalog, shared across all students |
+| **Enrollment** | user_id, course_code, color | A student's personal link to a course; `color` is used consistently across Timetable/Classes/Assessments |
+| **TimetableEntry** | course_code, class_type, day_of_week, start_time, end_time, location | Recurring weekly slot — no absolute date |
+| **Assessment** | course_code, task_name, description, due_date, deadline, weighting, total_marks, mark_achieved, completed, recurrence_group_id | `deadline` is an optional time-of-day; `recurrence_group_id` links assessments generated as part of a recurring series |
+| **Event** | title, description, event_date, start_time, end_time, location | One-off calendar events |
+| **Connection** | requester_id, addressee_id, status | Mutual friend-request model for future timetable comparison between students |
+
+All records are scoped to the authenticated user; every query filters by `user_id`, and JWT auth guards every route except register/login. `Course` is the one shared, global resource; deleting it is restricted to `admin`-role users and blocked if any student still references it.
+
+### Enrollment-gated creation
+A student must have an `Enrollment` for a course before creating a `TimetableEntry` or `Assessment` against it; both the frontend (dropdown sourced from `GET /api/enrollment`) and backend (explicit ownership checks) enforce this. Removing an enrollment cascades: it deletes the student's own timetable entries and assessments for that course. Scoped strictly to that student, other students' data for the same course are untouched.
+
+### Recurring assessments
+`POST /api/assessments/recurring` generates a series of independent `Assessment` rows (e.g. a weekly quiz), sharing a `recurrence_group_id`. Each occurrence is fully independent after creation: editable, deletable, and gradeable on its own, same as any single assessment. Supports skipping specific dates (e.g. a mid-semester break) without shrinking the total number of occurrences, the series stretches across more calendar weeks instead.
+
+### API overview
+- `POST /api/auth/register`, `POST /api/auth/login` (form-encoded, OAuth2 password flow), `GET /api/auth/me`
+- `GET/POST /api/courses`, `PUT /api/courses/{code}` (renamew), `DELETE /api/courses/{code}` (admin only)
+- `GET/POST /api/enrollments`, `PUT/DELETE /api/enrollments/{id}`
+- `GET/POST /api/timetable`, `GET/PUT/DELETE /api/timetable/{id}`
+- `GET/POST /api/assessments`, `GET/PUT/DELETE /api/assessments{id}`, `POST /api/assessments/recurring`, `DELETE /api/assessments/series.{recurrence_group_id}`
+- `GET/POST /api/events`, `GET/PUT/DELETE /api/events/{id}`
+
+Full interactive docs are auto-generated by FastAPI at `/docs`
+
+## Environment variables
+- `backend/.env` - `DATABASE_URL`, `SECRET_KEY` (change before any real deployment), `ALGORITHM`, `ACCESS_TOKEN_EXPIRE_MINUTES`, `CORS_ORIGINS`
+- `frontend/.env` - `VITE_API_URL`, pointing at the backend
+
+### Known limitations / not yet built
+- No password reset/email verification
+- No UI for browsing global course catalog independ of a student's own enrollments (`GET /api/courses` exists on backend but isn't accessible in the frontend)
+- Friend/Connection system (`Connection` model, mutal accept/reject) exists on the backend but has no frontend UI yet. Timetable comparison between students not yet built
+- Styling is intentionally minimal throughout, components use inline syle or plain HTML elements. A dedicated CSS pass (extracting shared styles, consistent theming) is a planned follow-up, not yet done
+- Database mirgrations are handeled by dropping and recreating tables during deployment (**switch to Alembic** planned, already listed in `requirements.txt` but is unused)
+
+## Notes for future development
+- Table are created automatically on backend startup via `Base.metadata.create_all`. This is fine for early development, but any further schema change on a database that holds real data should go through an Alembic migration instead of a drop/recreate
+- CORS is currently locked to `http://localhost:5173`, update `CORS_ORIGINS` in `backend/.env` before deploying frontend
+- For production: replace the plaintext `.env` with a real secrets manager, put HTTPS in front of both services, adn remove the `--reload` flag/bind-mounted volumes from `docker-compose.yml`
