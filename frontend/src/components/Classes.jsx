@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client.js'
 import Modal from './Modal.jsx'
+import { withOpacity } from '../utils/formatters.js'
+import { AddIcon, RemoveIcon, SaveIcon } from './icons/Icons.jsx'
 
 function emptyForm() {
     return {
@@ -83,27 +85,46 @@ export default function Classes() {
     return (
         <div>
         <h2>Enrolled Classes</h2>
-        <button onClick={openCreate}>+ Add class</button>
+        <button className = "btn" onClick={openCreate}>
+            <AddIcon size =  {16} />
+            Add class
+        </button>
 
         {classes.length === 0 ? (
             <p>No enrolled classes</p>
         ) : (
-            <ul>
-            {classes.map((enrollment) => (
-                <li key = {enrollment.id} style = {{ borderLeft: `4px solid ${enrollment.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
-                <button onClick = {() => openEdit(enrollment)} style = {{ all: 'unset', cursor: 'pointer' }}>
-                    {enrollment.course_code} — {enrollment.course.name}
-                </button>{' '}
-                <button onClick={() => handleDelete(enrollment.id)}>Remove</button>
-                </li>
-            ))}
-            </ul>
+            <table className = "tables">
+                <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {classes.map((enrollment) => (
+                        <tr key = {enrollment.id} style = {{ '--row-color': withOpacity(enrollment?.color || '#4F6D7A', 0.25)}}>
+                            <td>
+                                <button onClick = {() => openEdit(enrollment)} className = "link-button">
+                                    {enrollment.course_code}
+                                </button>
+                            </td>
+                            <td>{enrollment.course.name}</td>
+                            <td>
+                                <button className = "btn-icons" onClick = {() => handleDelete(enrollment.id)}>
+                                    <RemoveIcon size = {18} /> Remove
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         )}
 
         {modalOpen && (
             <Modal title = {editingId ? 'Edit class color' : 'Add class'} onClose = {() => setModalOpen(false)}>
                 <form onSubmit = {handleSubmit}>
-                    {formError && <p style = {{ color: 'red' }}>{formError}</p>}
+                    {formError && <p className = "form-error">{formError}</p>}
 
                     {!editingId && (
                     <>
@@ -135,7 +156,10 @@ export default function Classes() {
                     />
                     </div>
 
-                    <button type = "submit" className = "btn">{editingId ? 'Save color' : 'Add class'}</button>
+                    <button type = "submit" className = "btn">
+                        {editingId ? <SaveIcon size = {16} />: <AddIcon size = {16} />}
+                        {editingId ? 'Save changes' : 'Add class'}
+                    </button>
                 </form>
             </Modal>
         )}

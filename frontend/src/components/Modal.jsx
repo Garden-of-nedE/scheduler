@@ -1,4 +1,5 @@
 import React from 'react'
+import { CrossIcon } from '../components/icons/Icons.jsx'
 
 export default function Modal({ title, onClose, children }) {
     return (
@@ -6,7 +7,9 @@ export default function Modal({ title, onClose, children }) {
             <div className = "modal-box" onClick = {(e) => e.stopPropagation()}>
                 <div className = "modal-header">
                     <h2>{title}</h2>
-                    <button className = "modal-close" onClick = {onClose} aria-label = "Close">x</button>
+                    <button className = "btn-icons" onClick = {onClose} aria-label = "Close">
+                        <CrossIcon size = {20} />
+                    </button>
                 </div>
                 <div className = "modal-body">{children}</div>
             </div>

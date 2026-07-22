@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
 import { formatTime } from '../utils/formatters.js'
+import { AddIcon, RemoveIcon, SaveIcon } from './icons/Icons.jsx'
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
@@ -103,7 +104,10 @@ export default function Timetable() {
     return (
         <div>
             <h2>Weekly timetable</h2>
-            <button type = "button" className = "btn" onClick = {openCreate} disabled = {enrollments.length === 0}>+ Add class</button>
+            <button type = "button" className = "btn" onClick = {openCreate} disabled = {enrollments.length === 0}>
+                <AddIcon size = {16} />
+                Add class
+            </button>
             {enrollments.length ===  0 && <p>Asdd a class under "Classes" before scheduling</p>}
 
             {entries.length === 0 ? (
@@ -126,7 +130,7 @@ export default function Timetable() {
             {modalOpen && (
                 <Modal title = {editingId ? 'Edit class' : 'Add class'} onClose ={() => setModalOpen(false)}>
                     <form onSubmit = {handleSubmit}>
-                        {formError && <p style = {{ color: 'red'}}>{formError}</p>}
+                        {formError && <p className = "form-error">{formError}</p>}
                         
                         <div className = "form-field">
                             <label>Course code</label>
@@ -194,7 +198,10 @@ export default function Timetable() {
                         </div>
 
                         <div className = "button-group">
-                            <button type = "submit" className = "btn">{editingId ? 'Save changes' : 'Add class'}</button>
+                            <button type = "submit" className = "btn">
+                                {editingId ? <SaveIcon size = {16} />: <AddIcon size = {16} />}
+                                {editingId ? 'Save changes' : 'Add class'}
+                            </button>
                             {editingId && (
                                 <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
                                     Delete

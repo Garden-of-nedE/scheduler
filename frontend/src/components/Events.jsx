@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
 import { formatDate, formatTime } from '../utils/formatters.js'
+import { AddIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx' 
 
 function emptyForm() {
     return {
@@ -98,7 +99,10 @@ export default function Events() {
     return (
         <div>
             <h2>Current Events</h2>
-            <button type = "button" className = "btn" onClick = {openCreate}>+ Add Event</button>
+            <button type = "button" className = "btn" onClick = {openCreate}>
+                <AddIcon size = {16} />
+                Add Event
+            </button>
 
             {events.length === 0 ? (
                 <p>No events scheduled.</p>
@@ -176,9 +180,13 @@ export default function Events() {
                         </div>
 
                         <div className = "button-group">
-                            <button type = "submit" className = "btn">{editingId ? 'Save changes' : 'Add class'}</button>
+                            <button type = "submit" className = "btn">
+                                {editingId ? <SaveIcon size = {16} />: <AddIcon size = {16} />}
+                                {editingId ? 'Save changes' : 'Add class'}
+                            </button>
                             {editingId && (
                                 <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
+                                    <TrashIcon size = {16} />
                                     Delete
                                 </button>
                             )}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
 import { formatDate, withOpacity } from '../utils/formatters.js'
-import { AddIcon, BoxIcon, CheckedIcon, DownIcon, TrashIcon, UpIcon } from '../components/icons/Icons.jsx'
+import { AddIcon, BoxIcon, CheckedIcon, DownIcon, SaveIcon, TrashIcon, UpIcon } from './icons/Icons.jsx'
 
 function emptyForm() {
     return {
@@ -168,14 +168,14 @@ export default function Assessments() {
 
     return (
         <div>
-            <h2>Current Assessment List</h2>
-            <button type = "button" className = "btn" onClick = {openCreate} disabled = {enrollments.length === 0}>
-                <AddIcon size = {16} />
-                Add task
-            </button>            
+            <h2>Current Assessment List</h2>           
             {enrollments.length === 0 && <p>Add a class under "Classes" before adding an assessment.</p>}
 
             <div className = "filter-bar">
+                <button type = "button" className = "btn" onClick = {openCreate} disabled = {enrollments.length === 0}>
+                    <AddIcon size = {16} />
+                    Add task
+                </button> 
                 <select 
                     value = {filters.course_code}
                     onChange = {(e) => setFilters({ ...filters, course_code: e.target.value })}
@@ -202,7 +202,7 @@ export default function Assessments() {
             {filteredTasks.length === 0 ? (
                 <p>No assessments added</p>
             ) : (
-                <table className = "assessment-table">
+                <table className = "tables">
                     <thead>
                         <tr>
                             <th className = "sortable" onClick = {() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
@@ -247,7 +247,7 @@ export default function Assessments() {
             {modalOpen && (
                 <Modal task_name = {editingId ? 'Edit task' : 'Add task'} onClose = {() => setModalOpen(false)}>
                     <form onSubmit = {handleSubmit}>
-                        {formError && <p style = {{ color: 'red' }}>{formError}</p>}
+                        {formError && <p className = "form-error">{formError}</p>}
 
                         <div className = "form-field">
                             <label>Course Code</label>
@@ -326,7 +326,7 @@ export default function Assessments() {
                                             }
                                         }}
                                     >
-                                        + Add skip date
+                                        <AddIcon size = {14} /> Add skip date
                                     </button>
 
                                     {recurrence.skip_dates.length > 0 && (
@@ -411,7 +411,10 @@ export default function Assessments() {
                         </div>
 
                         <div className = "button-group">
-                            <button type = "submit" className = "btn">{editingId ? 'Save changes' : 'Add class'}</button>
+                            <button type = "submit" className = "btn">
+                                {editingId ? <SaveIcon size = {16} />: <AddIcon size = {16} />}
+                                {editingId ? 'Save changes' : 'Add class'}
+                            </button>
                             {editingId && (
                                 <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
                                     <TrashIcon size = {16} />
