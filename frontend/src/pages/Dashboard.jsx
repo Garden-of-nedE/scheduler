@@ -5,6 +5,7 @@ import Timetable from '../components/Timetable.jsx'
 import Classes from '../components/Classes.jsx'
 import Assessments from '../components/Assessments.jsx'
 import Events from '../components/Events.jsx'
+import EventsCalendar from '../components/calendar/EventsCalendar.jsx'
 import { SunIcon, MoonIcon, LogoutIcon } from '../components/icons/Icons.jsx'
 
 const TABS = [
@@ -12,6 +13,7 @@ const TABS = [
     { key: 'classes', label: 'Classes'},
     { key: 'assessments', label: 'Assessments'},
     { key: 'events', label: 'Events'},
+    { key: 'calendar', label: 'Calendar'}
 ]
 
 export default function Dashboard() {
@@ -54,6 +56,7 @@ export default function Dashboard() {
                         {tab === 'classes' && <Classes />}
                         {tab === 'assessments' && <Assessments />}
                         {tab === 'events' && <Events />}
+                        {tab === 'calendar' && <EventsCalendar />}
                     </main>
                 </div>
             </div>
