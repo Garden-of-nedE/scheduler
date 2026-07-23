@@ -4,11 +4,14 @@
 ### Docker
 A single docker container is utilised to compose the App and Postgres backend. Building using docker to ensure that project is functional across various operating systems (Windows & Mac), whilst ensuring that any dependencies for the project are self-contained. Minimise bloating local system memory with various libraries.
 
-### Backend
+### FastAPI & SQLAlchemy Backend
 Project eventually will allow different computer systems (Windows & Mac) to communicate via the internet, utilising REST API. Framework only requires a single declaration for parameter types in standard Python via Pydantic library. Interactive API docs, via Swagger UI, allows for local testing to be conducted easily.  `OAuth2` built-in tool allows the frontend to authenticate with the backend, for security.
 
+### Vite Frontend
+I was looking for a tool that that was simple and required very little configuration, as this is my first proper frontend project. Vite allowed me to focus on learning React and JavaScript instead of build tools. Vite is also able to run my app quickly, allowing me to tweak and test on a more regular basis.
+
 ## Build Stages
-1. Functional Postgres within Docker &rarr; Confirm that Docker networking works before moving forward.
+1. Functional Postgres within Docker &rarr; Confirm that Docker networking works before moving forward
 2. Database models &rarr; Define tables in SQLAlchemy before routing
 3. Full vertical slice for Authentication &rarr; Ensure Auth from end-to-end is established, heavily relied on for project
 4. Fully CRUD one table &rarr; Ensure that contents of ONE table is fully CRUD'd before moving on. Schema &rarr; router &rarr; test
@@ -60,9 +63,6 @@ Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is r
 `Assessment.completed` defaults to `False` ensures that the frontend checkbox remains empty upon creation of the task. This status should only every be **updated**, rather than chosen on task creation.
 
 Recurring assessments: `skip_date` stretch the series of tasks across more calendar weeks, rather than reducing the total quiz count.
-
-### Frontend
-Vite is used for the frontend, ESLint which catches issues such as unused variables, undefined references and typos.
 
 ### Noteable Error Log
 **Backend**
