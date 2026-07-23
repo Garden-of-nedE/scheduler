@@ -301,19 +301,27 @@ header {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
 <<<<<<< HEAD
+<<<<<<< HEAD
   overflow: visible;
 =======
   overflow: hidden;
 >>>>>>> 16d3e4b (feat: grid view for timetable added)
+=======
+  overflow: visible;
+>>>>>>> 257aa51 (fix: hour markers on timetable no longer ovverflow)
   margin-top: var(--spacing-md);
 }
 
 .week-grid-gutter {
 <<<<<<< HEAD
+<<<<<<< HEAD
   width: 64px;
 =======
   width: 56px;
 >>>>>>> 16d3e4b (feat: grid view for timetable added)
+=======
+  width: 64px;
+>>>>>>> 257aa51 (fix: hour markers on timetable no longer ovverflow)
   flex-shrink: 0;
   position: relative;
   border-right: 1px solid var(--color-border);
@@ -323,15 +331,21 @@ header {
   height: 40px;
   border-bottom: 1px solid var(--color-border);
 <<<<<<< HEAD
+<<<<<<< HEAD
   align-items: center;
   justify-items: center;
 =======
   position: relative;
 >>>>>>> 16d3e4b (feat: grid view for timetable added)
+=======
+  align-items: center;
+  justify-items: center;
+>>>>>>> 257aa51 (fix: hour markers on timetable no longer ovverflow)
 }
 
 .hour-label {
   position: absolute;
+<<<<<<< HEAD
 <<<<<<< HEAD
   transform: translateY(-50%);
   font-size: 0.75rem;
@@ -342,6 +356,11 @@ header {
   color: var(--color-text-muted);
   padding-left: 4px;
 >>>>>>> 16d3e4b (feat: grid view for timetable added)
+=======
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+>>>>>>> 257aa51 (fix: hour markers on timetable no longer ovverflow)
 }
 
 .week-grid-day {
@@ -359,10 +378,14 @@ header {
   align-items: center;
   justify-content: center;
 <<<<<<< HEAD
+<<<<<<< HEAD
   font-weight: 600;
 =======
   font-weight:  600;
 >>>>>>> 16d3e4b (feat: grid view for timetable added)
+=======
+  font-weight: 600;
+>>>>>>> 257aa51 (fix: hour markers on timetable no longer ovverflow)
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-surface);
 }
@@ -373,10 +396,14 @@ header {
     to bottom,
     transparent,
 <<<<<<< HEAD
+<<<<<<< HEAD
     transparent 59px,
 =======
     trasnsparent 59px,
 >>>>>>> 16d3e4b (feat: grid view for timetable added)
+=======
+    transparent 59px,
+>>>>>>> 257aa51 (fix: hour markers on timetable no longer ovverflow)
     var(--color-border) 59px,
     var(--color-border) 60px
   );
