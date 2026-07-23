@@ -77,6 +77,8 @@ CORS error showed a 200 status in the Network tab but still blocked the browser 
 
 Ran it unexpected error, where once a student logs out of their session they are no longer able to add classes to their timetable or assessments. Thought this was due to a token issue with JWT. After verifying that it wwas not a backend issue, further checks through `Inspect Elements` of the front end showed that there were typos in the respective code bases. 
 
+Timetable grid UI resulted in quite a time consuming issue, in which the `hourMarks` were being cut off by the horizontal borders of the table and misaligned class blocks. The `hourMarks` issue was somewhat resolved by extending the `DAY_START_MIN` and `DAY_END_MIN` constants and splicing the before the component is mapped into the table. The misaligned class blocks were off by 30px, which was due to unexpectedly doubling the `HEADER_HEIGHT` within the `week-grid-day` component, as well as not accounting for 2px padding. 
+
 ## Revisit Points
 Course deletion policy, duplicate-request handling logic at a later stage.
 

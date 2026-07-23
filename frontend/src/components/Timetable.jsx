@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
 import { formatTime, withOpacity, toMinutes, formatHourLabel } from '../utils/formatters.js'
-import { AddIcon, RemoveIcon, SaveIcon } from './icons/Icons.jsx'
+import { AddIcon, RemoveIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx'
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 const DAY_LABELS = { monday: 'MON', tuesday: 'TUE', wednesday: 'WED', thursday: 'THU', friday: 'FRI', saturday: 'SAT', sunday: 'SUN'}
@@ -240,6 +240,7 @@ export default function Timetable() {
                             </button>
                             {editingId && (
                                 <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
+                                    <TrashIcon size = {16} />
                                     Delete
                                 </button>
                             )}
