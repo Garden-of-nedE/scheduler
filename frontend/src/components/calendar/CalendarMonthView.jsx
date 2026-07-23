@@ -69,21 +69,21 @@ export default function CalendarMonthView({ currentDate, setCurrentDate, events,
                                     ))}
                                 </div>
                             )}
-
-                            {hoveredItem && (
-                                <div className = "calendar-tooltip" style = {{ left: hoverPosition.x, top: hoverPosition.y }}>
-                                    <strong>{hoveredItem.type === 'event' ? hoveredItem.title : hoveredItem.task_name}</strong>
-                                    {hoveredItem.type === 'assessment' && (
-                                        <div>{hoveredItem.course_code} | Due {hoveredItem.deadline ? formatTime(hoveredItem.deadline) : 'end of day'}</div>
-                                    )}
-                                    {hoveredItem.type === 'event' && hoveredItem.location &&  (
-                                        <div>{hoveredItem.location}</div>
-                                    )}
-                                </div>
-                            )}
                         </div>
                     )
                 })}
+
+                 {hoveredItem && (
+                    <div className = "calendar-tooltip" style = {{ left: hoverPosition.x, top: hoverPosition.y }}>
+                        <strong>{hoveredItem.type === 'event' ? hoveredItem.title : hoveredItem.task_name}</strong>
+                        {hoveredItem.type === 'assessment' && (
+                            <div>{hoveredItem.course_code} | Due {hoveredItem.deadline ? formatTime(hoveredItem.deadline) : 'end of day'}</div>
+                        )}
+                        {hoveredItem.type === 'event' && hoveredItem.location &&  (
+                            <div>{hoveredItem.location}</div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     )
