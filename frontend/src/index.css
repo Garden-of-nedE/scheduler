@@ -294,3 +294,86 @@ header {
   border-radius: var(--radius);
   font-size: 0.9rem;
 }
+
+/* TIMETABLE LAYOUT */
+.week-grid {
+  display: flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: var(--spacing-md);
+}
+
+.week-grid-gutter {
+  width: 56px;
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid var(--color-border);
+}
+
+.week-grid-corner {
+  height: 40px;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+
+.hour-label {
+  position: absolute;
+  transform: traslateY(-50%);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  padding-left: 4px;
+}
+
+.week-grid-day {
+  flex: 1;
+  border-right: 1px solid var(--color-border);
+}
+
+.week-grid-day:last-child {
+  border-right: none;
+}
+
+.week-grid-day-header {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight:  600;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.week-grid-day-body {
+  position: relative;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    trasnsparent 59px,
+    var(--color-border) 59px,
+    var(--color-border) 60px
+  );
+}
+
+.week-entry {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  font-size: 0.75rem;
+}
+
+.week-entry-title {
+  font-weight: 600;
+}
+
+.week-entry-type,
+.week-entry-location {
+  opacity: 0.9;
+}
