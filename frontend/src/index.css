@@ -300,12 +300,12 @@ header {
   display: flex;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  overflow: hidden;
+  overflow: visible;
   margin-top: var(--spacing-md);
 }
 
 .week-grid-gutter {
-  width: 56px;
+  width: 64px;
   flex-shrink: 0;
   position: relative;
   border-right: 1px solid var(--color-border);
@@ -314,15 +314,15 @@ header {
 .week-grid-corner {
   height: 40px;
   border-bottom: 1px solid var(--color-border);
-  position: relative;
+  align-items: center;
+  justify-items: center;
 }
 
 .hour-label {
   position: absolute;
-  transform: traslateY(-50%);
+  transform: translateY(-50%);
   font-size: 0.75rem;
   color: var(--color-text-muted);
-  padding-left: 4px;
 }
 
 .week-grid-day {
@@ -339,7 +339,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight:  600;
+  font-weight: 600;
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-surface);
 }
@@ -349,7 +349,7 @@ header {
   background-image: repeating-linear-gradient(
     to bottom,
     transparent,
-    trasnsparent 59px,
+    transparent 59px,
     var(--color-border) 59px,
     var(--color-border) 60px
   );
