@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
-import { formatTime } from '../utils/formatters.js'
+import { formatTime, withOpacity, toMinutes, formatHourLabel } from '../utils/formatters.js'
 import { AddIcon, RemoveIcon, SaveIcon } from './icons/Icons.jsx'
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+const DAY_LABELS = { monday: 'MON', tuesday: 'TUE', wednesday: 'WED', thursday: 'THU', friday: 'FRI', saturday: 'SAT', sunday: 'SUN'}
+
+const DAY_START_MIN = 8 * 60        // grid starts at 7AM
+const DAY_END_MIN = 21 * 60        // grid ends at 10PM
+const PX_PER_MIN = 1                // 1 min = 1px tall
+
+const gridHeight = DAY_END_MIN - DAY_START_MIN
+const hourMarks = []
+for (let m = DAY_START_MIN; m <= DAY_END_MIN; m += 60) {
+    hourMarks.push(m)
+}
 
 function emptyForm() {
     return {
@@ -113,18 +124,41 @@ export default function Timetable() {
             {entries.length === 0 ? (
                 <p>No classes scheduled</p>
             ) : (
-                <ul>
-                    {entries.map((entry) => {
-                        const enrollment = enrollments.find((e) => e.course_code === entry.course_code)
-                        return (
-                            <li key = {entry.id} style = {{ borderLeft : `4px solid ${enrollment?.color || '#4F6D7A'}`, paddingLeft: '8px' }}>
-                            <button onClick = {() => openEdit(entry)} className = "link-button">
-                                {entry.day_of_week} | {entry.course_code} | {formatTime(entry.start_time)}-{formatTime(entry.end_time)} | {entry.class_type} | {entry.location}
-                            </button>
-                        </li>
-                        )
-                    })}
-                </ul>
+                <div className = "week-grid">
+                    <div className = "week-grid-gutter">
+                        <div className = "week-grid-corner">
+                            {hourMarks.map((m) => (
+                                <div key = {m} className = "hour-label" style = {{ top: 40 + (m - DAY_START_MIN) * PX_PER_MIN }}>
+                                    {formatHourLabel(m)}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {DAYS.map((day) => (
+                            <div key = {day} className = "week-grid-day">
+                                <div className = "week-grid-day-header">{DAY_LABELS[day]}</div>
+                                <div className = "week-grid-day-body" style = {{ height: gridHeight * PX_PER_MIN}}>
+                                    {entries.filter((entry) => entry.day_of_week === day)
+                                    .map((entry) => {
+                                        const enrollment = enrollments.find((e) => e.course_code === entry.course_code)
+                                        const start = toMinutes(entry.start_time) - DAY_START_MIN
+                                        const end = toMinutes(entry.end_time) - DAY_START_MIN
+
+                                        return (
+                                            <button key = {entry.id} className = "week-entry" onClick = {() => openEdit(entry)}
+                                            style = {{ top: start * PX_PER_MIN, height: Math.max((end - start) * PX_PER_MIN, 24), backgroundColor: withOpacity(enrollment?.color || '#4F6D7A', 0.85)}}
+                                            >
+                                                <div className = "week-entry-title">{entry.course_code}</div>
+                                                <div className = "week-entry-type">{entry.class_type}</div>
+                                                {entry.location && <div className = "week-entry-location">{entry.location}</div>}
+                                            </button>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                </div>
             )}
 
             {modalOpen && (
