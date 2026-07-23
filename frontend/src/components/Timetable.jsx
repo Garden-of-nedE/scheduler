@@ -7,10 +7,13 @@ import { AddIcon, RemoveIcon, SaveIcon } from './icons/Icons.jsx'
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 const DAY_LABELS = { monday: 'MON', tuesday: 'TUE', wednesday: 'WED', thursday: 'THU', friday: 'FRI', saturday: 'SAT', sunday: 'SUN'}
 
-const DAY_START_MIN = 7 * 60        // grid starts at 7:30AM
-const DAY_END_MIN = 21 * 60        // grid ends at 8:30PM
+const DAY_START_MIN = 7 * 60        // grid starts at 7AM
+const DAY_END_MIN = 21 * 60        // grid ends at 9PM
 const PX_PER_MIN = 1                // 1 min = 1px tall
 
+const HEADER_HEIGHT = 40
+
+const gridHeight = DAY_END_MIN - DAY_START_MIN - 2
 const HEADER_HEIGHT = 40
 
 const gridHeight = DAY_END_MIN - DAY_START_MIN - 2
