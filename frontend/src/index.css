@@ -431,3 +431,68 @@ header {
 .week-entry-location {
   opacity: 0.9;
 }
+
+/* MONTH CALENDAR */
+.calendar-nav {
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.month-weekday-label {
+  text-align: center;
+  font-weight: 600;
+  padding: var(--spacing-sm);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.85rem;
+}
+
+.month-day-cell {
+  min-height: 90px;
+  padding: 6px;
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.month-day-outside {
+  opacity: 0.4;
+}
+
+.month-day-number {
+  font-size: 0.85rem;
+}
+
+.month-day-indicators {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.month-day-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.calendar-tooltip {
+  position: fixed;
+  transform: translate(-50%, -100%);
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  pointer-events: none;
+  z-index: 200;
+  white-space: nowrap;
+  margin-top: -8px;
+}

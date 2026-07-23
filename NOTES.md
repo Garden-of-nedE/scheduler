@@ -64,6 +64,9 @@ Test: `GET /api/auth/me` &rarr; Entire auth chain works end-to=end, if user is r
 
 Recurring assessments: `skip_date` stretch the series of tasks across more calendar weeks, rather than reducing the total quiz count.
 
+### Calendar
+Spent time investigating what looked like a data-matching bug in calendarUtils.js, but the root cause was simply testing against the wrong date. The event existed and the function worked correctly, I just queried a date that didn't match. Lesson: before assuming a filtering/matching function is broken, confirm that the actual values being compared line up as expected. A 'no results' output is often correct behaviour for mismatched inputs, not necessarily a bug.
+
 ### Noteable Error Log
 **Backend**
 
