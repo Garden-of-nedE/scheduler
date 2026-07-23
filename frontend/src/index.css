@@ -300,12 +300,20 @@ header {
   display: flex;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
+<<<<<<< HEAD
   overflow: visible;
+=======
+  overflow: hidden;
+>>>>>>> 16d3e4b (feat: grid view for timetable added)
   margin-top: var(--spacing-md);
 }
 
 .week-grid-gutter {
+<<<<<<< HEAD
   width: 64px;
+=======
+  width: 56px;
+>>>>>>> 16d3e4b (feat: grid view for timetable added)
   flex-shrink: 0;
   position: relative;
   border-right: 1px solid var(--color-border);
@@ -314,15 +322,26 @@ header {
 .week-grid-corner {
   height: 40px;
   border-bottom: 1px solid var(--color-border);
+<<<<<<< HEAD
   align-items: center;
   justify-items: center;
+=======
+  position: relative;
+>>>>>>> 16d3e4b (feat: grid view for timetable added)
 }
 
 .hour-label {
   position: absolute;
+<<<<<<< HEAD
   transform: translateY(-50%);
   font-size: 0.75rem;
   color: var(--color-text-muted);
+=======
+  transform: traslateY(-50%);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  padding-left: 4px;
+>>>>>>> 16d3e4b (feat: grid view for timetable added)
 }
 
 .week-grid-day {
@@ -339,7 +358,11 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
   font-weight: 600;
+=======
+  font-weight:  600;
+>>>>>>> 16d3e4b (feat: grid view for timetable added)
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-surface);
 }
@@ -349,7 +372,11 @@ header {
   background-image: repeating-linear-gradient(
     to bottom,
     transparent,
+<<<<<<< HEAD
     transparent 59px,
+=======
+    trasnsparent 59px,
+>>>>>>> 16d3e4b (feat: grid view for timetable added)
     var(--color-border) 59px,
     var(--color-border) 60px
   );

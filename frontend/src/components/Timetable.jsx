@@ -127,8 +127,8 @@ export default function Timetable() {
                 <div className = "week-grid">
                     <div className = "week-grid-gutter">
                         <div className = "week-grid-corner">
-                            {hourMarks.slice(1, -1).map((m) => (
-                                <div key = {m} className = "hour-label" style = {{ top: HEADER_HEIGHT + (m - DAY_START_MIN) * PX_PER_MIN }}>
+                            {hourMarks.map((m) => (
+                                <div key = {m} className = "hour-label" style = {{ top: 40 + (m - DAY_START_MIN) * PX_PER_MIN }}>
                                     {formatHourLabel(m)}
                                 </div>
                             ))}
