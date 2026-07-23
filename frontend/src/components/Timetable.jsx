@@ -7,11 +7,13 @@ import { AddIcon, RemoveIcon, SaveIcon } from './icons/Icons.jsx'
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 const DAY_LABELS = { monday: 'MON', tuesday: 'TUE', wednesday: 'WED', thursday: 'THU', friday: 'FRI', saturday: 'SAT', sunday: 'SUN'}
 
-const DAY_START_MIN = 8 * 60        // grid starts at 7AM
-const DAY_END_MIN = 21 * 60        // grid ends at 10PM
+const DAY_START_MIN = 7 * 60        // grid starts at 7:30AM
+const DAY_END_MIN = 21 * 60        // grid ends at 8:30PM
 const PX_PER_MIN = 1                // 1 min = 1px tall
 
-const gridHeight = DAY_END_MIN - DAY_START_MIN
+const HEADER_HEIGHT = 40
+
+const gridHeight = DAY_END_MIN - DAY_START_MIN - 2
 const hourMarks = []
 for (let m = DAY_START_MIN; m <= DAY_END_MIN; m += 60) {
     hourMarks.push(m)
@@ -127,8 +129,8 @@ export default function Timetable() {
                 <div className = "week-grid">
                     <div className = "week-grid-gutter">
                         <div className = "week-grid-corner">
-                            {hourMarks.map((m) => (
-                                <div key = {m} className = "hour-label" style = {{ top: 40 + (m - DAY_START_MIN) * PX_PER_MIN }}>
+                            {hourMarks.slice(1, -1).map((m) => (
+                                <div key = {m} className = "hour-label" style = {{ top: HEADER_HEIGHT + (m - DAY_START_MIN) * PX_PER_MIN }}>
                                     {formatHourLabel(m)}
                                 </div>
                             ))}
