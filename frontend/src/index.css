@@ -315,6 +315,7 @@ header {
 .week-grid-corner {
   height: 40px;
   border-bottom: 1px solid var(--color-border);
+  position: relative;
   align-items: center;
   justify-items: center;
 }
