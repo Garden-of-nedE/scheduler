@@ -13,7 +13,7 @@ const PX_PER_MIN = 1                // 1 min = 1px tall
 
 const HEADER_HEIGHT = 40
 
-const gridHeight = DAY_END_MIN - DAY_START_MIN - 2 - 2
+const gridHeight = DAY_END_MIN - DAY_START_MIN - 2
 const hourMarks = []
 for (let m = DAY_START_MIN; m <= DAY_END_MIN; m += 60) {
     hourMarks.push(m)
