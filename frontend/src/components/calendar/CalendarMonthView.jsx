@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { getMonthViewForDate, getMonthGridDates } from '../../utils/calendarUtils.js'
-import { formatTime } from '../../utils/formatters.js'
+import { formatTime, withOpacity } from '../../utils/formatters.js'
 
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const EVENT_COLOR = '#B03DE1'
 
-export default function CalendarMonthView({ currentDate, setCurrentDate, events, assessments }) {
+export default function CalendarMonthView({ currentDate, setCurrentDate, events, assessments, enrollments }) {
     console.log('Props received:', events, assessments)
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
@@ -58,29 +59,42 @@ export default function CalendarMonthView({ currentDate, setCurrentDate, events,
                             <span className = "month-day-number">{date.getDate()}</span>
                             {items.length > 0 && (
                                 <div className = "month-day-indicators">
-                                    {items.map((item) => (
-                                        <span 
+                                    {items.map((item) => {
+                                        const enrollment = item.type === 'assessment' ? enrollments?.find((e) => e.course_code === item.course_code) : null
+                                        const chipColor = item.type === 'assessment' ? (enrollment?.color || '#4F6D7A') : EVENT_COLOR
+
+                                        return (
+                                            <div 
                                             key = {item.id} 
-                                            className = "month-day-dot" 
-                                            style = {{ backgroundColor: item.type === 'event' ? '#B03DE1' : '#6EE13D' }}
+                                            className = {`month-day-chip month-day-chip${item.type}`}
+                                            style = {{ backgroundColor: chipColor }}
                                             onMouseEnter = {(e) => handleMouseEnter(item, e)}
                                             onMouseLeave = {handleMouseLeave}
-                                        />
-                                    ))}
+                                            >
+                                                {item.type === 'event' ? item.title : item.task_name}
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             )}
                         </div>
                     )
                 })}
 
-                 {hoveredItem && (
+                {hoveredItem && (
                     <div className = "calendar-tooltip" style = {{ left: hoverPosition.x, top: hoverPosition.y }}>
                         <strong>{hoveredItem.type === 'event' ? hoveredItem.title : hoveredItem.task_name}</strong>
                         {hoveredItem.type === 'assessment' && (
-                            <div>{hoveredItem.course_code} | Due {hoveredItem.deadline ? formatTime(hoveredItem.deadline) : 'end of day'}</div>
+                            <div>
+                                    {hoveredItem.course_code}
+                                    {hoveredItem.deadline && <div> Due: {formatTime(hoveredItem.deadline)}</div>}
+                            </div>
                         )}
-                        {hoveredItem.type === 'event' && hoveredItem.location &&  (
-                            <div>{hoveredItem.location}</div>
+                        {hoveredItem.type === 'event' && (
+                            <>
+                            {hoveredItem.start_time && <div> Start time: {formatTime(hoveredItem.start_time)}</div>}
+                            {hoveredItem.location && <div>Location: {hoveredItem.location}</div>}
+                            </>
                         )}
                     </div>
                 )}

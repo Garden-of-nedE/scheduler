@@ -66,6 +66,7 @@ export default function EventsCalendar() {
                     setCurrentDate = {setCurrentDate}
                     events = {events}
                     assessments = {assessments}
+                    enrollments = {enrollments}
                 />
             )}
 

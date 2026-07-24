@@ -369,6 +369,7 @@ header {
   cursor: pointer;
   overflow: hidden;
   font-size: 0.75rem;
+  min-height: 30px;
 }
 
 .week-entry-title {
@@ -376,12 +377,13 @@ header {
 }
 
 .week-entry-type,
-.week-entry-location {
+.week-entry-location,
+.week-entry-time {
   opacity: 0.9;
 }
 
 .week-grid-scroll {
-  max-height: 600px;
+  max-height: 800px;
   overflow-y: auto;
 }
 
@@ -430,10 +432,15 @@ header {
   flex-wrap: wrap;
 }
 
-.month-day-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.month-day-chip {
+  font-size: 0.7rem;
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
 }
 
 .calendar-tooltip {
