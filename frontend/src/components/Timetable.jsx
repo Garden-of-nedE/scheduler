@@ -140,7 +140,7 @@ export default function Timetable() {
                     {DAYS.map((day) => (
                             <div key = {day} className = "week-grid-day">
                                 <div className = "week-grid-day-header">{DAY_LABELS[day]}</div>
-                                <div className = "week-grid-day-body" style = {{ height: gridHeight * PX_PER_MIN}}>
+                                <div className = "week-grid-day-body" style = {{ height: gridHeight * PX_PER_MIN, '--hour-height' : `${60 * PX_PER_MIN}px` }}>
                                     {entries.filter((entry) => entry.day_of_week === day)
                                     .map((entry) => {
                                         const enrollment = enrollments.find((e) => e.course_code === entry.course_code)

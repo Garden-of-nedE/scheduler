@@ -298,10 +298,11 @@ header {
 /* TIMETABLE LAYOUT */
 .week-grid {
   display: flex;
-  border: 1px solid var(--color-border);
+  border: none;
   border-radius: var(--radius);
   overflow: visible;
   margin-top: var(--spacing-md);
+  width: 100%;
 }
 
 .week-grid-gutter {
@@ -327,6 +328,7 @@ header {
 
 .week-grid-day {
   flex: 1;
+  min-width: 0;
   border-right: 1px solid var(--color-border);
 }
 
@@ -349,9 +351,9 @@ header {
   background-image: repeating-linear-gradient(
     to bottom,
     transparent,
-    transparent 59px,
-    var(--color-border) 59px,
-    var(--color-border) 60px
+    transparent calc(var(--hour-height) - 1px),
+    var(--color-border) calc(var(--hour-height) - 1px),
+    var(--color-border) var(--hour-height)
   );
 }
 
@@ -376,6 +378,11 @@ header {
 .week-entry-type,
 .week-entry-location {
   opacity: 0.9;
+}
+
+.week-grid-scroll {
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 /* MONTH CALENDAR */
