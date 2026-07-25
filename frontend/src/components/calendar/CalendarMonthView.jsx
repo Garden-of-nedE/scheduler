@@ -26,7 +26,7 @@ export default function CalendarMonthView({ currentDate, setCurrentDate, events,
     function handleMouseEnter(item, e) {
         const rect = e.currentTarget.getBoundingClientRect()
         setHoveredItem(item)
-        setHoverPosition({ x: rect.lect + rect.width /2, y: rect.top })
+        setHoverPosition({ x: rect.left + rect.width /2, y: rect.top })
     }
 
     function handleMouseLeave() {

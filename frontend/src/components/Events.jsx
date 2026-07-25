@@ -83,9 +83,9 @@ export default function Events() {
         }
     }
 
-    async function handleDelete(id) {
+    async function handleDelete() {
         try{
-            await client.delete(`/api/events/${id}`)
+            await client.delete(`/api/events/${editingId}`)
             setModalOpen(false)
             await load()
         } catch (err) {

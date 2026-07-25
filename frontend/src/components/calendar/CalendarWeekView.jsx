@@ -49,7 +49,7 @@ export default function CalendarWeekView({ currentDate, setCurrentDate, events, 
     function handleMouseEnter(item, e) {
         const rect = e.currentTarget.getBoundingClientRect()
         setHoveredItem(item)
-        setHoverPosition({ x: rect.lect + rect.width /2, y: rect.top })
+        setHoverPosition({ x: rect.left + rect.width /2, y: rect.top })
     }
 
     function handleMouseLeave() {
@@ -105,6 +105,8 @@ export default function CalendarWeekView({ currentDate, setCurrentDate, events, 
                                                     height: Math.max((end - start) * PX_PER_MIN, 24),
                                                     backgroundColor: withOpacity(color, 0.85),
                                                 }}
+                                                onMouseEnter = {(e) => handleMouseEnter(item, e)}
+                                                onMouseLeave = {handleMouseLeave}
                                             >
                                                 <div className = "week-entry-title">
                                                     {item.type === 'class' ? item.course_code : item.type === 'assessment' ? item.task_name : item.title}
@@ -123,6 +125,30 @@ export default function CalendarWeekView({ currentDate, setCurrentDate, events, 
                     })}
                 </div>
             </div>
+
+            {hoveredItem && (
+                <div className = "calendar-tooltip" style = {{ left: hoverPosition.x, top: hoverPosition.y }}>
+                    <strong>
+                        {hoveredItem.type === 'class' ? hoveredItem.course_code : hoveredItem.type === 'assessment' ? hoveredItem.task_name : hoveredItem.title}
+                    </strong>
+                    {hoveredItem.type === 'class' && (
+                        <div>
+                            {hoveredItem.class_type} | {hoveredItem.location}
+                        </div>
+                    )}
+                    {hoveredItem.type === 'assessment' && (
+                        <div>
+                            {hoveredItem.course_code}
+                            {hoveredItem.deadline && <div>Due: {formatTime(hoveredItem.deadline)}</div>}
+                        </div>
+                    )}
+                    {hoveredItem.type === 'event' && (
+                        <div>
+                            {hoveredItem.location} | {hoveredItem.description}
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     )
 }

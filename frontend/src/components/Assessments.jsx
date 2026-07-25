@@ -138,10 +138,10 @@ export default function Assessments() {
         }
     }
 
-    async function handleDelete(id) {
+    async function handleDelete() {
         if (!editingId) return
         try {
-            await client.delete(`/api/assessments/${id}`)
+            await client.delete(`/api/assessments/${editingId}`)
             setModalOpen(false)
             await load()
         } catch (err) {
