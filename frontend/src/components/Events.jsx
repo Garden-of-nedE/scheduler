@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
+import EventsCalendar from './calendar/EventsCalendar.jsx'
 import { formatDate, formatTime } from '../utils/formatters.js'
 import { AddIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx' 
 
@@ -24,6 +25,8 @@ export default function Events() {
     const [editingId, setEditingId] = useState(null)
     const [form, setForm] = useState(emptyForm())
     const [formError, setFormError] = useState('')
+
+    const [viewMode, setViewMode] = useState('list')
 
     async function load() {
         setLoading(true)
@@ -98,26 +101,42 @@ export default function Events() {
 
     return (
         <div>
-            <h2>Current Events</h2>
-            <button type = "button" className = "btn" onClick = {openCreate}>
-                <AddIcon size = {16} />
-                Add Event
-            </button>
+            <div className = "calendar-nav">
+                <h2>Events</h2>
+                <div className = "button-group">
+                    <button type = "button" className = "btn" onClick = {openCreate}>
+                        <AddIcon size = {16} />
+                        Add Event
+                    </button>
+                    <button className = "btn btn-secondary" onClick = {() => setViewMode('list')} disabled = {viewMode === 'list'}>
+                        List
+                    </button>
+                    <button className = "btn btn-secondary" onClick = {() => setViewMode('calendar')} disabled = {viewMode === 'calendar'}>
+                        Calendar
+                    </button>
+                </div>
+            </div>
 
-            {events.length === 0 ? (
-                <p>No events scheduled.</p>
+            {viewMode === 'list' ? (
+                <>
+                {events.length === 0 ? (
+                    <p>No events scheduled.</p>
+                ) : (
+                    <ul>
+                        {events.map((event) => {
+                            return (
+                                <li key = {event.id}>
+                                <button onClick = {() => openEdit(event)} className = "link-button">
+                                    {formatDate(event.event_date)} {formatTime(event.start_time)} | {event.title} | {event.location}
+                                </button>
+                            </li>
+                            )
+                        })}
+                    </ul>
+                )}
+                </>
             ) : (
-                <ul>
-                    {events.map((event) => {
-                        return (
-                            <li key = {event.id}>
-                            <button onClick = {() => openEdit(event)} className = "link-button">
-                                {formatDate(event.event_date)} {formatTime(event.start_time)} | {event.title} | {event.location}
-                            </button>
-                        </li>
-                        )
-                    })}
-                </ul>
+                <EventsCalendar />
             )}
 
             {modalOpen && (
