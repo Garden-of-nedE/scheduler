@@ -298,7 +298,7 @@ header {
 /* TIMETABLE LAYOUT */
 .week-grid {
   display: flex;
-  border: none;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
   overflow: visible;
   margin-top: var(--spacing-md);
