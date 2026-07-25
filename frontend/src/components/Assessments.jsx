@@ -413,7 +413,7 @@ export default function Assessments() {
                         <div className = "button-group">
                             <button type = "submit" className = "btn">
                                 {editingId ? <SaveIcon size = {16} />: <AddIcon size = {16} />}
-                                {editingId ? 'Save changes' : 'Add class'}
+                                {editingId ? 'Save changes' : 'Add task'}
                             </button>
                             {editingId && (
                                 <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>

@@ -30,8 +30,8 @@ export default function Dashboard() {
                         {theme === 'light' ? <MoonIcon size = {18} />: <SunIcon size = {18} />}
                     </button>
                     <button className = "btn btn-secondary" onClick = {logout}>
-                        <LogoutIcon size = {16} />
                         Sign out
+                        <LogoutIcon size = {16} />
                     </button>
                 </div>
             </header>

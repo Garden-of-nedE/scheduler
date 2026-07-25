@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { getWeekViewForDate } from '../../utils/calendarUtils.js'
 import { formatHourLabel, formatTime, toMinutes, withOpacity } from '../../utils/formatters.js'
+import { PrevIcon, NextIcon } from '../icons/Icons.jsx'
 
 const DAY_START_MIN = 0
 const DAY_END_MIN = 24 * 60
@@ -59,20 +60,27 @@ export default function CalendarWeekView({ currentDate, setCurrentDate, events, 
     return (
         <div>
             <div className = "calendar-nav button-group">
-                <button className = "btn btn-secondary" onClick = {goToPrevWeek}>Prev</button>
+                <button className = "btn btn-secondary" onClick = {goToPrevWeek}>
+                    <PrevIcon size = {18} />
+                    Prev
+                </button>
                 <h3>{weekDates[0].toDateString()} - {weekDates[6].toDateString()}</h3>
-                <button className = "btn btn-secondary" onClick = {goToNextWeek}>Next</button>
+                <button className = "btn btn-secondary" onClick = {goToNextWeek}>
+                    Next
+                    <NextIcon size = {18} />
+                </button>
             </div>
 
             <div className = "week-grid-scroll">
                 <div className = "week-grid">
                     <div className = "week-grid-gutter">
-                        <div className = "week-grid-corner" />
-                        {hourMarks.slice(1).map((m) => (
-                            <div key = {m} className = "hour-label" style = {{ top: HEADER_HEIGHT + (m - DAY_START_MIN) * PX_PER_MIN }}>
-                                {formatHourLabel(m)}
-                            </div>
-                        ))}
+                        <div className = "week-grid-corner">
+                            {hourMarks.slice(1, -1).map((m) => (
+                                <div key = {m} className = "hour-label" style = {{ top: HEADER_HEIGHT + (m - DAY_START_MIN) * PX_PER_MIN }}>
+                                    {formatHourLabel(m)}
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     {weekDates.map((date) => {

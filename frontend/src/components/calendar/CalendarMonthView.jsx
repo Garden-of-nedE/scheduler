@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { getMonthViewForDate, getMonthGridDates } from '../../utils/calendarUtils.js'
 import { formatTime, withOpacity } from '../../utils/formatters.js'
+import { PrevIcon, NextIcon } from '../icons/Icons.jsx'
 
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -37,11 +38,13 @@ export default function CalendarMonthView({ currentDate, setCurrentDate, events,
         <div>
             <div className = "calendar-nav button-group">
                 <button className = "btn btn-secondary" onClick = {goToPrevMonth}>
+                    <PrevIcon size = {18} />
                     Prev
                 </button>
                 <h3>{MONTH_NAMES[month]} {year}</h3>
                 <button className = "btn btn-secondary" onClick = {goToNextMonth}>
                     Next
+                    <NextIcon size = {18} />
                 </button>
             </div>
 
