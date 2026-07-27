@@ -10,6 +10,9 @@ Project eventually will allow different computer systems (Windows & Mac) to comm
 ### Vite Frontend
 I was looking for a tool that that was simple and required very little configuration, as this is my first proper frontend project. Vite allowed me to focus on learning React and JavaScript instead of build tools. Vite is also able to run my app quickly, allowing me to tweak and test on a more regular basis.
 
+### Alembic Migrations
+Replaces ad-hoc `Base.metadata.create_all()` schema management (which can only create new tables, never alter existing ones) with proper, version-tracked migrations. `env.py` reads the database URL from `app.config.settings` rather than duplicating it in `alembic.ini`, so there's a single source of truth for the connection string. Going forward, schema changes follow: edit `model.py` &rarr; `alembic revision --autogenerate -m "..."` &rarr; review the generated file &rarr; `alembic upgrade head`. Autogenerate output is not blindly trusted; reviewing the generated migration file before applying it is necessary, since autogenerate can misinterpret certain changes (e.g. treating a column rename as a drop-and-add pair).
+
 ## Build Stages
 1. Functional Postgres within Docker &rarr; Confirm that Docker networking works before moving forward
 2. Database models &rarr; Define tables in SQLAlchemy before routing
@@ -67,7 +70,7 @@ Recurring assessments: `skip_date` stretch the series of tasks across more calen
 ### Calendar
 Spent time investigating what looked like a data-matching bug in calendarUtils.js, but the root cause was simply testing against the wrong date. The event existed and the function worked correctly, I just queried a date that didn't match. Lesson: before assuming a filtering/matching function is broken, confirm that the actual values being compared line up as expected. A 'no results' output is often correct behaviour for mismatched inputs, not necessarily a bug.
 
-## Noteable Error Log
+## Noteable Lesson Log
 ### Backend — CORS error masking a missing middleware block
 **Symptom:** Login request showed a `200` status in Network tab, but the browser console reported a CORS error and the frontend never received the response data.
 
@@ -165,11 +168,11 @@ both nominally represented "the same day."
 
 Timetable grid UI resulted in quite a time consuming issue, in which the `hourMarks` were being cut off by the horizontal borders of the table and misaligned class blocks. The `hourMarks` issue was somewhat resolved by extending the `DAY_START_MIN` and `DAY_END_MIN` constants and splicing the before the component is mapped into the table. The misaligned class blocks were off by 30px, which was due to unexpectedly doubling the `HEADER_HEIGHT` within the `week-grid-day` component, as well as not accounting for 2px padding. 
 
-## Revisit Points
-Course deletion policy, duplicate-request handling logic at a later stage.
+### Backend — Alembic's first migratin surfaced real orphaned data
+**Symptom:** Setting up Alembic and generating a bseline migration against eht existsing database, `alembic upgrade head` failed partway through with an `IntegrityError`: insert or update on table "assessments" violates foreign key constaint "assessments_user_id_fkey". A specific `user_id` referenced by an assessment row didn't exist in the `users` table.
 
-A separate Course router will be created to list/create courses independently *before* submitting a timetable entry. \
-Current implementation: get or create pattern will first check for existing Course before creating it. \
-Attached limitation &rarr; theoretical race condition if two requests for same course code occurs, need to include a database level `ON CONFLICT DO NOTHING` constraint. 
+**Cause:** Multiple manual `DROP TABLE`/recreate cycles during development (used in place of proper migrations) had, at some point, dropped and recreated `users` without cleaning up dependent rows in `assessments`, `enrollments`, `events` and `timetable_entries`. Those tables had never properly *enforced* foreign key constsinta on `user_id` until this migration tried to add one. So the orphaned rows had been silently sitting in the databse the whole time, invisible to any query that didn't specifically go looking for them.
 
-Planned: calendar view for Events (grid layout, month/week navigation, positioning same-day events). Will reuse global CSS variable system (`--color-`, `--radius`, `--spacing-`) for visual consistency with rest of app; likely gets its own CSS file once calendar-specific rules grown large enought to warrant splitting. It will start out in the shared stylesheet like everything else.
+**Fix:** Queried each affecte table for rows whose `user_id` didn't match any real row in `users` [`WHERE user_id NOT IN (SELECT id FROM users)`], confirmed the row counts looked like accumulated test-account debris, rather than anything meaningful. Deleted the orphaned rows table by table, then re-ran `alembic upgrade head`, which completed successfully once every remaining row had a valid reference.
+
+**Lesson:** Without real, enforced foreign key constraints, a database can silently accumulate orphaned data indefinitely; nothing fails, nothing warns you. The rows sit there disconnected until something finally checks it. THis is a concrete, first-hand example of why the constraints (and Alembic migrations that properly manage them) matter beyond just "best practice". The very first real migration caught and forced a fix for corruption that had been invisible the entire project so far. Also confirmed that ad-hoc `DROP TABLE`/recreate cycles, however convenient during early development, aren't a substiture for migrations even before "real" users exists; the data-integrity gap they create is real regardless of who the data belongs to.
