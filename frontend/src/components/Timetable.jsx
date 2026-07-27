@@ -4,8 +4,8 @@ import Modal from './Modal.jsx'
 import { formatTime, withOpacity, toMinutes, formatHourLabel } from '../utils/formatters.js'
 import { AddIcon, RemoveIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx'
 
-const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-const DAY_LABELS = { monday: 'MON', tuesday: 'TUE', wednesday: 'WED', thursday: 'THU', friday: 'FRI', saturday: 'SAT', sunday: 'SUN'}
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+const DAY_LABELS = { Monday: 'MON', Tuesday: 'TUE', Wednesday: 'WED', Thursday: 'THU', Friday: 'FRI', Saturday: 'SAT', Sunday: 'SUN'}
 
 const DAY_START_MIN = 7 * 60        // grid starts at 7AM
 const DAY_END_MIN = 21 * 60        // grid ends at 9PM
@@ -23,7 +23,7 @@ function emptyForm() {
     return {
         course_code: '',
         class_type: '',
-        day_of_week: 'monday',
+        day_of_week: 'Monday',
         start_time: '08:00',
         end_time: '10:00',
         location: '',
@@ -121,7 +121,7 @@ export default function Timetable() {
                 <AddIcon size = {16} />
                 Add class
             </button>
-            {enrollments.length ===  0 && <p>Asdd a class under "Classes" before scheduling</p>}
+            {enrollments.length ===  0 && <p>Add a class under "Classes" before scheduling.</p>}
 
             {entries.length === 0 ? (
                 <p>No classes scheduled</p>

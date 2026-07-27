@@ -2,8 +2,8 @@ FROM python:3.12.0-slim
 
 WORKDIR /app
 
-ENV PYTHONDOWNWRITEBYTECODE = 1 \
-    PYTHONUNBUFFERED = 1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev gcc \

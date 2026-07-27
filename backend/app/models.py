@@ -11,13 +11,13 @@ def gen_uuid() -> str:
     return str(uuid.uuid4())
 
 class DayOfWeek(str, enum.Enum):
-    monday = "monday"
-    tuesday = "tuesday"
-    wednesday = "wednesday"
-    thursday = "thursday"
-    friday = "friday"
-    saturday = "saturday"
-    sunday = "sunday"
+    monday = "Monday"
+    tuesday = "Tuesday"
+    wednesday = "Wednesday"
+    thursday = "Thursday"
+    friday = "Friday"
+    saturday = "Saturday"
+    sunday = "Sunday"
 
 class ConnectionStatus(str, enum.Enum):
     pending = "pending"
