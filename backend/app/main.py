@@ -1,10 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import Base, engine
 from app.routers import auth, timetable, assessments, events, courses, enrollments
 from app.config import settings
-
-Base.metadata.create_all(bind = engine)
 
 app = FastAPI(title = "Student Scheduler API")
 app.include_router(auth.router)

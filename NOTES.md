@@ -176,3 +176,12 @@ Timetable grid UI resulted in quite a time consuming issue, in which the `hourMa
 **Fix:** Queried each affecte table for rows whose `user_id` didn't match any real row in `users` [`WHERE user_id NOT IN (SELECT id FROM users)`], confirmed the row counts looked like accumulated test-account debris, rather than anything meaningful. Deleted the orphaned rows table by table, then re-ran `alembic upgrade head`, which completed successfully once every remaining row had a valid reference.
 
 **Lesson:** Without real, enforced foreign key constraints, a database can silently accumulate orphaned data indefinitely; nothing fails, nothing warns you. The rows sit there disconnected until something finally checks it. THis is a concrete, first-hand example of why the constraints (and Alembic migrations that properly manage them) matter beyond just "best practice". The very first real migration caught and forced a fix for corruption that had been invisible the entire project so far. Also confirmed that ad-hoc `DROP TABLE`/recreate cycles, however convenient during early development, aren't a substiture for migrations even before "real" users exists; the data-integrity gap they create is real regardless of who the data belongs to.
+
+### Backend — `create_all()` silently coexisiting with Alembic caused confusing state
+**Symptom:** After a full databse volume wipe, `alembic upgrade head` appeared to do nothing, and `alembic current` showed no tracked revision at all. Despite teh application's tables clerly existing and the app working normally.
+
+**Cause:** `Base.metadata.create_all()` was still present in `main.py`, running on every backend startup adn silently recreating all tables before Alembic ever got a chance to manage them; completely bypassing Alembic's version tracking, since `create_all()` has no awareness of migrations.
+
+**Fix:** Removed `Base.metadata.create_all()` from `main.py` entirely. Reset the schema to empty and let `alembic upgrade head` build it from scratch as the sole schema authority.
+
+**Lesson:** Once Alembic is adopted, `create_all()` must be removed, not just left "harmlessly" alongside it. The two mechanisms silently fight for control over the schema. `create_all()` always wins by running first on every startup, making it appear as if Alembic is broken when it's actually just never getting the change to act.
