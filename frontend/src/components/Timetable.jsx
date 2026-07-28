@@ -4,8 +4,9 @@ import Modal from './Modal.jsx'
 import { formatTime, withOpacity, toMinutes, formatHourLabel } from '../utils/formatters.js'
 import { AddIcon, RemoveIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx'
 
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-const DAY_LABELS = { Monday: 'MON', Tuesday: 'TUE', Wednesday: 'WED', Thursday: 'THU', Friday: 'FRI', Saturday: 'SAT', Sunday: 'SUN'}
+const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+const DAY_LABELS = { monday: 'MON', tuesday: 'TUE', wednesday: 'WED', thursday: 'THU', friday: 'FRI', saturday: 'SAT', sunday: 'SUN'}
+const capitalize =  (day) => day.charAt(0).toUpperCase() + day.slice(1)
 
 const DAY_START_MIN = 7 * 60        // grid starts at 7AM
 const DAY_END_MIN = 21 * 60        // grid ends at 9PM
@@ -199,7 +200,9 @@ export default function Timetable() {
                                 onChange = {(e) => setForm({ ...form, day_of_week: e.target.value })}
                             >
                                 {DAYS.map((d) => (
-                                    <option key = {d} value = {d}>{d}</option>
+                                    <option key = {d} value = {d}>
+                                        {capitalize(d)}
+                                    </option>
                                 ))}
                             </select>
                         </div>

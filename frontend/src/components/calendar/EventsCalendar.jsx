@@ -41,7 +41,6 @@ export default function EventsCalendar() {
 
     useEffect(() => {
         if (!loading) {
-            console.log('Month View for ', currentDate.toDateString(), ':', getMonthViewForDate(currentDate, events, assessments))
             console.log('Week View for ', currentDate.toDateString(), ':', getWeekViewForDate(currentDate, events, assessments, timetableEntries))
         }
     }, [loading, currentDate, events, assessments, timetableEntries])
