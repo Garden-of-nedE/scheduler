@@ -1,22 +1,24 @@
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
-import Timetable from '../components/Timetable.jsx'
-import Classes from '../components/Classes.jsx'
+import Landing from '../components/landing/Landing.jsx'
+// import Timetable from '../components/Timetable.jsx'
+// import Classes from '../components/Classes.jsx'
 import Assessments from '../components/Assessments.jsx'
 import Events from '../components/Events.jsx'
 import { SunIcon, MoonIcon, LogoutIcon } from '../components/icons/Icons.jsx'
 
 const TABS = [
-    { key: 'timetable', label: 'Timetable'},
-    { key: 'classes', label: 'Classes'},
+    // { key: 'timetable', label: 'Timetable'},
+    { key: 'landing', label: 'Landing' },
+    // { key: 'classes', label: 'Classes'},
     { key: 'assessments', label: 'Assessments'},
     { key: 'events', label: 'Events'},
 ]
 
 export default function Dashboard() {
     const { user, logout } = useAuth()
-    const [tab, setTab] = useState('timetable')
+    const [tab, setTab] = useState('landing')
     const { theme, toggleTheme } = useTheme()
 
     return (
@@ -50,8 +52,9 @@ export default function Dashboard() {
 
                 <div className = "dashboard-content">
                     <main>
-                        {tab === 'timetable' && <Timetable />}
-                        {tab === 'classes' && <Classes />}
+                        {/* {tab === 'timetable' && <Timetable />}
+                        {tab === 'classes' && <Classes />} */}
+                        {tab === 'landing' && <Landing />}
                         {tab === 'assessments' && <Assessments />}
                         {tab === 'events' && <Events />}
                     </main>

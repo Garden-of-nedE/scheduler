@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import client from '../api/client'
-import Modal from './Modal.jsx'
-import { formatTime, withOpacity, toMinutes, formatHourLabel } from '../utils/formatters.js'
-import { AddIcon, RemoveIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx'
+import client from '../../api/client.js'
+import Modal from '../Modal.jsx'
+import { formatTime, withOpacity, toMinutes, formatHourLabel } from '../../utils/formatters.js'
+import { AddIcon, RemoveIcon, SaveIcon, TrashIcon } from '../icons/Icons.jsx'
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 const DAY_LABELS = { monday: 'MON', tuesday: 'TUE', wednesday: 'WED', thursday: 'THU', friday: 'FRI', saturday: 'SAT', sunday: 'SUN'}
@@ -88,11 +88,16 @@ export default function Timetable() {
     async function handleSubmit(e) {
         e.preventDefault()
         setFormError('')
+        const payload = {
+            ...form, 
+            day_of_week: form.day_of_week.toLowerCase(),
+        }
+
         try {
             if (editingId) {
-                await client.put(`/api/timetable/${editingId}`, form)
+                await client.put(`/api/timetable/${editingId}`, payload)
             } else {
-                await client.post('/api/timetable', form)
+                await client.post('/api/timetable', payload)
             }
             setModalOpen(true)
             await load()
