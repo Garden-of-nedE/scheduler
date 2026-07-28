@@ -35,9 +35,11 @@ Replaces ad-hoc `Base.metadata.create_all()` schema management (which can only c
 Persistance test involved creating a table within a healthy container. Followed by stopping the volume, and restarting it. This test showcased that any data hosed in the volume will persist after disconnecting; and ensures that the volume is mounted properly.
 
 ### Docker
-**Running** &mdash; Container's main process has started & not crashed
+**Running** &mdash; Container's main process has started & not crashed.
 
-**Healthy** &mdash; Application within container is actively passing user-defined functional test (healthcheck)
+**Healthy** &mdash; Application within container is actively passing user-defined functional test (healthcheck).
+
+`VITE_API_URL` must be a browser-reachable address (`localhost` or public domain), never a Docker service name. The frontend's JS runs in the browser, entirely outside Docker's internal network, unline backend-to-backend connections like `DATABASE_URL`.
 
 ### Backend
 `pool_pre_ping = True` &mdash; pings the DB before resusing a pooled connection, provides clean reconnect if Postgres restarts or connection is stale.
