@@ -2,13 +2,26 @@ from datetime import datetime, time, date
 from typing import Optional, List
 from decimal import Decimal
 
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, field_validator
 from app.models import DayOfWeek
 
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
     full_name: Optional[str] = None
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        if len(value) < 8:
+            raise ValueError('Passwordd must be at least 8 characters long')
+        if not any (c.isupper() for c in value):
+            raise ValueError('Password must contain at least one uppercase letter')
+        if not any(c.islower() for c in value):
+            raise ValueError('Password must contain at least on lowercase letter')
+        if not any(c.isdigit() for c in value):
+            raise ValueError('Password must contain at least one number')
+        return value
 
 class UserOut(BaseModel):
     model_config = ConfigDict(from_attributes = True)
