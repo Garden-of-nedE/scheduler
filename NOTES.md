@@ -187,3 +187,12 @@ Timetable grid UI resulted in quite a time consuming issue, in which the `hourMa
 **Fix:** Removed `Base.metadata.create_all()` from `main.py` entirely. Reset the schema to empty and let `alembic upgrade head` build it from scratch as the sole schema authority.
 
 **Lesson:** Once Alembic is adopted, `create_all()` must be removed, not just left "harmlessly" alongside it. The two mechanisms silently fight for control over the schema. `create_all()` always wins by running first on every startup, making it appear as if Alembic is broken when it's actually just never getting the change to act.
+
+### Backend — docker-compose.yml `environment:` silently overriding `.env`
+**Symptom:** While testing the production frontend build against CORS, edits ot `backend/.env`'s `CORS_ORIGINS` had no effect at all; even after multiple restarts adn a full container recreate. `seetings.cors_origins_list` kept showing only the original singla origin, never piocking up the added second one.
+
+**Cause:** `docker-compose.yml`'s `backend` service has an `environment:` block hardcoding `CORS_ORIGINS` (and `DATABASE_URL`) directly, in addition to the `env_file: ./backend/.env` entry. Docker Compose's `environment:` values always taks precedence over `env_file:` values when both set ht esame variable. So hardcoded comopse-file value silently won every time, regardless of how the `.env` file itself was edited.
+
+**Fix:** Removed the redundant `environment:` block from the `backend` service entirely, leaving the `env_file: ./backend/.env` as the single source of truth for these variables.
+
+**Lesson:** When a config change "doesn't take effect" despite correct edits and restarts, check for a second, competing source of the same variable before assuming the edit or restart mechanism itself is broken. This is the same underlying bug as the `EventUpdate` schema collision nad the Timetable `NON_NULLABLE_FIELDS` checks earlier in the project. Different layers, same root lesson: confirm value is actually in effect rather than trusing that an edited file is automatically the one being used.

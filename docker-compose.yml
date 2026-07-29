@@ -21,9 +21,6 @@ services:
     restart: unless-stopped
     env_file:
       - ./backend/.env
-    environment:
-      DATABASE_URL: postgresql://scheduler:scheduler@db:5432/scheduler
-      CORS_ORIGINS: http://localhost:5173
     depends_on:
       db:
         condition: service_healthy
