@@ -3,7 +3,7 @@ import client from '../../api/client.js'
 import Classes from './Classes.jsx'
 import Timetable from './Timetable.jsx'
 
-export default function Landing() {
+export default function Home() {
     const [timetableEntries, setTimetableEntries] = useState([])
     const [enrollments, setEnrollments] = useState([])
     const [loading, setLoading] = useState(true)
