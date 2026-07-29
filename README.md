@@ -126,7 +126,6 @@ All functioning correctly through nginx reverse proxy, with no direct browser-to
 - No password reset/email verification
 - No UI for browsing global course catalog independent of a student's own enrollments (`GET /api/courses` exists on backend but isn't accessible in the frontend)
 - Friend/Connection system (`Connection` model, mutal accept/reject) exists on the backend but has no frontend UI yet. Timetable comparison between students not yet built
-- Database migrations are handled by dropping and recreating tables during deployment (**switch to Alembic** planned, already listed in `requirements.txt` but is unused)
 
 ### Still outstanding before real, public deployment
 - HTTPS &mdash; not yet configured; current setup is plain HTTP, suitable for local verification only.
