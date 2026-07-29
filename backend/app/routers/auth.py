@@ -42,3 +42,21 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 @router.get("/me", response_model = schemas.UserOut)
 def read_current_user(current_user: models.User = Depends(get_current_user)):
     return current_user
+
+@router.put("/me", response_model = schemas.UserOut)
+def update_current_user(
+    user_in: schemas.UserUpdate, 
+    db: Session = Depends(get_db), 
+    current_user: models.User =  Depends(get_current_user),
+):
+    if user_in.full_name is not None:
+        current_user.full_name = user_in.full_name
+
+    if user_in.password is not None:
+        if not user_in.current_password or not verify_password(user_in.current_password, current_user.hashed_password):
+            raise HTTPException(status_code = 400, detail = "Current password is incorrect")
+        current_user.hashed_password = hash_password(user_in.password)
+
+    db.commit()
+    db.refresh(current_user)
+    return current_user

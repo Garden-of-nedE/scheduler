@@ -4,7 +4,8 @@ import { useTheme } from '../context/ThemeContext.jsx'
 import Home from '../components/home/Home.jsx'
 import Assessments from '../components/Assessments.jsx'
 import Events from '../components/Events.jsx'
-import { SunIcon, MoonIcon, LogoutIcon } from '../components/icons/Icons.jsx'
+import AccountModal from '../components/AccountModal.jsx'
+import { SunIcon, MoonIcon, LogoutIcon, UserIcon } from '../components/icons/Icons.jsx'
 
 const TABS = [
     { key: 'home', label: 'Home' },
@@ -16,12 +17,17 @@ export default function Dashboard() {
     const { user, logout } = useAuth()
     const [tab, setTab] = useState('home')
     const { theme, toggleTheme } = useTheme()
+    const [accountModalOpen, setAccountModalOpen] = useState(false)
 
     return (
         <div className = "page-container">
             <header>
                 <h1>{user?.full_name ? `${user.full_name}'s Timetable` : 'Your Timetable'}</h1>
                 <div className = "button-group">
+                    <button className = "btn btn-secondary" onClick = {() => setAccountModalOpen(true)}>
+                        <UserIcon />
+                        My Account
+                    </button>
                     <button className = "btn-icons" onClick={toggleTheme}>
                         {theme === 'light' ? <MoonIcon size = {18} />: <SunIcon size = {18} />}
                     </button>
@@ -31,6 +37,8 @@ export default function Dashboard() {
                     </button>
                 </div>
             </header>
+
+            {accountModalOpen && <AccountModal onClose = {() => setAccountModalOpen(false)} />}
 
             <div className = "dashboard-layout">
                 <nav className = "sidebar-nav">

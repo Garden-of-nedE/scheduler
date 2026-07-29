@@ -27,3 +27,16 @@ def decode_access_token(token: str) -> Optional[str]:
         return payload.get("sub")
     except JWTError:
         return None
+
+def validate_password_strength(password: str) -> None:
+    if len(password) < 8:
+        raise ValueError('Passwordd must be at least 8 characters long')
+    
+    if not any (c.isupper() for c in password):
+        raise ValueError('Password must contain at least one uppercase letter')
+    
+    if not any(c.islower() for c in password):
+        raise ValueError('Password must contain at least on lowercase letter')
+    
+    if not any(c.isdigit() for c in password):
+        raise ValueError('Password must contain at least one number')

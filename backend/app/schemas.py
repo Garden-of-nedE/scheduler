@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, EmailStr, ConfigDict, field_validator
 from app.models import DayOfWeek
+from app.security import validate_password_strength
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -13,14 +14,7 @@ class UserCreate(BaseModel):
     @field_validator('password')
     @classmethod
     def validate_password(cls, value: str) -> str:
-        if len(value) < 8:
-            raise ValueError('Passwordd must be at least 8 characters long')
-        if not any (c.isupper() for c in value):
-            raise ValueError('Password must contain at least one uppercase letter')
-        if not any(c.islower() for c in value):
-            raise ValueError('Password must contain at least on lowercase letter')
-        if not any(c.isdigit() for c in value):
-            raise ValueError('Password must contain at least one number')
+        validate_password_strength(value)
         return value
 
 class UserOut(BaseModel):
@@ -29,6 +23,18 @@ class UserOut(BaseModel):
     email: EmailStr
     full_name: Optional[str] = None
     created_at: datetime
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    password: Optional[str] = None
+    current_password: Optional[str] = None
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, value: Optional[str]) -> Optional[str]:
+        if value is None:
+            validate_password_strength(value)
+        return value
 
 class Token(BaseModel):
     access_token: str

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import client from '../../api/client.js'
+import client from '../../api/client'
 import Classes from './Classes.jsx'
 import Timetable from './Timetable.jsx'
 

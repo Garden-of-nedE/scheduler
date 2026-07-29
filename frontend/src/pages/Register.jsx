@@ -50,7 +50,7 @@ export default function Register() {
 
                 <form onSubmit = {handleSubmit}>
                     <div className = "form-field">
-                        <label>Full Name</label>
+                        <label>Username</label>
                         <input
                             type = "text"
                             value = {fullName}
