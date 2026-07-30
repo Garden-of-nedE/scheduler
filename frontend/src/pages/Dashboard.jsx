@@ -25,7 +25,7 @@ export default function Dashboard() {
                 <h1>{user?.full_name ? `${user.full_name}'s Timetable` : 'Your Timetable'}</h1>
                 <div className = "button-group">
                     <button className = "btn btn-secondary" onClick = {() => setAccountModalOpen(true)}>
-                        <UserIcon />
+                        <UserIcon size = {16} />
                         My Account
                     </button>
                     <button className = "btn-icons" onClick={toggleTheme}>
