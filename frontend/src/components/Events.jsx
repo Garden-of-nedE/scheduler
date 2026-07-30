@@ -245,7 +245,7 @@ export default function Events() {
                         <div className = "button-group">
                             <button type = "submit" className = "btn">
                                 {editingId ? <SaveIcon size = {16} />: <AddIcon size = {16} />}
-                                {editingId ? 'Save changes' : 'Add class'}
+                                {editingId ? 'Save changes' : 'Add event'}
                             </button>
                             {editingId && (
                                 <button type = "button" className = "btn btn-danger" onClick = {handleDelete}>
