@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
-import EventsCalendar from './calendar/EventsCalendar.jsx'
+import CalendarMonthView from './calendar/CalendarMonthView.jsx'
+import CalendarWeekView from './calendar/CalendarWeekView.jsx'
 import { formatDate, formatTime } from '../utils/formatters.js'
 import { AddIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx' 
 
@@ -18,6 +19,9 @@ function emptyForm() {
 
 export default function Events() {
     const [events, setEvents] = useState([])
+    const [assessments, setAssessments] = useState([])
+    const [timetableEntries, setTimetableEntries] = useState([])
+    const [enrollments, setEnrollments] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
@@ -27,14 +31,23 @@ export default function Events() {
     const [formError, setFormError] = useState('')
 
     const [viewMode, setViewMode] = useState('list')
+    const [currentDate, setCurrentDate] = useState(new Date())
 
     async function load() {
         setLoading(true)
         try {
-            const res = await client.get('/api/events')
-            setEvents(res.data)
+            const [eventsRes, assessmentsRes, timetableRes, enrollmentsRes] = await Promise.all([
+                client.get('../api/events'),
+                client.get('../api/assessments'),
+                client.get('../api/timetable'),
+                client.get('../api/enrollments'),
+            ])
+            setEvents(eventsRes.data)
+            setAssessments(assessmentsRes.data)
+            setTimetableEntries(timetableRes.data)
+            setEnrollments(enrollmentsRes.data)
         } catch (err) {
-            setError('Could not load your events')
+            setError('Could not load your calendar')
         } finally {
             setLoading(false)
         }
@@ -111,32 +124,63 @@ export default function Events() {
                     <button className = "btn btn-secondary" onClick = {() => setViewMode('list')} disabled = {viewMode === 'list'}>
                         List
                     </button>
-                    <button className = "btn btn-secondary" onClick = {() => setViewMode('calendar')} disabled = {viewMode === 'calendar'}>
-                        Calendar
+                    <button className = "btn btn-secondary" onClick = {() => setViewMode('month')} disabled = {viewMode === 'month'}>
+                        Month
+                    </button>
+                    <button className = "btn btn-secondary" onClick = {() => setViewMode('week')} disabled = {viewMode === 'week'}>
+                        Week
                     </button>
                 </div>
             </div>
 
-            {viewMode === 'list' ? (
-                <>
-                {events.length === 0 ? (
+            {viewMode === 'list' && (
+                events.length === 0 ? (
                     <p>No events scheduled.</p>
                 ) : (
-                    <ul>
-                        {events.map((event) => {
-                            return (
-                                <li key = {event.id}>
-                                <button onClick = {() => openEdit(event)} className = "link-button">
-                                    {formatDate(event.event_date)} {formatTime(event.start_time)} | {event.title} | {event.location}
-                                </button>
-                            </li>
-                            )
-                        })}
-                    </ul>
-                )}
-                </>
-            ) : (
-                <EventsCalendar />
+                    <table className = "tables">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Title</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {events.map((event) => (
+                                <tr key = {event.id}>
+                                    <td>{formatDate(event.event_date)}</td>
+                                    <td>{event.start_time && `${formatTime(event.start_time)}`}</td>
+                                    <td>
+                                        <button className = "link-button" onClick = {() => openEdit(event)}>{event.title}</button>
+                                    </td>
+                                    <td>{event.location}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )
+            )}
+
+            {viewMode === 'month' && (
+                <CalendarMonthView
+                    currentDate = {currentDate}
+                    setCurrentDate = {setCurrentDate}
+                    events = {events}
+                    assessments = {assessments}
+                    enrollments = {enrollments}
+                />
+            )}
+
+            {viewMode === 'week' && (
+                <CalendarWeekView
+                    currentDate = {currentDate}
+                    setCurrentDate = {setCurrentDate}
+                    events = {events}
+                    assessments = {assessments}
+                    timetableEntries = {timetableEntries}
+                    enrollments = {enrollments}
+                />
             )}
 
             {modalOpen && (

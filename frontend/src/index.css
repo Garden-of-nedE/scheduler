@@ -4,8 +4,8 @@
   --color-text: #1a1a1a;
   --color-text-muted: #6b6b6b;
   --color-border: #e0e0e0;
-  --color-accent: #4f6d7a;
-  --color-accent-hover: #3d5560;
+  --color-accent: #5631FC;
+  --color-accent-hover: #8368FD;
   --color-danger: #b3413c;
   --color-danger-bg: #fbeceb;
 
@@ -21,8 +21,8 @@
   --color-text: #eaeaea;
   --color-text-muted: #9a9a9a;
   --color-border: #33363c;
-  --color-accent: #7a9cad;
-  --color-accent-hover: #8fb0c1;
+  --color-accent: #8368FD;
+  --color-accent-hover: #5631FC;
   --color-danger: #d9736c;
   --color-danger-bg: #3a2422;
 }
@@ -30,7 +30,7 @@
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
   margin: 0;
 }
 
@@ -79,6 +79,7 @@ body {
 
 /* BUTTON SETTINGS */
 .btn {
+  font-family: inherit;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -93,6 +94,7 @@ body {
 
 .btn:hover {
   background-color: var(--color-accent-hover);
+  color: white;
 }
 
 .btn:disabled {
@@ -120,6 +122,12 @@ body {
 .link-button {
   all: unset;
   cursor: pointer;
+  color: var(--color-text);
+  transition: color 0.15s ease;
+}
+
+.link-button:hover {
+  color: var(--color-accent);
 }
 
 /* Button Icons */
@@ -162,6 +170,7 @@ body {
 
 .form-field input:not([type = 'color']),
 .form-field select {
+  font-family: inherit;
   width: 100%;
   padding: 8px;
   border: 1px solid var(--color-border);
@@ -172,8 +181,8 @@ body {
   box-sizing: border-box;
 }
 
-.form-field input[tyuupe='color'] {
-  width: 48px;
+.form-field input[type='color'] {
+  width: 72px;
   height: 32px;
   padding: 2px;
   border: 1px solid var(--color-border);
@@ -185,7 +194,7 @@ body {
 /* TABLE SETTINGS */
 .tables {
   border-collapse: collapse;
-  width: 120%;
+  width: 100%;
   margin-top: var(--spacing-md);
 }
 
@@ -224,6 +233,7 @@ body {
 
 .filter-bar select,
 .filter-bar input {
+  font-family: inherit;
   padding: 6px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
@@ -240,7 +250,7 @@ header {
 }
 
 .page-container {
-  max-width: 1100px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: var(--spacing-lg);
   box-sizing: border-box;
@@ -359,6 +369,7 @@ header {
 }
 
 .week-entry {
+  font-family: inherit;
   position: absolute;
   left: 2px;
   right: 2px;
