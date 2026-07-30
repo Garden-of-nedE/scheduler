@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { getWeekViewForDate } from '../../utils/calendarUtils.js'
+import React, { cacheSignal, useState } from 'react'
+import { getWeekViewForDate, overlappingItems } from '../../utils/calendarUtils.js'
 import { formatHourLabel, formatTime, toMinutes, withOpacity } from '../../utils/formatters.js'
 import { PrevIcon, NextIcon } from '../icons/Icons.jsx'
 
@@ -85,6 +85,21 @@ export default function CalendarWeekView({ currentDate, setCurrentDate, events, 
 
                     {weekDates.map((date) => {
                         const items = getWeekViewForDate(date, events, assessments, timetableEntries)
+
+                        const layout = overlappingItems(
+                            items,
+                            (item) => {
+                                const t = item.type === 'class' ? item.start_time : (item.start_time || item.deadline || '00:00:00')
+                                return toMinutes(t)
+                            },
+                            (item) => {
+                                if (item.type === 'class' || item.end_time) {
+                                    return toMinutes(item.end_time)
+                                }
+
+                                return toMinutes(item.start_time || item.deadline) + 30
+                            }
+                        )
                         
                         return (
                             <div key = {date.toISOString()} className = "week-grid-day">
@@ -95,10 +110,13 @@ export default function CalendarWeekView({ currentDate, setCurrentDate, events, 
                                 <div className = "week-grid-day-body" style = {{ height: gridHeight * PX_PER_MIN, '--hour-height' : `${60 * PX_PER_MIN}px` }}>
                                     {items.map((item) => {
                                         const startTime = item.type === 'class' ? item.start_time : (item.start_time || item.deadline || '11:59:00')
-                                        const endTime = item.type === 'class' ? item.end_time : null
-                                        
+                                        const endTime = item.type === 'class' ? item.end_time : (item.end_time || null)
                                         const start = toMinutes(startTime) - DAY_START_MIN
-                                        const end = endTime ? toMinutes(endTime) - DAY_START_MIN : start
+                                        const end = endTime ? toMinutes(endTime) - DAY_START_MIN : start + 30
+
+                                        const { columnIndex, totalColumns } = layout.get(item)
+                                        const widthPercent = 100 / totalColumns
+                                        const leftPercent = columnIndex * widthPercent
 
                                         const courseCode = item.course_code
                                         const enrollment = enrollments?.find((e) => e.course_code === courseCode)
@@ -107,10 +125,12 @@ export default function CalendarWeekView({ currentDate, setCurrentDate, events, 
                                         return (
                                             <div
                                                 key = {`${item.type}-${item.id}`}
-                                                className = "week-entry"
+                                                className = "calendar-entry"
                                                 style = {{
                                                     top: start * PX_PER_MIN,
                                                     height: Math.max((end - start) * PX_PER_MIN, 24),
+                                                    left: `calc(${leftPercent}% + 2px)`,
+                                                    width: `calc(${widthPercent}% - 4px)`,
                                                     backgroundColor: withOpacity(color, 0.85),
                                                 }}
                                                 onMouseEnter = {(e) => handleMouseEnter(item, e)}
