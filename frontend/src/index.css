@@ -468,3 +468,17 @@ header {
   white-space: nowrap;
   margin-top: -8px;
 }
+
+.calendar-entry {
+  position: absolute;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  font-size: 0.75rem;
+  min-height: 36px;
+}

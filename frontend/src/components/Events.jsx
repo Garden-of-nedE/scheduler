@@ -141,7 +141,8 @@ export default function Events() {
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Time</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
                                 <th>Title</th>
                                 <th>Location</th>
                             </tr>
@@ -151,6 +152,7 @@ export default function Events() {
                                 <tr key = {event.id}>
                                     <td>{formatDate(event.event_date)}</td>
                                     <td>{event.start_time && `${formatTime(event.start_time)}`}</td>
+                                    <td>{event.end_time ? `${formatTime(event.end_time)}` : "-"}</td>
                                     <td>
                                         <button className = "link-button" onClick = {() => openEdit(event)}>{event.title}</button>
                                     </td>
