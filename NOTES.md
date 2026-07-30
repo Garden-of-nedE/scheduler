@@ -13,13 +13,14 @@ I was looking for a tool that that was simple and required very little configura
 ### Alembic Migrations
 Replaces ad-hoc `Base.metadata.create_all()` schema management (which can only create new tables, never alter existing ones) with proper, version-tracked migrations. `env.py` reads the database URL from `app.config.settings` rather than duplicating it in `alembic.ini`, so there's a single source of truth for the connection string. Going forward, schema changes follow: edit `model.py` &rarr; `alembic revision --autogenerate -m "..."` &rarr; review the generated file &rarr; `alembic upgrade head`. Autogenerate output is not blindly trusted; reviewing the generated migration file before applying it is necessary, since autogenerate can misinterpret certain changes (e.g. treating a column rename as a drop-and-add pair).
 
-## Build Stages
-1. Functional Postgres within Docker &rarr; Confirm that Docker networking works before moving forward
-2. Database models &rarr; Define tables in SQLAlchemy before routing
-3. Full vertical slice for Authentication &rarr; Ensure Auth from end-to-end is established, heavily relied on for project
-4. Fully CRUD one table &rarr; Ensure that contents of ONE table is fully CRUD'd before moving on. Schema &rarr; router &rarr; test
-5. CRUD other tables
-6. Frontend set up &rarr; Final touches once API is established
+### Password Validation
+Password strenght rules (min. 8 characters, at least one uppercase, lowercase and digit) are enforced via a shared `validate_password_strength()` function in `security.py`, called from a Pydantic `field_validator` on both `UserCreate` and `UserUpdate`. Keeping the rule in one place avoids the two flows silently drifting apare if the requirements ever change.
+
+Login (`UserLogin`) deliberately has not password-strength validation; as an existing user must always be able to log in with whatever password they registered under, regardless of whether current rules would still accept it. Strength rules only ever apply at the point a password is being *set*, never when it's being *checked*.
+
+Changing an exisiting passowrd additionally requires the user's current password to be re-submitted and verified before the change is accepted, even though the request is already authenticated via JWT. This guards against the case where a logged-in session is left unattended; without this check, anyone wiht access to an open sesison could silently take over the account by setting a new password with no further proof of identity.
+
+**Scoped decision:** full password-rest-via-email was considered but deliberately scaled back for now, in favour for this simpler in-app change flow. Email-based reset would require new infrastructure this project doesn't currently need for a feature that isn't proportionate to build immediately. Revisit when the app has real external users who could genuinely lock themselves out.
 
 ## Miscellaneous Notes
 ### Database

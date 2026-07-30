@@ -115,7 +115,7 @@ A freshly created database has no tables until this runs; skipping this step wil
 
 4. Vist the app at whatever port/domain the `frontend` service is published on (port 80 by default in `docker-compose.prod.yml`).
 
-### Verified workking (local test, prior to real hosting)
+### Verified working (local test, prior to real hosting)
 Full stack brought up via `docker-compose.prod.yml`, migrations applied, and complete user journey re-tested end to end under this configuration:
 
 Registration (including password strength validation) &rarr; login &rarr; class enrollment &rarr; timetable entries &rarr; single and recurring assessments &rarr; events &rarr; both calendar views &rarr; light/dark theming
