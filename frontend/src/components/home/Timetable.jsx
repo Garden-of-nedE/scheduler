@@ -144,28 +144,28 @@ export default function Timetable() {
                     </div>
 
                     {DAYS.map((day) => (
-                            <div key = {day} className = "week-grid-day">
-                                <div className = "week-grid-day-header">{DAY_LABELS[day]}</div>
-                                <div className = "week-grid-day-body" style = {{ height: gridHeight * PX_PER_MIN, '--hour-height' : `${60 * PX_PER_MIN}px` }}>
-                                    {entries.filter((entry) => entry.day_of_week === day)
-                                    .map((entry) => {
-                                        const enrollment = enrollments.find((e) => e.course_code === entry.course_code)
-                                        const start = toMinutes(entry.start_time) - DAY_START_MIN
-                                        const end = toMinutes(entry.end_time) - DAY_START_MIN
+                        <div key = {day} className = "week-grid-day">
+                            <div className = "week-grid-day-header">{DAY_LABELS[day]}</div>
+                            <div className = "week-grid-day-body" style = {{ height: gridHeight * PX_PER_MIN, '--hour-height' : `${60 * PX_PER_MIN}px` }}>
+                                {entries.filter((entry) => entry.day_of_week === day)
+                                .map((entry) => {
+                                    const enrollment = enrollments.find((e) => e.course_code === entry.course_code)
+                                    const start = toMinutes(entry.start_time) - DAY_START_MIN
+                                    const end = toMinutes(entry.end_time) - DAY_START_MIN
 
-                                        return (
-                                            <button key = {entry.id} className = "week-entry" onClick = {() => openEdit(entry)}
-                                            style = {{ top: start * PX_PER_MIN, height: Math.max((end - start) * PX_PER_MIN, 24), backgroundColor: withOpacity(enrollment?.color || '#4F6D7A', 0.85)}}
-                                            >
-                                                <div className = "week-entry-title">{entry.course_code}</div>
-                                                <div className = "week-entry-type">{entry.class_type}</div>
-                                                {entry.location && <div className = "week-entry-location">{entry.location}</div>}
-                                            </button>
-                                        )
-                                    })}
-                                </div>
+                                    return (
+                                        <button key = {entry.id} className = "week-entry" onClick = {() => openEdit(entry)}
+                                        style = {{ top: start * PX_PER_MIN, height: Math.max((end - start) * PX_PER_MIN, 24), backgroundColor: withOpacity(enrollment?.color || '#4F6D7A', 0.85)}}
+                                        >
+                                            <div className = "week-entry-title">{entry.course_code}</div>
+                                            <div className = "week-entry-type">{entry.class_type}</div>
+                                            {entry.location && <div className = "week-entry-location">{entry.location}</div>}
+                                        </button>
+                                    )
+                                })}
                             </div>
-                        ))}
+                        </div>
+                    ))}
                 </div>
             )}
 

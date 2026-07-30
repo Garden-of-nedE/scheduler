@@ -1,6 +1,6 @@
 import React, { cacheSignal, useState } from 'react'
-import { getWeekViewForDate, overlappingItems } from '../../utils/calendarUtils.js'
-import { formatHourLabel, formatTime, toMinutes, withOpacity } from '../../utils/formatters.js'
+import { getWeekViewForDate } from '../../utils/calendarUtils.js'
+import { formatHourLabel, formatTime, toMinutes, withOpacity, overlappingItems } from '../../utils/formatters.js'
 import { PrevIcon, NextIcon } from '../icons/Icons.jsx'
 
 const DAY_START_MIN = 0
@@ -125,7 +125,7 @@ export default function CalendarWeekView({ currentDate, setCurrentDate, events, 
                                         return (
                                             <div
                                                 key = {`${item.type}-${item.id}`}
-                                                className = "calendar-entry"
+                                                className = "week-entry"
                                                 style = {{
                                                     top: start * PX_PER_MIN,
                                                     height: Math.max((end - start) * PX_PER_MIN, 24),
