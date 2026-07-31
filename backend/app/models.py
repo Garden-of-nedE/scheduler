@@ -19,11 +19,6 @@ class DayOfWeek(str, enum.Enum):
     saturday = "saturday"
     sunday = "sunday"
 
-class ConnectionStatus(str, enum.Enum):
-    pending = "pending"
-    accepted = "accepted"
-    rejected = "rejected"
-
 class UserRole(str, enum.Enum):
     student = "student"
     admin = "admin"
@@ -41,8 +36,6 @@ class User(Base):
     timetable_entries = relationship("TimetableEntry", back_populates = "owner", cascade = "all, delete-orphan")
     assessments = relationship("Assessment", back_populates = "owner", cascade = "all, delete-orphan")
     events = relationship("Event", back_populates = "owner", cascade = "all, delete-orphan")
-    sent_requests = relationship("Connections", foreign_keys = "Connections.requester_id", back_populates = "request", cascade = "all, delete-orphan")
-    received_requests = relationship("Connections", foreign_keys = "Connections.invitee_id", back_populates = "invitee", cascade = "all, delete-orphan")
     enrollments = relationship("Enrollment", back_populates = "owner", cascade = "all, delete-orphan")
 
 class Course(Base):
@@ -120,20 +113,3 @@ class Event(Base):
     location = Column(String, nullable = True)
 
     owner = relationship("User", back_populates = "events")
-
-
-class Connections(Base):
-    __tablename__ = "connections"
-
-    id = Column(UUID(as_uuid = False), primary_key = True, default = gen_uuid)
-    requester_id = Column(UUID(as_uuid = False), ForeignKey("users.id", ondelete = "CASCADE"), nullable = False, index = True)
-    invitee_id = Column(UUID(as_uuid = False), ForeignKey("users.id", ondelete = "CASCADE"), nullable = False, index = True)
-    status = Column(Enum(ConnectionStatus), nullable = False, default = ConnectionStatus.pending)
-    created_at = Column(DateTime(timezone = True), server_default = func.now())
-
-    __table_args__ = (
-        UniqueConstraint("requester_id", "invitee_id", name = "unique_connection"),
-    )
-
-    request = relationship("User", foreign_keys = [requester_id], back_populates = "sent_requests")
-    invitee = relationship("User", foreign_keys = [invitee_id], back_populates = "received_requests")
