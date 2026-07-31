@@ -22,6 +22,9 @@ Changing an exisiting passowrd additionally requires the user's current password
 
 **Scoped decision:** full password-rest-via-email was considered but deliberately scaled back for now, in favour for this simpler in-app change flow. Email-based reset would require new infrastructure this project doesn't currently need for a feature that isn't proportionate to build immediately. Revisit when the app has real external users who could genuinely lock themselves out.
 
+### Removed: Connectiions/friend-request model
+The `Connection` model (mutual friend-request pattern, intended to support student-to-student timetable comparison) was built early in the project but never had a frontend built against it. Removed via Alembic migration once the project's direction shifted toward a self-hosted, single/few-user local tool rather than a multi-student platform. Keeping unused, half-wired infrastructure in the schema no longer matched the project's actual scope. Reasonable to revist if the multi-user route is ever picked back up later.
+
 ## Miscellaneous Notes
 ### Database
 `POSTGRES_USER` &mdash; Environment variable used to start a PostgreSQL database in Docker, defines the main administrator. This user will have full control over the database.
