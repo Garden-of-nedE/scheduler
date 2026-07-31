@@ -1,7 +1,7 @@
 # Student Scheduler
 
 An organisation tool for students providing a weekly timetable, assessment tracker, and events calendar.
-This includes course enrollment, recurring assessments, and student-to-student timetable comparisons.
+This includes course enrollment and recurring assessments.
 
 **Backend:** FastAPI (Python), JWT auth, SQLAlchemy
 
@@ -52,7 +52,6 @@ This covers local development. For a production-style deployment (static fronten
 | **TimetableEntry** | course_code, class_type, day_of_week, start_time, end_time, location | Recurring weekly slot — no absolute date |
 | **Assessment** | course_code, task_name, description, due_date, deadline, weighting, total_marks, mark_achieved, completed, recurrence_group_id | `deadline` is an optional time-of-day; `recurrence_group_id` links assessments generated as part of a recurring series |
 | **Event** | title, description, event_date, start_time, end_time, location | One-off calendar events |
-| **Connection** | requester_id, addressee_id, status | Mutual friend-request model for future timetable comparison between students |
 
 All records are scoped to the authenticated user; every query filters by `user_id`, and JWT auth guards every route except register/login. `Course` is the one shared, global resource; deleting it is restricted to `admin`-role users and blocked if any student still references it.
 
@@ -123,10 +122,5 @@ Registration (including password strength validation) &rarr; login &rarr; class 
 All functioning correctly through nginx reverse proxy, with no direct browser-to-backend connection required.
 
 ### Known limitations / not yet built
-- No password reset/email verification
+- No email verification
 - No UI for browsing global course catalog independent of a student's own enrollments (`GET /api/courses` exists on backend but isn't accessible in the frontend)
-- Friend/Connection system (`Connection` model, mutal accept/reject) exists on the backend but has no frontend UI yet. Timetable comparison between students not yet built
-
-### Still outstanding before real, public deployment
-- HTTPS &mdash; not yet configured; current setup is plain HTTP, suitable for local verification only.
-- Real hosting target not yet chosen. 
