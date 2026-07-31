@@ -1,4 +1,4 @@
-import React, { cacheSignal, useState } from 'react'
+import React, { useState } from 'react'
 import { getWeekViewForDate } from '../../utils/calendarUtils.js'
 import { formatHourLabel, formatTime, toMinutes, withOpacity, overlappingItems } from '../../utils/formatters.js'
 import { PrevIcon, NextIcon } from '../icons/Icons.jsx'

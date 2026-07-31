@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import client from '../../api/client.js'
 import Modal from '../Modal.jsx'
-import { formatTime, withOpacity, toMinutes, formatHourLabel } from '../../utils/formatters.js'
+import { formatTime, withOpacity, toMinutes, formatHourLabel, overlappingItems } from '../../utils/formatters.js'
 import { AddIcon, RemoveIcon, SaveIcon, TrashIcon } from '../icons/Icons.jsx'
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
@@ -42,6 +42,9 @@ export default function Timetable() {
     const [editingId, setEditingId] = useState(null)
     const [form, setForm] = useState(emptyForm())
     const [formError, setFormError] = useState('') 
+
+    const [hoveredItem, setHoveredItem] = useState(null)
+    const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 })
     
     async function load() {
         setLoading(true)
@@ -117,6 +120,16 @@ export default function Timetable() {
         }
     }
 
+    function handleMouseEnter(entry, e) {
+        const rect = e.currentTarget.getBoundingClientRect()
+        setHoveredItem(entry)
+        setHoverPosition({ x: rect.left + rect.width /2, y: rect.top })
+    }
+
+    function handleMouseLeave() {
+        setHoveredItem(null)
+    }
+
     if (loading) return <p>Loading timetable ...</p>
     if (error) return <p style = {{ color: 'red' }}>{error}</p>
 
@@ -143,29 +156,54 @@ export default function Timetable() {
                         </div>
                     </div>
 
-                    {DAYS.map((day) => (
-                        <div key = {day} className = "week-grid-day">
-                            <div className = "week-grid-day-header">{DAY_LABELS[day]}</div>
-                            <div className = "week-grid-day-body" style = {{ height: gridHeight * PX_PER_MIN, '--hour-height' : `${60 * PX_PER_MIN}px` }}>
-                                {entries.filter((entry) => entry.day_of_week === day)
-                                .map((entry) => {
-                                    const enrollment = enrollments.find((e) => e.course_code === entry.course_code)
-                                    const start = toMinutes(entry.start_time) - DAY_START_MIN
-                                    const end = toMinutes(entry.end_time) - DAY_START_MIN
+                    {DAYS.map((day) => {
+                        const dayEntries = entries.filter((entry) => entry.day_of_week === day)
 
-                                    return (
-                                        <button key = {entry.id} className = "week-entry" onClick = {() => openEdit(entry)}
-                                        style = {{ top: start * PX_PER_MIN, height: Math.max((end - start) * PX_PER_MIN, 24), backgroundColor: withOpacity(enrollment?.color || '#4F6D7A', 0.85)}}
-                                        >
-                                            <div className = "week-entry-title">{entry.course_code}</div>
-                                            <div className = "week-entry-type">{entry.class_type}</div>
-                                            {entry.location && <div className = "week-entry-location">{entry.location}</div>}
-                                        </button>
-                                    )
-                                })}
+                        const layout = overlappingItems(
+                            dayEntries,
+                            (entry) => toMinutes(entry.start_time),
+                            (entry) => toMinutes(entry.end_time)
+                        )
+
+                        return (
+                            <div key = {day} className = "week-grid-day">
+                                <div className = "week-grid-day-header">{DAY_LABELS[day]}</div>
+                                <div className = "week-grid-day-body" style = {{ height: gridHeight * PX_PER_MIN, '--hour-height' : `${60 * PX_PER_MIN}px` }}>
+                                    {entries.filter((entry) => entry.day_of_week === day)
+                                    .map((entry) => {
+                                        const enrollment = enrollments.find((e) => e.course_code === entry.course_code)
+                                        const start = toMinutes(entry.start_time) - DAY_START_MIN
+                                        const end = toMinutes(entry.end_time) - DAY_START_MIN
+
+                                        const { columnIndex, totalColumns } = layout.get(entry)
+                                        const widthPercent = 100 / totalColumns
+                                        const leftPercent = columnIndex * widthPercent
+
+                                        return (
+                                            <button 
+                                                key = {entry.id} 
+                                                className = "week-entry" 
+                                                onClick = {() => openEdit(entry)}
+                                                style = {{ 
+                                                    top: start * PX_PER_MIN,
+                                                    height: Math.max((end - start) * PX_PER_MIN, 24),
+                                                    left: `calc(${leftPercent}% + 2px)`,
+                                                    width: `calc(${widthPercent}% - 4px)`,
+                                                    backgroundColor: withOpacity(enrollment?.color || '#4F6D7A', 0.85),
+                                                }}
+                                                onMouseEnter = {(e) => handleMouseEnter(entry, e)}
+                                                onMouseLeave = {handleMouseLeave}
+                                            >
+                                                <div className = "week-entry-title">{entry.course_code}</div>
+                                                <div className = "week-entry-type">{entry.class_type}</div>
+                                                {entry.location && <div className = "week-entry-location">{entry.location}</div>}
+                                            </button>
+                                        )
+                                    })}    
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )})
+                    }
                 </div>
             )}
 
@@ -255,6 +293,17 @@ export default function Timetable() {
                         </div>
                     </form>
                 </Modal>
+            )}
+
+            {hoveredItem && (
+                <div className = "calendar-tooltip" style = {{ left: hoverPosition.x, top: hoverPosition.y }}>
+                    <strong>
+                        {hoveredItem.course_code}
+                    </strong>
+                    <div>
+                        {hoveredItem.class_type} | {hoveredItem.location}
+                    </div>
+                </div>
             )}
         </div>
     )
