@@ -469,3 +469,59 @@ header {
   white-space: nowrap;
   margin-top: -8px;
 }
+
+/* NOTIFICATIONS */
+.notification-banner-stack {
+  position: fixed;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  z-index: 300;
+}
+
+.notification-banner {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-accent);
+  border-radius: vcar(--radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-width: 260px;
+}
+
+.notification-badge {
+  background-color: var(--color-accent);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+}
+
+.notification-dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-top: var(--spacing-sm);
+  min-width: 200px;
+  z-index: 400;
+}
+
+.notification-item {
+  padding: var(--spacing-md) var(--spacing-md);
+  cursor: pointer;
+}

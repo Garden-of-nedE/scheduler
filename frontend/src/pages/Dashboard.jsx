@@ -5,6 +5,8 @@ import Home from '../components/home/Home.jsx'
 import Assessments from '../components/Assessments.jsx'
 import Events from '../components/Events.jsx'
 import AccountModal from '../components/AccountModal.jsx'
+import ToastNotifications from '../components/ToastNotifications.jsx'
+import NotificationTab from '../components/NotificationTab.jsx'
 import { SunIcon, MoonIcon, LogoutIcon, UserIcon } from '../components/icons/Icons.jsx'
 
 const TABS = [
@@ -24,6 +26,7 @@ export default function Dashboard() {
             <header>
                 <h1>{user?.full_name ? `${user.full_name}'s Timetable` : 'Your Timetable'}</h1>
                 <div className = "button-group">
+                    <NotificationTab />
                     <button className = "btn btn-secondary" onClick = {() => setAccountModalOpen(true)}>
                         <UserIcon size = {16} />
                         My Account
@@ -37,6 +40,8 @@ export default function Dashboard() {
                     </button>
                 </div>
             </header>
+
+            <ToastNotifications />
 
             {accountModalOpen && <AccountModal onClose = {() => setAccountModalOpen(false)} />}
 
