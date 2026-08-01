@@ -15,7 +15,12 @@ export function formatDate(isoString) {
         year: '2-digit',
     })
 }
-
+export function formatDateShort(isoString) {
+    return new Date(isoString).toLocaleDateString(undefined, {
+        month: 'numeric',
+        day: 'numeric',
+    })
+}
 export function formatTime(timeString) {
     const [hours, minutes] = timeString.split(':')
     const date = new Date()

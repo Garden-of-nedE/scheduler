@@ -32,7 +32,7 @@ export default function Dashboard() {
                         My Account
                     </button>
                     <button className = "btn-icons" onClick={toggleTheme}>
-                        {theme === 'light' ? <MoonIcon size = {18} />: <SunIcon size = {18} />}
+                        {theme === 'light' ? <MoonIcon size = {22} />: <SunIcon size = {22} />}
                     </button>
                     <button className = "btn btn-secondary" onClick = {logout}>
                         Sign out

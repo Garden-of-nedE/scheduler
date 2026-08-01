@@ -4,14 +4,14 @@ import { getReminderThreshold, getDismissedIds, dismissReminder } from '../utils
 import { CrossIcon } from './icons/Icons.jsx'
 
 export default function ToastNotifications() {
-    const reminders = useReminders()
+const { reminders } = useReminders()
     const [dismissed, setDismissed] = useState(getDismissedIds())
     
     const visible = reminders.filter((r) => !dismissed.includes(r.id))
 
     function handleDismiss(id) {
         dismissReminder(id)
-        setReminders((prev) => prev.filter((r) => r.id !== id))   
+        setDismissed((prev) => [...prev, id])   
     }
 
     if (visible.length === 0) return null
@@ -21,7 +21,7 @@ export default function ToastNotifications() {
             {visible.map((r) => (
                 <div key = {r.id} className = "notification-banner">
                     <span>{r.label}</span>
-                    <button className = "btn-icon" onClick = {() => handleDismiss(r.id)}>
+                    <button className = "btn-icons" onClick = {() => handleDismiss(r.id)}>
                         <CrossIcon size = {16} />
                     </button>
                 </div>

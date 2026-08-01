@@ -6,7 +6,6 @@ import { getReminderThreshold, getDismissedIds, dismissReminder } from '../utils
 export function useReminders() {
     const [reminders, setReminders] = useState([])
 
-    useEffect(() => {
         async function load() {
             const [assessmentsRes, eventsRes] = await Promise.all([
                 client.get('/api/assessments'),
@@ -17,8 +16,8 @@ export function useReminders() {
             const dismissed = getDismissedIds()
             setReminders(upcoming.filter((r) => !dismissed.includes(r.id)))
         }
-        load()
-    }, [])
 
-    return reminders
+    useEffect(() => { load() }, [])
+
+    return { reminders, refresh: load }
 }

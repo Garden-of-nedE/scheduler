@@ -1,3 +1,5 @@
+import { formatDateShort, formatTime } from './formatters.js'
+
 export function getUpcomingReminders(assessments, events, thresholdHours) {
     const now = new Date()
     const threshold = new Date(now.getTime() + thresholdHours * 60 * 60 * 1000)
@@ -14,7 +16,7 @@ export function getUpcomingReminders(assessments, events, thresholdHours) {
     })
 
     return [
-        ...dueAssessments.map((a) => ({ type: 'assessment', id: a.id, label: `${a.task_name} due`, when: `${a.due_date}T${a.deadline || '23:59:59'}` })),
-        ...upcomingEvents.map((e) => ({ type: 'event', id: e.id, label: e.title, when: `${e.event_date}T${e.start_time}` })),
+        ...dueAssessments.map((a) => ({ type: 'assessment', id: a.id, label: `${a.course_code}: ${a.task_name} due`, when: `${formatDateShort(a.due_date)} ${formatTime(a.deadline) || '23:59:00'}` })),
+        ...upcomingEvents.map((e) => ({ type: 'event', id: e.id, label: e.title, when: `${formatDateShort(e.event_date)} ${formatTime(e.start_time)}` })),
     ]
 }
