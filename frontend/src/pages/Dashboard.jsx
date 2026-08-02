@@ -5,7 +5,6 @@ import Home from '../components/home/Home.jsx'
 import Assessments from '../components/Assessments.jsx'
 import Events from '../components/Events.jsx'
 import AccountModal from '../components/AccountModal.jsx'
-import ToastNotifications from '../components/ToastNotifications.jsx'
 import NotificationTab from '../components/NotificationTab.jsx'
 import { SunIcon, MoonIcon, LogoutIcon, UserIcon } from '../components/icons/Icons.jsx'
 
@@ -40,8 +39,6 @@ export default function Dashboard() {
                     </button>
                 </div>
             </header>
-
-            <ToastNotifications />
 
             {accountModalOpen && <AccountModal onClose = {() => setAccountModalOpen(false)} />}
 
