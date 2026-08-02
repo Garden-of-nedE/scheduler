@@ -20,6 +20,7 @@ export default function NotificationTab() {
         setOpen(!open)
     }
 
+
     return (
         <div style = {{ position: 'relative' }}>
             <button className = "btn-icons" onClick = {() => handleToggle()}>

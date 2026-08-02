@@ -11,10 +11,8 @@ export function useReminders() {
                 client.get('/api/assessments'),
                 client.get('/api/events'),
             ])
-            const threshold = getReminderThreshold()
-            const upcoming = getUpcomingReminders(assessmentsRes.data, eventsRes.data, threshold)
-            const dismissed = getDismissedIds()
-            setReminders(upcoming.filter((r) => !dismissed.includes(r.id)))
+            const upcoming = getUpcomingReminders(assessmentsRes.data, eventsRes.data, getReminderThreshold())
+            setReminders(upcoming)
         }
 
     useEffect(() => { load() }, [])
