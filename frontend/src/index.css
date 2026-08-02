@@ -523,6 +523,9 @@ header {
 }
 
 .notification-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
   padding: var(--spacing-md) var(--spacing-md);
   cursor: pointer;
 }
