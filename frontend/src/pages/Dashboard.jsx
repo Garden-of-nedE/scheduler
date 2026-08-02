@@ -30,7 +30,7 @@ export default function Dashboard() {
                         <UserIcon size = {16} />
                         My Account
                     </button>
-                    <button className = "btn-icons" onClick={toggleTheme}>
+                    <button className = "btn-icon" onClick={toggleTheme}>
                         {theme === 'light' ? <MoonIcon size = {22} />: <SunIcon size = {22} />}
                     </button>
                     <button className = "btn btn-secondary" onClick = {logout}>

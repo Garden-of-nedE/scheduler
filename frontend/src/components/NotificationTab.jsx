@@ -23,7 +23,7 @@ export default function NotificationTab() {
 
     return (
         <div style = {{ position: 'relative' }}>
-            <button className = "btn-icons" onClick = {() => handleToggle()}>
+            <button className = "btn-icon" onClick = {() => handleToggle()}>
                 <BellIcon size = {22} />
                 {dropdownItems.length > 0 && <span className = "notification-badge">{dropdownItems.length}</span>}
             </button>
@@ -36,7 +36,7 @@ export default function NotificationTab() {
                         dropdownItems.map((r) => (
                             <div key = {r.id} className = "notification-item">
                                 <span>{r.label} | {r.when}</span>
-                                <button className = "btn-icons" onClick = {() => handleRemove(r.id)}>
+                                <button className = "btn-icon" onClick = {() => handleRemove(r.id)}>
                                     <CrossIcon size = {16} />
                                 </button>
                             </div>

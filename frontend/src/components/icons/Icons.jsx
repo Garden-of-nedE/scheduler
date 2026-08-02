@@ -89,7 +89,7 @@ export function TrashIcon({ size = 24, ...props }) {
 // close
 export function CrossIcon({ size = 24, ...props }) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960"fill="currentColor" {...props}>
+        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960" fill="currentColor" {...props}>
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
         </svg>
     )
@@ -97,7 +97,7 @@ export function CrossIcon({ size = 24, ...props }) {
 
 export function AddIcon({ size = 24, ...props }) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960"fill="currentColor" {...props}>
+        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960" fill="currentColor" {...props}>
             <path d="M440-120v-320H120v-80h320v-320h80v320h320v80H520v320h-80Z"/>
         </svg>
     )
@@ -105,7 +105,7 @@ export function AddIcon({ size = 24, ...props }) {
 
 export function SaveIcon({ size = 24, ...props }) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960"fill="currentColor" {...props}>
+        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960" fill="currentColor" {...props}>
             <path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM565-275q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"/>
         </svg>
     )
@@ -113,7 +113,7 @@ export function SaveIcon({ size = 24, ...props }) {
 
 export function RemoveIcon({ size = 24, ...props }) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960"fill="currentColor" {...props}>
+        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960" fill="currentColor" {...props}>
             <path d="M200-440v-80h560v80H200Z"/>
         </svg>
     )
@@ -137,7 +137,7 @@ export function PrevIcon({ size = 24, ...props }) {
 
 export function UserIcon({ size = 24, ...props }) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960" width="24px" fill="currentColor" {...props}>
+        <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 -960 960 960" fill="currentColor" {...props}>
             <path d="M367-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q560-607 560-640t-23.5-56.5Q513-720 480-720t-56.5 23.5Q400-673 400-640t23.5 56.5Q447-560 480-560t56.5-23.5ZM480-640Zm0 400Z"/>
         </svg>
     )

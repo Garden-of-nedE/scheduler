@@ -111,7 +111,7 @@ export default function Classes() {
                             </td>
                             <td>{enrollment.course.name}</td>
                             <td>
-                                <button className = "btn-icons" onClick = {() => handleDelete(enrollment.id)}>
+                                <button className = "btn-icon" onClick = {() => handleDelete(enrollment.id)}>
                                     <RemoveIcon size = {18} /> Remove
                                 </button>
                             </td>

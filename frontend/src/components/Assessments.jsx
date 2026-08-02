@@ -235,7 +235,7 @@ export default function Assessments() {
                                     <td>{task.mark_achieved != null ? `${task.mark_achieved}/${task.total_marks}` : `—/${task.total_marks}`}</td>
                                     <td>{weightedMark(task) != null ? `${weightedMark(task)}%` : '—'}</td>
                                     <td className = "col-completed">
-                                        <button className = "btn-icons" onClick = {() => toggleCompleted(task)}>{task.completed ? <CheckedIcon size = {24} /> : <BoxIcon size = {24}/>}</button>
+                                        <button className = "btn-icon" onClick = {() => toggleCompleted(task)}>{task.completed ? <CheckedIcon size = {24} /> : <BoxIcon size = {24}/>}</button>
                                     </td>
                                 </tr>
                             )

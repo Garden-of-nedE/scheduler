@@ -7,7 +7,7 @@ export default function Modal({ title, onClose, children }) {
             <div className = "modal-box" onClick = {(e) => e.stopPropagation()}>
                 <div className = "modal-header">
                     <h2>{title}</h2>
-                    <button className = "btn-icons" onClick = {onClose} aria-label = "Close">
+                    <button className = "btn-icon" onClick = {onClose} aria-label = "Close">
                         <CrossIcon size = {20} />
                     </button>
                 </div>
