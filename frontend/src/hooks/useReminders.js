@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import client from '../api/client'
 import { getUpcomingReminders } from '../utils/notifications.js'
-import { getReminderThreshold, getDismissedIds, dismissReminder } from '../utils/notificationPrefs.js'
+import { getReminderThreshold } from '../utils/notificationPrefs.js'
 
 export function useReminders() {
     const [reminders, setReminders] = useState([])
