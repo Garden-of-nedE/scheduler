@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import client from '../../api/client.js'
 import Modal from '../Modal.jsx'
 import { withOpacity } from '../../utils/formatters.js'
-import { AddIcon, RemoveIcon, SaveIcon } from '../icons/Icons.jsx'
+import { AddIcon, AsteriskIcon,  RemoveIcon, SaveIcon } from '../icons/Icons.jsx'
 
 function emptyForm() {
     return {
@@ -128,6 +128,12 @@ export default function Classes() {
 
                     {!editingId && (
                     <>
+                        <div className = "form-field">
+                            <label>
+                                <AsteriskIcon size={10}/> All fields required
+                            </label>
+                        </div>
+                        
                         <div className = "form-field">
                         <label>Course code</label>
                         <input
