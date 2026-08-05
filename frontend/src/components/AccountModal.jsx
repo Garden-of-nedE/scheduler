@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
-import { SaveIcon } from './icons/Icons'
+import { AsteriskIcon, SaveIcon } from './icons/Icons'
 
 export default function  AccountModal({ onClose }) {
     const { user, refreshUser } = useAuth()
@@ -51,10 +51,19 @@ export default function  AccountModal({ onClose }) {
                 </div>
 
                 {newPassword && (
-                    <div className = "form-field">
-                        <label>Current Password</label>
-                        <input type = "password" value = {currentPassword} onChange = {(e) => setCurrentPassword(e.target.value)}/>
-                    </div>
+                    <>
+                        <div className = "form-field">
+                            <label>Current Password <AsteriskIcon size={10}/></label>
+                            <input type = "password" value = {currentPassword} onChange = {(e) => setCurrentPassword(e.target.value)}/> 
+                        </div>
+
+                        <div className = "form-field">
+                            <label>
+                                <AsteriskIcon size={10}/> Required
+                            </label>
+                        </div>
+                    </>
+                    
                 )}
 
                 <button type = "submit" className = "btn" disabled = {submitting}>

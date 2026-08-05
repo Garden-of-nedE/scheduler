@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import client from '../../api/client.js'
 import Modal from '../Modal.jsx'
 import { formatTime, withOpacity, toMinutes, formatHourLabel, overlappingItems } from '../../utils/formatters.js'
-import { AddIcon, RemoveIcon, SaveIcon, TrashIcon } from '../icons/Icons.jsx'
+import { AddIcon, AsteriskIcon, RemoveIcon, SaveIcon, TrashIcon } from '../icons/Icons.jsx'
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 const DAY_LABELS = { monday: 'MON', tuesday: 'TUE', wednesday: 'WED', thursday: 'THU', friday: 'FRI', saturday: 'SAT', sunday: 'SUN'}
@@ -213,7 +213,7 @@ export default function Timetable() {
                         {formError && <p className = "form-error">{formError}</p>}
                         
                         <div className = "form-field">
-                            <label>Course code</label>
+                            <label>Course code <AsteriskIcon size={10}/></label>
                             <select
                                 required
                                 value = {form.course_code}
@@ -237,7 +237,7 @@ export default function Timetable() {
                         </div>
 
                         <div className = "form-field">
-                            <label>Day</label>
+                            <label>Day <AsteriskIcon size={10}/></label>
                             <select
                                 value = {form.day_of_week}
                                 onChange = {(e) => setForm({ ...form, day_of_week: e.target.value })}
@@ -251,7 +251,7 @@ export default function Timetable() {
                         </div>
 
                         <div className = "form-field">
-                            <label>Start time</label>
+                            <label>Start time <AsteriskIcon size={10}/></label>
                             <input
                                 type = "time"
                                 required
@@ -261,7 +261,7 @@ export default function Timetable() {
                         </div>
 
                         <div className = "form-field">
-                            <label>End time</label>
+                            <label>End time <AsteriskIcon size={10}/></label>
                             <input
                                 type = "time"
                                 required
@@ -277,6 +277,12 @@ export default function Timetable() {
                                 value = {form.location}
                                 onChange = {(e) => setForm({ ...form, location: e.target.value })}
                             />
+                        </div>
+
+                        <div className = "form-field">
+                            <label>
+                                <AsteriskIcon size={10}/> Required fields
+                            </label>
                         </div>
 
                         <div className = "button-group">
