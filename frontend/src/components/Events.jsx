@@ -4,7 +4,7 @@ import Modal from './Modal.jsx'
 import CalendarMonthView from './calendar/CalendarMonthView.jsx'
 import CalendarWeekView from './calendar/CalendarWeekView.jsx'
 import { formatDate, formatTime } from '../utils/formatters.js'
-import { AddIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx' 
+import { AddIcon, AsteriskIcon, SaveIcon, TrashIcon } from './icons/Icons.jsx' 
 
 function emptyForm() {
     return {
@@ -191,7 +191,7 @@ export default function Events() {
                         {formError && <p style = {{ color: 'red' }}>{formError}</p>}
 
                         <div className = "form-field">
-                            <label>Title</label>
+                            <label>Title <AsteriskIcon size={10}/></label>
                             <input
                                 required
                                 value = {form.title}
@@ -208,7 +208,7 @@ export default function Events() {
                         </div>
 
                         <div className = "form-field">
-                            <label>Date</label>
+                            <label>Date <AsteriskIcon size={10}/></label>
                             <input
                                 type = "date"
                                 required
@@ -218,7 +218,7 @@ export default function Events() {
                         </div>
 
                         <div className = "form-field">
-                            <label>Start Time</label>
+                            <label>Start Time <AsteriskIcon size={10}/></label>
                             <input
                                 type = "time"
                                 required
@@ -242,6 +242,12 @@ export default function Events() {
                                 value = {form.location}
                                 onChange = {(e) => setForm({ ...form, location: e.target.value })}
                             />
+                        </div>
+
+                        <div className = "form-field">
+                            <label>
+                                <AsteriskIcon size={10}/> Required fields
+                            </label>
                         </div>
 
                         <div className = "button-group">
