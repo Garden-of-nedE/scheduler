@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import client from '../api/client'
 import Modal from './Modal.jsx'
 import { formatDate, withOpacity } from '../utils/formatters.js'
-import { AddIcon, BoxIcon, CheckedIcon, DownIcon, SaveIcon, TrashIcon, UpIcon } from './icons/Icons.jsx'
+import { AddIcon, AsteriskIcon, BoxIcon, CheckedIcon, DownIcon, SaveIcon, TrashIcon, UpIcon } from './icons/Icons.jsx'
 
 function emptyForm() {
     return {
@@ -250,7 +250,7 @@ export default function Assessments() {
                         {formError && <p className = "form-error">{formError}</p>}
 
                         <div className = "form-field">
-                            <label>Course Code</label>
+                            <label>Course Code <AsteriskIcon size={10}/></label>
                             <select
                                 required
                                 value = {form.course_code}
@@ -266,7 +266,7 @@ export default function Assessments() {
                         </div>
 
                         <div className = "form-field">
-                            <label>Task</label>
+                            <label>Task <AsteriskIcon size={10}/></label>
                             <input 
                                 required
                                 value = {form.task_name}
@@ -276,13 +276,16 @@ export default function Assessments() {
 
                         {!editingId && (
                             <div>
-                                <label>
+                                <label className = "checkbox">
                                     <input
                                         type = "checkbox"
                                         checked = {isRecurring}
                                         onChange = {(e) => setIsRecurring(e.target.checked)}
                                     />
-                                    {' '}Repeat weekly
+                                    <span className = "checkbox-icon">
+                                        {isRecurring ? <CheckedIcon /> : <BoxIcon />}
+                                    </span>
+                                    <span>Repeat weekly</span>
                                 </label>
                             </div>
                         )}
@@ -290,7 +293,7 @@ export default function Assessments() {
                         {isRecurring ? (
                             <>
                                 <div className = "form-field">
-                                    <label>Number of occurrences</label>
+                                    <label>Number of occurrences <AsteriskIcon size={10}/></label>
                                     <input
                                         type = "number"
                                         min = "1"
@@ -301,7 +304,7 @@ export default function Assessments() {
                                 </div>
 
                                 <div className = "form-field">
-                                    <label>First due date</label>
+                                    <label>First due date <AsteriskIcon size={10}/></label>
                                     <input
                                         type = "date"
                                         required
@@ -319,6 +322,7 @@ export default function Assessments() {
                                     />
                                     <button
                                         type = "button"
+                                        className = "btn btn-secondary sm-btn"
                                         onClick = {() => {
                                             if (skipDateInput && !recurrence.skip_dates.includes(skipDateInput)) {
                                                 setRecurrence({ ...recurrence, skip_dates: [...recurrence.skip_dates, skipDateInput] })
@@ -332,10 +336,12 @@ export default function Assessments() {
                                     {recurrence.skip_dates.length > 0 && (
                                         <ul>
                                             {recurrence.skip_dates.map((d) => (
-                                                <li key = {d}>
-                                                    {d}{' '}
+                                                <li key = {d} className = "skip-item">
+                                                    <span>{formatDate(d)}</span>
+
                                                     <button
                                                         type = "button"
+                                                        className = "btn btn-secondary sm-btn"
                                                         onClick = {() => setRecurrence({
                                                             ...recurrence,
                                                             skip_dates: recurrence.skip_dates.filter((sd) => sd !== d)
@@ -351,7 +357,7 @@ export default function Assessments() {
                             </>
                         ) : (
                             <div className = "form-field">
-                                <label>Due date</label>
+                                <label>Due date <AsteriskIcon size={10}/></label>
                                 <input
                                     type = "date"
                                     required
@@ -370,7 +376,7 @@ export default function Assessments() {
                         </div>
 
                         <div className = "form-field">
-                            <label>Weighting (%)</label>
+                            <label>Weighting (%) <AsteriskIcon size={10}/></label>
                             <input 
                                 type = "number"
                                 step = "0.01"
@@ -381,7 +387,7 @@ export default function Assessments() {
                         </div>
 
                         <div className = "form-field">
-                            <label>Total Marks</label>
+                            <label>Total Marks <AsteriskIcon size={10}/></label>
                             <input
                                 type = "number"
                                 step = "0.01"
@@ -402,14 +408,20 @@ export default function Assessments() {
                         </div>
 
                         <div className = "form-field">
-                            <label>Deadline (optional)</label>
+                            <label>Deadline</label>
                             <input
                                 type = "time"
                                 value = {form.deadline}
                                 onChange = {(e) => setForm({ ...form, deadline: e.target.value })}
                             />
                         </div>
-
+                        
+                        <div className = "form-field">
+                            <label>
+                                <AsteriskIcon size={10}/> Required fields
+                            </label>
+                        </div>
+                        
                         <div className = "button-group">
                             <button type = "submit" className = "btn">
                                 {editingId ? <SaveIcon size = {16} />: <AddIcon size = {16} />}
@@ -422,6 +434,7 @@ export default function Assessments() {
                                 </button>
                             )}
                         </div>
+                        
                     </form>
                 </Modal>
             )}
