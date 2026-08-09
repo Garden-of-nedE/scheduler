@@ -43,8 +43,10 @@ chmod +x start.sh stop.sh
 
 6. Open http://localhost in your browser.
 
-
 This covers local development. For a production-style deployment (static frontend, no hot-reload, separate secrets), see **Production deployment** below.
+
+### Toubleshooting
+**Docker Desktop:** If `./start.sh` fails with `usr/bin/docker: Input/output error`, ensure that **WSL integration** is enabled in Docker Desktop, then restart Docker Desktop.
 
 ## Data Model
 | Entity | Fields | Notes |
