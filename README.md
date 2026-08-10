@@ -1,4 +1,8 @@
-# <picture> <img src="frontend/public/ghost-favicon.ico" alt="Icon" style="width:34px;"> </picture> Student Scheduler
+<p align = "center">
+    <img src="frontend/public/ghost-icon-lg.png" alt="Icon" style="width:100px; height:100px;"> 
+</p>
+
+<h1 align = "center"> Student Scheduler </h1>
 
 
 An organisation tool for students providing a weekly timetable, assessment tracker, and events calendar. Includes course enrollment, recurring assessments, and in-app deadline/event notifications.
