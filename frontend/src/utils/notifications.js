@@ -16,7 +16,7 @@ export function getUpcomingReminders(assessments, events, thresholdHours) {
     })
 
     return [
-        ...dueAssessments.map((a) => ({ type: 'assessment', id: a.id, label: `${a.course_code}: ${a.task_name} due`, when: `${formatDateShort(a.due_date)} ${formatTime(a.deadline) || '23:59:00'}` })),
+        ...dueAssessments.map((a) => ({ type: 'assessment', id: a.id, label: `${a.course_code}: ${a.task_name} |`, when: `Due ${formatDateShort(a.due_date)} ${formatTime(a.deadline) || '23:59:00'}` })),
         ...upcomingEvents.map((e) => ({ type: 'event', id: e.id, label: e.title, when: `${formatDateShort(e.event_date)} ${formatTime(e.start_time)}` })),
     ]
 }
